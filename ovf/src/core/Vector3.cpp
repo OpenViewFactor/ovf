@@ -1,4 +1,4 @@
-#include "ovf/core/Vector3.h"
+#include "ovf/core/Vector3.hpp"
 #include <cmath>
 
 namespace openviewfactor {

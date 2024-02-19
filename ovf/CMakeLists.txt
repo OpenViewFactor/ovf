@@ -90,3 +90,6 @@ if(OVF_BUILD_CLI)
   set_target_properties(openviewfactor PROPERTIES LINKER_LANGUAGE CXX)
   target_link_libraries(openviewfactor ovfcore ovfmanager Boost::program_options Boost::boost)
 endif()
+
+# ---------- Add Test Subdirectory ---------- #
+add_subdirectory(test)

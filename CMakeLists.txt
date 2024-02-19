@@ -38,3 +38,13 @@ if(OVF_BUID_CUDA)
   message("OVF CUDA Enabled")
   set(CMAKE_CUDA_FLAGS_DEBUG ${CMAKE_CUDA_FLAGS_DEBUG} " -g -G ") # enables CUDA debugging
 endif()
+
+# Pull the GoogleTest library
+if(OVF_BUILD_GTEST)
+  add_subdirectory(third_party/google-test)
+  set(GTEST_LIBS gtest gtest_main)
+  set(GTEST_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party/google-test/include)
+endif()
+
+# Add project directory
+add_subdirectory(ovf)

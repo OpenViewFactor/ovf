@@ -129,23 +129,25 @@ namespace openviewfactor {
 
   // ! openviewfactor namespace equality operator overload
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE bool operator==(const Vector3<FLOAT_TYPE> &rhs) {
-    //TODO FILL OUT
+  OVF_HOST_DEVICE bool operator==(const Vector3<FLOAT_TYPE> &lhs,
+                                  const Vector3<FLOAT_TYPE> &rhs) {
+    return lhs == rhs;
   }
   // ! Vector3 namespace equality operator overload
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE bool Vector3<FLOAT_TYPE>::operator==(const Vector3<FLOAT_TYPE> &rhs) {
-    //TODO FILL OUT
+    return (*this == rhs);
   }
 
   // ! openviewfactor namespace inequality operator overload
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE bool operator!=(const Vector3<FLOAT_TYPE> &rhs) {
-    //TODO FILL OUT
+  OVF_HOST_DEVICE bool operator!=(const Vector3<FLOAT_TYPE> &lhs,
+                                  const Vector3<FLOAT_TYPE> &rhs) {
+    return !(lhs == rhs);
   }
   // ! Vector3 namespace inequality operator overload
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE bool Vector3<FLOAT_TYPE>::operator!=(const Vector3<FLOAT_TYPE> &rhs) {
-    //TODO FILL OUT
+    return !(*this == rhs);
   }
 }

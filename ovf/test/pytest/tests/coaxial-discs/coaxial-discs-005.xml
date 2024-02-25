@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<DATA>
+
+    <TEST-DESCRIPTION>
+        <TEST-CONFIGURATION>r1=5.0 r2=5.0 coaxial discs</TEST-CONFIGURATION>
+        <AUTHOR>Natan Herzog</AUTHOR>
+        <DATE-CREATED>07/17/2023</DATE-CREATED>
+    </TEST-DESCRIPTION>
+
+    <TARGETS>
+        <ANALYTIC-RESULT>8.190024876e-1</ANALYTIC-RESULT>
+        <EXPECTED-NUMERICAL-RESULT>8.190029173e-1</EXPECTED-NUMERICAL-RESULT>
+        <TOLERANCE>1e-2</TOLERANCE>
+    </TARGETS>
+
+    <MESHES>
+        <EMITTER>assets\participatory\coaxial-discs\bottom-ri=5.stl</EMITTER>
+        <RECEIVER>assets\participatory\coaxial-discs\top-rj=5.stl</RECEIVER>
+        <BLOCKER>NONE</BLOCKER>
+    </MESHES>
+
+    <SETTINGS>
+        <SELF-INT>NONE</SELF-INT>
+        <METHOD>DAIMT</METHOD>
+        
+        <PRECISION>DOUBLE</PRECISION>
+    </SETTINGS>
+
+</DATA>

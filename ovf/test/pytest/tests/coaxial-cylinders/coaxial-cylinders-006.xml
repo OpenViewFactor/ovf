@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<DATA>
+
+    <TEST-DESCRIPTION>
+        <TEST-CONFIGURATION>r1/h=2.0 r2/h=3.0 concentric finite right cylinders</TEST-CONFIGURATION>
+        <AUTHOR>Natan Herzog</AUTHOR>
+        <DATE-CREATED>07/17/2023</DATE-CREATED>
+    </TEST-DESCRIPTION>
+
+    <TARGETS>
+        <ANALYTIC-RESULT>3.007424463e-1</ANALYTIC-RESULT>
+        <EXPECTED-NUMERICAL-RESULT>3.007813659e-1</EXPECTED-NUMERICAL-RESULT>
+        <TOLERANCE>1e-2</TOLERANCE>
+    </TARGETS>
+
+    <MESHES>
+        <EMITTER>assets\participatory\coaxial-cylinders\outer-r2perh=3-cent=0,0-numtri=22914.stl</EMITTER>
+        <RECEIVER>assets\participatory\coaxial-cylinders\inner-r1perh=2-cent=0,0-numtri=22914.stl</RECEIVER>
+        <BLOCKER>NONE</BLOCKER>
+    </MESHES>
+
+    <SETTINGS>
+        <SELF-INT>NONE</SELF-INT>
+        <METHOD>DAIMT</METHOD>
+        
+        <PRECISION>DOUBLE</PRECISION>
+    </SETTINGS>
+
+</DATA>

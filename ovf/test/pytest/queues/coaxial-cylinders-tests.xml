@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALL-TESTS>
+
+    <TEST ID="coaxial-cylinders-001.xml" STATE="ON"/>
+    <TEST ID="coaxial-cylinders-002.xml" STATE="ON"/>
+    <TEST ID="coaxial-cylinders-003.xml" STATE="ON"/>
+    <TEST ID="coaxial-cylinders-004.xml" STATE="ON"/>
+    <TEST ID="coaxial-cylinders-005.xml" STATE="ON"/>
+    <TEST ID="coaxial-cylinders-006.xml" STATE="ON"/>
+    <TEST ID="coaxial-cylinders-007.xml" STATE="ON"/>
+
+</ALL-TESTS>

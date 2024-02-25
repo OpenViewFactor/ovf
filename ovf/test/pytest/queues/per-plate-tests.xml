@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALL-TESTS>
+
+    <TEST ID="per-plate-nonsharing-001.xml" STATE="ON"/>
+    <TEST ID="per-plate-nonsharing-002.xml" STATE="ON"/>
+    <TEST ID="per-plate-nonsharing-003.xml" STATE="ON"/>
+    <TEST ID="per-plate-nonsharing-004.xml" STATE="ON"/>
+    <TEST ID="per-plate-nonsharing-005.xml" STATE="ON"/>
+    <TEST ID="per-plate-nonsharing-006.xml" STATE="ON"/>
+    <TEST ID="per-plate-nonsharing-007.xml" STATE="ON"/>
+    <TEST ID="per-plate-nonsharing-008.xml" STATE="ON"/>
+
+    <TEST ID="per-plate-sharing-001.xml" STATE="ON"/>
+    <TEST ID="per-plate-sharing-002.xml" STATE="ON"/>
+    <TEST ID="per-plate-sharing-003.xml" STATE="ON"/>
+    <TEST ID="per-plate-sharing-004.xml" STATE="ON"/>
+    <TEST ID="per-plate-sharing-005.xml" STATE="ON"/>
+    <TEST ID="per-plate-sharing-006.xml" STATE="ON"/>
+    <TEST ID="per-plate-sharing-007.xml" STATE="ON"/>
+    <TEST ID="per-plate-sharing-008.xml" STATE="ON"/>
+
+</ALL-TESTS>

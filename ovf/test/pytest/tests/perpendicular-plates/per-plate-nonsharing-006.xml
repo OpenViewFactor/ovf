@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<DATA>
+
+    <TEST-DESCRIPTION>
+        <TEST-CONFIGURATION>Z/X=4.0 Y/X=4.0 perpendicular plates (nonsharing)</TEST-CONFIGURATION>
+        <AUTHOR>Natan Herzog</AUTHOR>
+        <DATE-CREATED>07/17/2023</DATE-CREATED>
+    </TEST-DESCRIPTION>
+
+    <TARGETS>
+        <ANALYTIC-RESULT>1.929862936e-2</ANALYTIC-RESULT>
+        <EXPECTED-NUMERICAL-RESULT>1.929864136e-2</EXPECTED-NUMERICAL-RESULT>
+        <TOLERANCE>1e-2</TOLERANCE>
+    </TARGETS>
+
+    <MESHES>
+        <EMITTER>assets\participatory\perpendicular-rectangles\z-x-4-y-x-4/horz_262144TB.STL</EMITTER>
+        <RECEIVER>assets\participatory\perpendicular-rectangles\z-x-4-y-x-4/vert_262144TB.STL</RECEIVER>
+        <BLOCKER>NONE</BLOCKER>
+    </MESHES>
+
+    <SETTINGS>
+        <SELF-INT>NONE</SELF-INT>
+        <METHOD>DAIMT</METHOD>
+        
+        <PRECISION>DOUBLE</PRECISION>
+    </SETTINGS>
+
+</DATA>

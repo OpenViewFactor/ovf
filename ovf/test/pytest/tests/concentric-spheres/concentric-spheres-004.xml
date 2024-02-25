@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<DATA>
+
+    <TEST-DESCRIPTION>
+        <TEST-CONFIGURATION>concentric spheres r1=2 r2=1</TEST-CONFIGURATION>
+        <AUTHOR>Natan Herzog</AUTHOR>
+        <DATE-CREATED>08/02/2023</DATE-CREATED>
+    </TEST-DESCRIPTION>
+
+    <TARGETS>
+        <ANALYTIC-RESULT>1</ANALYTIC-RESULT>
+        <EXPECTED-NUMERICAL-RESULT>1</EXPECTED-NUMERICAL-RESULT>
+        <TOLERANCE>1e-2</TOLERANCE>
+    </TARGETS>
+
+    <MESHES>
+        <EMITTER>assets\participatory\concentric-spheres\outer-sphere-r2=2.stl</EMITTER>
+        <RECEIVER>assets\participatory\concentric-spheres\inner-sphere-r1=1.stl</RECEIVER>
+        <BLOCKER>NONE</BLOCKER>
+    </MESHES>
+
+    <SETTINGS>
+        <SELF-INT>NONE</SELF-INT>
+        <METHOD>DAIMT</METHOD>
+        
+        <PRECISION>DOUBLE</PRECISION>
+    </SETTINGS>
+
+</DATA>

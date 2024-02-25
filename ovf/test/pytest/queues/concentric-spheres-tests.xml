@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ALL-TESTS>
+
+    <TEST ID="concentric-spheres-001.xml" STATE="ON"/>
+    <TEST ID="concentric-spheres-002.xml" STATE="OFF"/>
+    <TEST ID="concentric-spheres-003.xml" STATE="OFF"/>
+    <TEST ID="concentric-spheres-004.xml" STATE="OFF"/>
+    <TEST ID="concentric-spheres-005.xml" STATE="OFF"/>
+    <TEST ID="concentric-spheres-006.xml" STATE="OFF"/>
+
+</ALL-TESTS>

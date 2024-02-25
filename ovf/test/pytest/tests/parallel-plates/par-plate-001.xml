@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<DATA>
+
+    <TEST-DESCRIPTION>
+        <TEST-CONFIGURATION>Xbar=0.1 Ybar=0.1 parallel plates</TEST-CONFIGURATION>
+        <AUTHOR>Natan Herzog</AUTHOR>
+        <DATE-CREATED>07/14/2023</DATE-CREATED>
+    </TEST-DESCRIPTION>
+
+    <TARGETS>
+        <ANALYTIC-RESULT>3.162056839e-3</ANALYTIC-RESULT>
+        <EXPECTED-NUMERICAL-RESULT>3.162056892e-3</EXPECTED-NUMERICAL-RESULT>
+        <TOLERANCE>1e-2</TOLERANCE>
+    </TARGETS>
+
+    <MESHES>
+        <EMITTER>assets\participatory\aligned-parallel-rectangles\bottom-xbar=0.1-ybar=0.1.stl</EMITTER>
+        <RECEIVER>assets\participatory\aligned-parallel-rectangles\top-xbar=0.1-ybar=0.1.stl</RECEIVER>
+        <BLOCKER>NONE</BLOCKER>
+    </MESHES>
+
+    <SETTINGS>
+        <SELF-INT>NONE</SELF-INT>
+        <METHOD>DAIMT</METHOD>
+        <PRECISION>DOUBLE</PRECISION>
+    </SETTINGS>
+
+</DATA>

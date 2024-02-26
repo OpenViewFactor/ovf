@@ -3,7 +3,7 @@
 <DATA>
 
     <TEST-DESCRIPTION>
-        <TEST-CONFIGURATION>Z/X=10.0 Y/X=10.0 perpendicular plates (nonsharing)</TEST-CONFIGURATION>
+        <TEST-CONFIGURATION>Z/X=20.0 Y/X=20.0 perpendicular plates (nonsharing)</TEST-CONFIGURATION>
         <AUTHOR>Natan Herzog</AUTHOR>
         <DATE-CREATED>07/17/2023</DATE-CREATED>
     </TEST-DESCRIPTION>

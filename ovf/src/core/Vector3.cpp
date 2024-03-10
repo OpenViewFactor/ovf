@@ -4,12 +4,12 @@
 namespace openviewfactor {
   //* ----- CLASS CONSTRUCTORS ----- *//
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE>::Vector3() : _x(0), _y(0), _z(0) {} // default to 0 vector
+  OVF_HOST_DEVICE Vector3<FLOAT_TYPE>::Vector3()
+    : _x(0), _y(0), _z(0) {} // default to 0 vector
   
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE>::Vector3(FLOAT_TYPE x,
-                                               FLOAT_TYPE y,
-                                               FLOAT_TYPE z) : _x(x), _y(y), _z(z) {}
+  OVF_HOST_DEVICE Vector3<FLOAT_TYPE>::Vector3(FLOAT_TYPE x, FLOAT_TYPE y, FLOAT_TYPE z)
+    : _x(x), _y(y), _z(z) {}
 
   //* ----- ACCESSOR METHODS ----- *//
   template <typename FLOAT_TYPE>
@@ -40,6 +40,11 @@ namespace openviewfactor {
     _z = z;
     return *this;
   }
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> Vector3<FLOAT_TYPE>::scale(FLOAT_TYPE s) const {
+    Vector3<FLOAT_TYPE> scaled_vector(_x * s, _y * s, _z * s);
+    return scaled_vector;
+  }
 
   //* ----- VECTOR OPERATIONS ----- *//
   // ! openviewfactor namespace dot product function
@@ -59,7 +64,7 @@ namespace openviewfactor {
   // ! openviewfactor namespace cross product function
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE cross(const Vector3<FLOAT_TYPE> &lhs,
-                                 const Vector3<FLOAT_TYPE> &rhs) {
+                                   const Vector3<FLOAT_TYPE> &rhs) {
     Vector3<FLOAT_TYPE> crossed_vector = {
       lhs.getY() * rhs.getZ() - lhs.getZ() * rhs.getY(),
       lhs.getZ() * rhs.getX() - lhs.getX() * rhs.getZ(),

@@ -20,14 +20,14 @@ namespace openviewfactor {
   OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::getOC() const { return *_OC; }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::getAB() const { return _OB - _OA; }
+  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getAB() const { return _OB - _OA; }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::getBC() const { return _OC - _OB; }
+  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getBC() const { return _OC - _OB; }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::getCA() const { return _OA - _OC; }
+  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getCA() const { return _OA - _OC; }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::normal() const { return _n; };
+  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::normal() const { return *_n; };
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::centroid() const { 
     return (_OA + _OB + _OC).scale(1/3);

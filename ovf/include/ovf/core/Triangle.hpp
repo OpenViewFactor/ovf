@@ -27,9 +27,9 @@ template <typename FLOAT_TYPE> class Triangle {
     OVF_HOST_DEVICE const V3& getOA() const;
     OVF_HOST_DEVICE const V3& getOB() const;
     OVF_HOST_DEVICE const V3& getOC() const;
-    OVF_HOST_DEVICE const V3& getAB() const;
-    OVF_HOST_DEVICE const V3& getBC() const;
-    OVF_HOST_DEVICE const V3& getCA() const;
+    OVF_HOST_DEVICE const V3 getAB() const;
+    OVF_HOST_DEVICE const V3 getBC() const;
+    OVF_HOST_DEVICE const V3 getCA() const;
     OVF_HOST_DEVICE const V3& normal() const;
     OVF_HOST_DEVICE const V3 centroid() const;
     OVF_HOST_DEVICE const FLOAT_TYPE area() const;

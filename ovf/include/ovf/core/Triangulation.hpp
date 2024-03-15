@@ -22,6 +22,7 @@ template <typename FLOAT_TYPE> class Triangulation {
     std::vector<V3> _pts;  // points list in the triangulation
     std::vector<std::array<size_t, 3>> _con; // connectivity list in the triangulation
     std::string _name;  // mesh name (i assume this was EMITTER, RECEIVER, BLOCKER)
+
   public:
     //* ----- CLASS CONSTRUCTORS ----- *//
     OVF_HOST_DEVICE Triangulation();  // default constructor
@@ -29,19 +30,20 @@ template <typename FLOAT_TYPE> class Triangulation {
 
     //* ----- ACCESSOR METHODS ----- *//
     OVF_HOST_DEVICE std::string getName() const;
-    OVF_HOST_DEVICE size_t size() const;
-    OVF_HOST_DEVICE size_t capacity() const;
+    OVF_HOST_DEVICE size_t numElem() const;
+    OVF_HOST_DEVICE size_t numPts() const;
     OVF_HOST_DEVICE size_t numBytes() const;
-    OVF_HOST_DEVICE TGLN* getPtr() const;
-    OVF_HOST_DEVICE const T& operator[](size_t index) const;   // access element
+    OVF_HOST_DEVICE std::vector<std::array<size_t, 3>>& getConPtr() const;
+    OVF_HOST_DEVICE std::vector<V3>& getPtsPtr() const;
+    OVF_HOST_DEVICE const T operator[](size_t index) const;
+    OVF_HOST_DEVICE T operator[](size_t index);
     OVF_HOST_DEVICE FLOAT_TYPE area() const;
 
     //* ----- MUTATOR METHODS ----- *//
     OVF_HOST_DEVICE TGLN& setName(const std::string &name);
     OVF_HOST_DEVICE TGLN& clear();
-    OVF_HOST_DEVICE T& operator[](size_t index);         // modify element
-    OVF_HOST_DEVICE TGLN& addElem(const T &tri);
-    OVF_HOST_DEVICE TGLN& removeElem(size_t index);
+    OVF_HOST_DEVICE TGLN& addElem(V3 OA, V3 OB, V3 OC);
+    OVF_HOST_DEVICE TGLN& addElem(T tri);
 };
 }
 

@@ -1,12 +1,12 @@
 set(_public_headers
-    ovf/core/Vector3.h
-    ovf/core/Triangle.h
-    ovf/core/TriangleMesh.h
-    ovf/core/FileReader.h
-    ovf/core/STLReader.h
-    ovf/core/Solver.h
-    ovf/core/SolverOptions.h
-    ovf/solvers/cpp/DoubleAreaIntegration.h
-    ovf/manager/SolverFactory.h
-    ovf/core/ViewFactorWriter.h
-    ovf/core/config.h)
+    ovf/core/Vector3.hpp
+    ovf/core/Triangle.hpp
+    ovf/core/TriangleMesh.hpp
+    ovf/core/FileReader.hpp
+    ovf/core/STLReader.hpp
+    ovf/core/Solver.hpp
+    ovf/core/SolverOptions.hpp
+    ovf/solvers/cpp/DoubleAreaIntegration.hpp
+    ovf/manager/SolverFactory.hpp
+    ovf/core/ViewFactorWriter.hpp
+    ovf/core/config.hpp)

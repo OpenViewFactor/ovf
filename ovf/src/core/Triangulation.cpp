@@ -57,7 +57,7 @@ namespace openviewfactor {
     return *this;
   }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::addElem(V3 OA, V3 OB, V3 OC) {
+  OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::addElem(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC) {
     std::vector<Vector3<FLOAT_TYPE>> pos = {OA, OB, OC};
     std::array<size_t, 3> con;
     for (size_t i = 0; i < pos.size(); i++) {

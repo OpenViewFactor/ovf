@@ -18,12 +18,10 @@ namespace openviewfactor {
       ViewFactorState _state = UNLINKED;
       std::shared_ptr<Triangulation<FLOAT_TYPE>> _emitter = nullptr;
       std::shared_ptr<Triangulation<FLOAT_TYPE>> _receiver = nullptr;
-      std::vector<FLOAT_TYPE> _nonzero_view_factors;
-      std::vector<size_t> _full_matrix_indices_map;
+      std::vector<std::pair<size_t, FLOAT_TYPE>> _nonzero_vf;
     
     public:
-      ViewFactor(std::vector<FLOAT_TYPE> full_matrix_indices_map);  //! initialize with filtered number from back-face culling and intersection
-      // ViewFactor(size_t num_rows, size_t num_cols); //! initialize a full matrix
+      ViewFactor(std::vector<size_t> full_matrix_indices_map);
 
       ViewFactor<FLOAT_TYPE>& link(std::shared_ptr<Triangulation<FLOAT_TYPE>> mesh);  //* 1-mesh implementation
       ViewFactor<FLOAT_TYPE>& link(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh,
@@ -36,15 +34,16 @@ namespace openviewfactor {
       size_t getNumMeshes() const;
       std::shared_ptr<Triangulation<FLOAT_TYPE>> getEmitterMesh() const;
       std::shared_ptr<Triangulation<FLOAT_TYPE>> getReceiverMesh() const;
-      FLOAT_TYPE *getPointer() const;
+      FLOAT_TYPE *getViewFactorVector() const;
+
+      ViewFactor<FLOAT_TYPE>& sortIndicesMap();
+      ViewFactor<FLOAT_TYPE>& setViewFactorVector(const std::vector<FLOAT_TYPE> &buffer);
+      ViewFactor<FLOAT_TYPE>& setElement(size_t emitter_index, size_t receiver_index, FLOAT_TYPE value);
 
       FLOAT_TYPE getSurfaceToSurfaceAverageVF() const;
       FLOAT_TYPE getEmitterElementToReceiverSurfaceVF(size_t emitter_index) const;
       FLOAT_TYPE getReceiverElementFromEmitterSurfaceVF(size_t receiver_index) const;
       FLOAT_TYPE getMatrixElementVF(size_t emitter_index, size_t receiver_index) const;
-
-      ViewFactor<FLOAT_TYPE>& setViewFactorVector(const std::vector<FLOAT_TYPE> &buffer);
-      ViewFactor<FLOAT_TYPE>& setElement(size_t emitter_index, size_t receiver_index, FLOAT_TYPE value);
   };
 }
 

@@ -76,4 +76,7 @@ namespace openviewfactor {
     addElem(tri.getOA(), tri.getOB(), tri.getOC());
     return *this;
   }
+
+template class Triangulation<float>;
+template class Triangulation<double>;
 }

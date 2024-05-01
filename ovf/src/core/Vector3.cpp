@@ -155,4 +155,22 @@ namespace openviewfactor {
   OVF_HOST_DEVICE bool Vector3<FLOAT_TYPE>::operator!=(const Vector3<FLOAT_TYPE> &rhs) {
     return !(*this == rhs);
   }
+
+template class Vector3<float>;
+template class Vector3<double>;
+
+template bool operator==(const Vector3<float> &, const Vector3<float> &);
+template bool operator==(const Vector3<double> &, const Vector3<double> &);
+template bool operator!=(const Vector3<float> &, const Vector3<float> &);
+template bool operator!=(const Vector3<double> &, const Vector3<double> &);
+
+template Vector3<float> operator+(const Vector3<float> &, const Vector3<float> &);
+template Vector3<double> operator+(const Vector3<double> &, const Vector3<double> &);
+template Vector3<float> operator-(const Vector3<float> &, const Vector3<float> &);
+template Vector3<double> operator-(const Vector3<double> &, const Vector3<double> &);
+
+template float dot(const Vector3<float> &, const Vector3<float> &);
+template double dot(const Vector3<double> &, const Vector3<double> &);
+template Vector3<float> cross(const Vector3<float> &, const Vector3<float> &);
+template Vector3<double> cross(const Vector3<double> &, const Vector3<double> &);
 }

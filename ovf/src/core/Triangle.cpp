@@ -77,4 +77,11 @@ namespace openviewfactor {
   OVF_HOST_DEVICE bool Triangle<FLOAT_TYPE>::operator!=(const Triangle<FLOAT_TYPE> &rhs) const {
     return !(this == rhs);
   }
+
+template class Triangle<float>;
+template class Triangle<double>;
+template bool operator==(const Triangle<float> &, const Triangle<float> &);
+template bool operator==(const Triangle<double> &, const Triangle<double> &);
+template bool operator!=(const Triangle<float> &, const Triangle<float> &);
+template bool operator!=(const Triangle<double> &, const Triangle<double> &);
 }

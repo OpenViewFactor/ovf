@@ -46,6 +46,13 @@ template <typename FLOAT_TYPE> class Triangle {
     OVF_HOST_DEVICE bool operator==(const T &rhs) const;
     OVF_HOST_DEVICE bool operator!=(const T &rhs) const;
 };
+
+template <typename FLOAT_TYPE>
+bool operator==(const Triangle<FLOAT_TYPE> &lhs,
+                const Triangle<FLOAT_TYPE> &rhs);
+template <typename FLOAT_TYPE>
+bool operator!=(const Triangle<FLOAT_TYPE> &lhs,
+                const Triangle<FLOAT_TYPE> &rhs);
 }
 
 #endif

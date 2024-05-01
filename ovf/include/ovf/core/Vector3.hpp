@@ -56,6 +56,13 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE bool operator!=(const Vector3<FLOAT_TYPE> &lhs,
                                   const Vector3<FLOAT_TYPE> &rhs);  // explicit instantiation of inequality comparison
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE FLOAT_TYPE dot(const Vector3<FLOAT_TYPE> &lhs,
+                                 const Vector3<FLOAT_TYPE> &rhs);
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> cross(const Vector3<FLOAT_TYPE> &lhs,
+                                 const Vector3<FLOAT_TYPE> &rhs);
 }
 
 #endif

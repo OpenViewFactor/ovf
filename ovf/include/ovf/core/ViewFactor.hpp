@@ -21,8 +21,6 @@ namespace openviewfactor {
       std::vector<std::pair<size_t, FLOAT_TYPE>> _nonzero_vf;
     
     public:
-      ViewFactor(std::vector<size_t> full_matrix_indices_map);
-
       ViewFactor<FLOAT_TYPE>& link(std::shared_ptr<Triangulation<FLOAT_TYPE>> mesh);  //* 1-mesh implementation
       ViewFactor<FLOAT_TYPE>& link(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh,
                                    std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh); //* 2-mesh implementation
@@ -34,10 +32,8 @@ namespace openviewfactor {
       size_t getNumMeshes() const;
       std::shared_ptr<Triangulation<FLOAT_TYPE>> getEmitterMesh() const;
       std::shared_ptr<Triangulation<FLOAT_TYPE>> getReceiverMesh() const;
-      FLOAT_TYPE *getViewFactorVector() const;
+      FLOAT_TYPE *getNonZeroViewFactorVectorPtr() const;
 
-      ViewFactor<FLOAT_TYPE>& sortIndicesMap();
-      ViewFactor<FLOAT_TYPE>& setViewFactorVector(const std::vector<FLOAT_TYPE> &buffer);
       ViewFactor<FLOAT_TYPE>& setElement(size_t emitter_index, size_t receiver_index, FLOAT_TYPE value);
 
       FLOAT_TYPE getSurfaceToSurfaceAverageVF() const;

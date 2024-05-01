@@ -2,16 +2,6 @@
 
 namespace openviewfactor {
   template <typename FLOAT_TYPE>
-  ViewFactor<FLOAT_TYPE>::ViewFactor(std::vector<size_t> full_matrix_indices_map) {
-    std::vector<FLOAT_TYPE> values;
-    auto indices = full_matrix_indices_map;
-    std::sort(indices.begin(), indices.end());
-    for (int i=0; i < indices.size(); i++) {
-      _nonzero_vf.push_back(std::make_pair(indices[i], values[i]));
-    }
-  }
-  
-  template <typename FLOAT_TYPE>
   ViewFactor<FLOAT_TYPE>& ViewFactor<FLOAT_TYPE>::link(std::shared_ptr<Triangulation<FLOAT_TYPE>> mesh) {
     if (_state != UNLINKED) {
       unlink();
@@ -89,71 +79,70 @@ namespace openviewfactor {
     }
   }
   template <typename FLOAT_TYPE>
-  FLOAT_TYPE *ViewFactor<FLOAT_TYPE>::getViewFactorVector() const { return _nonzero_vf.data(); }
+  FLOAT_TYPE *ViewFactor<FLOAT_TYPE>::getNonZeroViewFactorVectorPtr() const { return _nonzero_vf.data(); }
 
   template <typename FLOAT_TYPE>
-  ViewFactor<FLOAT_TYPE>& ViewFactor<FLOAT_TYPE>::sortIndicesMap() {
-    std::sort(_full_matrix_indices_map.begin(), _full_matrix_indices_map.end());
-    std::sort(_nonzero_view_factors.begin(), _nonzero_view_factors.end(), _full_matrix_indices_map);
-    return *this;
-  }
-  template <typename FLOAT_TYPE>
-  ViewFactor<FLOAT_TYPE>& ViewFactor<FLOAT_TYPE>::setViewFactorVector(const std::vector<FLOAT_TYPE> &v) {
-    _nonzero_view_factors = v;
-    return *this;
-  }
-  template <typename FLOAT_TYPE>
   ViewFactor<FLOAT_TYPE>& ViewFactor<FLOAT_TYPE>::setElement(size_t emitter_index, size_t receiver_index, FLOAT_TYPE value) {
-    auto full_matrix_index = (emitter_index * _receiver.size()) + receiver_index;
-    std::vector<size_t>::iterator it = std::find(_full_matrix_indices_map.begin(), _full_matrix_indices_map.end(), full_matrix_index);
-    if (it != _full_matrix_indices_map.end()) {
-      size_t index_in_mapping_vector = it - _full_matrix_indices_map.begin();
-      _nonzero_view_factors[index_in_mapping_vector] = value;
-      return *this;
-    } else {
-      throw std::exception("Element attempting to be populated in ViewFactor::setElement was already determined to be zero and is therefore not present in the ViewFactor object.");
-    }
+    auto full_matrix_index = (emitter_index * getNumReceiverElements()) + receiver_index;
+    std::pair<size_t, FLOAT_TYPE> p;
+    p.first = full_matrix_index;
+    p.second = value;
+    _nonzero_vf.push_back(p);
+    return *this;
   }
 
   template <typename FLOAT_TYPE>
   FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getSurfaceToSurfaceAverageVF() const {
-    //TODO FILL THIS OUT
-    FLOAT_TYPE sum = 0.0;
-    switch (_state) {
-      case LINKED_ONE_MESH:
-      case LINKED_TWO_MESH:
-      default:
-        throw std::exception("Cannot perform transformation: Result not linked to mesh");
+    FLOAT_TYPE outer_sum = 0.0;
+    if (_state == UNLINKED) {
+      throw std::exception("Error getting surface-surface average: result not linked to mesh");
     }
+    for (size_t emitter_index=0; emitter_index < getNumEmitterElements(); emitter_index++) {
+      outer_sum += (*_emitter)[emitter_index].area() * getEmitterElementToReceiverSurfaceVF();
+    }
+    return (outer_sum / _emitter->area());
   }
   template <typename FLOAT_TYPE>
   FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getEmitterElementToReceiverSurfaceVF(size_t emitter_index) const {
-    //TODO FILL THIS OUT
     FLOAT_TYPE sum = 0.0;
-    switch (_state) {
-      case LINKED_ONE_MESH:
-        break;
-      case LINKED_TWO_MESH:
-        break;
-      default:
-        throw std::exception("Cannot perform transformation: Result not linked to mesh");
+    if (_state == UNLINKED) {
+      throw std::exception("Error getting emitting element-surface average: result not linked to mesh");
     }
+    for (size_t receiver_index=0; receiver_index < getNumReceiverElements(); receiver_index++) {
+      if (emitter_index == receiver_index) {
+        continue;
+      }
+      sum += getMatrixElementVF(emitter_index, receiver_index);
+    }
+    return sum;
   }
   template <typename FLOAT_TYPE>
   FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getReceiverElementFromEmitterSurfaceVF(size_t receiver_index) const {
-    //TODO FILL THIS OUT
-    FLOAT_TYPE sum = 0.0;
     switch (_state) {
       case LINKED_ONE_MESH:
-        break;
+        return getEmitterElementToReceiverSurfaceVF(receiver_index);
       case LINKED_TWO_MESH:
-        break;
+        FLOAT_TYPE sum = 0.0;
+        for (size_t emitter_index=0; emitter_index < getNumEmitterElements(); emitter_index++) {
+          sum += getMatrixElementVF(emitter_index, receiver_index) * ((*_emitter)[emitter_index].area() / (*_receiver)[receiver_index].area());
+        }
+        return sum;
       default:
-        throw std::exception("Cannot perform transformation: Result not linked to mesh");
+        throw std::exception("Error getting receiving element-surface average: result not linked to mesh");
     }
   }
   template <typename FLOAT_TYPE>
   FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getMatrixElementVF(size_t emitter_index, size_t receiver_index) const {
-    return _nonzero_vf[(emitter_index * _receiver.size()) + receiver_index];
+    auto full_matrix_index = (emitter_index * getNumReceiverElements()) +  receiver_index;
+    std::vector<std::pair<size_t, FLOAT_TYPE>>::iterator it = std::find_if(_nonzero_vf.begin(), _nonzero_vf.end(), (n=0)[]mutable{ return (full_matrix_index==_nonzero_vf[n++].first); });
+    if (it != _nonzero_vf.end()) {
+      size_t index = it - _nonzero_vf.begin();
+      return _nonzero_vf[index].second;
+    } else {
+      throw std::exception("The element being accessed in this call to getMatrixElementVF does not exist in the nonzero vf vector.");
+    }
   }
+
+template class ViewFactor<float>;
+template class ViewFactor<double>;
 }

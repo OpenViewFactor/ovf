@@ -6,8 +6,6 @@
 #include <vector>
 #include <algorithm>
 
-#include "ovf/core/config.hpp"
-#include "ovf/core/Vector3.hpp"
 #include "ovf/core/Triangle.hpp"
 
 namespace openviewfactor {

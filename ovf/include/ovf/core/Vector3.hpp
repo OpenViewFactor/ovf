@@ -1,7 +1,7 @@
 #ifndef OVF_VECTOR3_H_
 #define OVF_VECTOR3_H_
 
-#include "ovf/core/config.hpp"
+#include "ovf/headers/config.hpp"
 
 namespace openviewfactor {
   template <typename FLOAT_TYPE> class Vector3 {

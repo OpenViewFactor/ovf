@@ -1,5 +1,3 @@
-#include "ovf/core/Vector3.hpp"
-#include "ovf/core/Triangle.hpp"
 #include "ovf/core/Triangulation.hpp"
 #include "ovf/core/FileReader.hpp"
 #include "ovf/core/STLReader.hpp"

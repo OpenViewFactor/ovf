@@ -5,7 +5,7 @@ namespace openviewfactor {
   //* ----- CLASS CONSTRUCTORS ----- *//
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangle<FLOAT_TYPE>::Triangle()
-    : _OA(), _OB(), _OC(), _n(), _a(0) {}
+    : _OA(Vector3()), _OB(Vector3()), _OC(Vector3()), _n(Vector3()), _a(0) {}
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangle<FLOAT_TYPE>::Triangle(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC)

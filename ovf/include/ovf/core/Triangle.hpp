@@ -1,7 +1,6 @@
 #ifndef OVF_TRIANGLE_H_
 #define OVF_TRIANGLE_H_
 
-#include "ovf/core/config.hpp"
 #include "ovf/core/Vector3.hpp"
 
 namespace openviewfactor {

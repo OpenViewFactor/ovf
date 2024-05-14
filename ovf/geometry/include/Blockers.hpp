@@ -11,6 +11,8 @@ namespace openviewfactor {
 
     public:
       OVF_HOST_DEVICE Blockers();
+
+      OVF_HOST_DEVICE Blockers<FLOAT_TYPE>& addBlocker(const Triangulation<FLOAT_TYPE> &b);
   };
 }
 

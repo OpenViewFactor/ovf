@@ -32,7 +32,7 @@ classdef ViewFactor < handle
     end
 
     function num_emitters = getNumEmitterElements(obj)
-      if obj.state ~= ViewFactorState.UNLINKED
+      if obj.isLinked
         num_emitters = obj.emitter.numElements;
       else
         exception = MException("ViewFactor:Unlinked", "Cannot get number of emitter elements, ViewFactor object is not linked to a mesh");

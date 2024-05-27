@@ -17,6 +17,8 @@ classdef Triangle < handle
       obj.OA = OA;
       obj.OB = OB;
       obj.OC = OC;
+      obj.NORMAL = obj.getAB.crossProduct(obj.getCA.flip);
+      obj.AREA = obj.NORMAL.getMagnitude / 2;
     end
 
     function OA = getOA(obj)

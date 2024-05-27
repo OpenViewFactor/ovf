@@ -75,6 +75,10 @@ classdef Vector3 < handle
       dir = Vector3(obj.getX / obj.getMagnitude, obj.getY / obj.getMagnitude, obj.getZ / obj.getMagnitude);
     end
 
+    function flipped_vector = flip(obj)
+      flipped_vector = Vector3(obj.getX * (-1), obj.getY * (-1), obj.getZ * (-1));
+    end
+
     function sum = plus(obj, v)
       arguments
         obj Vector3

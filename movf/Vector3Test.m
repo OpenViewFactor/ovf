@@ -1,5 +1,5 @@
 function tests = Vector3Test
-tests = functiontests(localfunctions);
+  tests = functiontests(localfunctions);
 end
 
 

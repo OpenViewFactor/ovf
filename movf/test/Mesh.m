@@ -52,7 +52,7 @@ classdef Mesh < handle
       end
     end
 
-    function T = subsref(obj, index)
+    function T = getElement(obj, index)
       arguments
         obj Mesh
         index uint64
@@ -65,7 +65,7 @@ classdef Mesh < handle
     function A = area(obj)
       A = 0;
       for i=1:size(obj.connectivity,1)
-        T = obj.subsref(i);
+        T = obj.getElement(i);
         A = A + T.area;
       end
     end

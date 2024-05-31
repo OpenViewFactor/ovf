@@ -94,7 +94,7 @@ classdef ViewFactor < handle
         receiver_index (1,1) uint64
         value (1,1) double
       end
-      full_matrix_index = (emitter_index * obj.getNumReceiverElements) + receiver_index;
+      full_matrix_index = ((emitter_index - 1) * obj.getNumReceiverElements) + (receiver_index - 1) + 1;
       pair = IndexValuePair(full_matrix_index, value);
       obj.nonzero_vf = [obj.nonzero_vf, pair];
     end
@@ -105,7 +105,7 @@ classdef ViewFactor < handle
         emitter_index (1,1) uint64
         receiver_index (1,1) uint64
       end
-      full_matrix_index = (emitter_index * obj.getNumReceiverElements) + receiver_index;
+      full_matrix_index = ((emitter_index - 1) * obj.getNumReceiverElements) + (receiver_index - 1) + 1;
       map = obj.nonzero_vf;
       for map_index = 1 : length(map)
         pair = map(map_index);
@@ -124,8 +124,8 @@ classdef ViewFactor < handle
         throw(MException('ViewFactor:AverageVF', 'Error getting emitting element-to-surface average: result is not linked a mesh'));
       end
       emitter_element_average = 0;
-      for receiver_index = 1 : obj.receiver.numElements
-        if emitter_index == receiver_index
+      for receiver_index = 1 : obj.getNumReceiverElements
+        if emitter_index == receiver_index && obj.state == ViewFactorState.LINKED_ONE_MESH
           continue
         end
         emitter_element_average = emitter_element_average + obj.getMatrixElementVF(emitter_index, receiver_index);

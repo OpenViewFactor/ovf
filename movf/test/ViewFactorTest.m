@@ -116,8 +116,57 @@ function testGetEmitterElementToReceiverSurfaceVF(testCase)
   v.setElement(1,1,1);
   v.setElement(1,2,1);
   v.setElement(1,3,1);
-  v.setElement(2,1,1);
-  v.setElement(2,2,1);
-  v.setElement(2,3,1);
-  verifyEqual(testCase, v.getEmitterElementToReceiverSurfaceVF(1), 3);
+  v.setElement(2,1,1.1);
+  v.setElement(2,2,1.1);
+  v.setElement(2,3,1.1);
+  verifyEqual(testCase, v.getEmitterElementToReceiverSurfaceVF(1), 3, "AbsTol", 1e-10);
+  verifyEqual(testCase, v.getEmitterElementToReceiverSurfaceVF(2), 3.3, "AbsTol", 1e-10);
+end
+
+function testGetReceiverElementFromEmitterSurfaceVF(testCase)
+  e = Mesh;
+  e.setName(MeshType.EMITTER);
+  e.addElement(Vector3(0,0,0), Vector3(1,0,0), Vector3(1,1,0));
+  e.addElement(Vector3(0,0,0), Vector3(1,1,0), Vector3(0,1,0));
+
+  r = Mesh;
+  r.setName(MeshType.RECEIVER);
+  r.addElement(Vector3(0,0,1), Vector3(1,0,1), Vector3(1,1,1));
+  r.addElement(Vector3(0,0,1), Vector3(1,1,1), Vector3(0,1,1));
+  r.addElement(Vector3(1,0,1), Vector3(2,0,1), Vector3(2,1,1));
+  
+  v = ViewFactor;
+  v.linkMeshes(e, r);
+  v.setElement(1,1,1);
+  v.setElement(1,2,1);
+  v.setElement(1,3,1);
+  v.setElement(2,1,1.1);
+  v.setElement(2,2,1.1);
+  v.setElement(2,3,1.1);
+  verifyEqual(testCase, v.getReceiverElementFromEmitterSurfaceVF(1), 2.1, "AbsTol", 1e-10);
+  verifyEqual(testCase, v.getReceiverElementFromEmitterSurfaceVF(2), 2.1, "AbsTol", 1e-10);
+  verifyEqual(testCase, v.getReceiverElementFromEmitterSurfaceVF(3), 2.1, "AbsTol", 1e-10);
+end
+
+function testGetSurfaceToSurfaceAverageVF(testCase)
+  e = Mesh;
+  e.setName(MeshType.EMITTER);
+  e.addElement(Vector3(0,0,0), Vector3(1,0,0), Vector3(1,1,0));
+  e.addElement(Vector3(0,0,0), Vector3(1,1,0), Vector3(0,1,0));
+
+  r = Mesh;
+  r.setName(MeshType.RECEIVER);
+  r.addElement(Vector3(0,0,1), Vector3(1,0,1), Vector3(1,1,1));
+  r.addElement(Vector3(0,0,1), Vector3(1,1,1), Vector3(0,1,1));
+  r.addElement(Vector3(1,0,1), Vector3(2,0,1), Vector3(2,1,1));
+  
+  v = ViewFactor;
+  v.linkMeshes(e, r);
+  v.setElement(1,1,1);
+  v.setElement(1,2,1);
+  v.setElement(1,3,1);
+  v.setElement(2,1,1.1);
+  v.setElement(2,2,1.1);
+  v.setElement(2,3,1.1);
+  verifyEqual(testCase, v.getSurfaceToSurfaceAverageVF, 3.15, "AbsTol", 1e-10);
 end

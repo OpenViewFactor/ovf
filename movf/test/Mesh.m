@@ -62,6 +62,22 @@ classdef Mesh < handle
       T = Triangle(pts(con(index,1)), pts(con(index,2)), pts(con(index,3)));
     end
 
+    function centroids = getCentroids(obj)
+      centroids = Vector3.empty(size(obj.connectivity, 1), 0);
+      for i=1:size(obj.connectivity,1)
+        T = obj.getElement(i);
+        centroids(i) = T.centroid;
+      end
+    end
+
+    function normals = getNormals(obj)
+      normals = Vector3.empty(size(obj.connectivity, 1), 0);
+      for i=1:size(obj.connectivity,1)
+        T = obj.getElement(i);
+        normals(i) = T.normal;
+      end
+    end
+
     function A = area(obj)
       A = 0;
       for i=1:size(obj.connectivity,1)

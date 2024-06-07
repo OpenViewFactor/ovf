@@ -5,3 +5,26 @@
 %* [5] run bfcull (m*n - b)
 %* [6] determine blocking (NOT YET WRITTEN)
 %* [7] run DAI
+
+classdef Solver < handle
+  properties
+    options SolverOptions
+  end
+
+  methods
+    function obj = Solver(options)
+      arguments
+        options SolverOptions
+      end
+      obj.options = options;
+    end
+
+    function view_factors = solveViewFactor(obj, emitter_mesh, receiver_mesh)
+      arguments
+        obj Solver
+        emitter_mesh Mesh
+        receiver_mesh Mesh
+      end
+    end
+  end
+end

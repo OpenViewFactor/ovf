@@ -2,15 +2,17 @@
 
 namespace openviewfactor {
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE BFCull<FLOAT_TYPE>::BFCull(ViewFactor<FLOAT_TYPE> vf) : _vf(vf), _culled_pairs(std::vector<size_t>()) {}
+  OVF_HOST_DEVICE BFCull<FLOAT_TYPE>::BFCull(const ViewFactor<FLOAT_TYPE> &vf) : _vf(vf), _culled_pairs(std::vector<size_t>()) {}
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE std::vector<size_t> BFCull<FLOAT_TYPE>::getCulledPairs() const { return _culled_pairs; }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE bool BFCull<FLOAT_TYPE>::isCulled(const Triangle<FLOAT_TYPE> &emitter, const Triangle<FLOAT_TYPE> &receiver) const {
-    Vector3<FLOAT_TYPE> centroid_centroid_ray = receiver.centroid() - emitter.centroid();
-    return (centroid_centroid_ray.dot(emitter.normal()) < 0 || centroid_centroid_ray.dot(receiver.normal()) > 0);
+  OVF_HOST_DEVICE bool BFCull<FLOAT_TYPE>::isCulled(size_t emitter_index, size_t receiver_index) const {
+    Triangle<FLOAT_TYPE> emitter_triangle = _vf.getEmitterMesh()[emitter_index];
+    Triangle<FLOAT_TYPE> receiver_triangle = _vf.getReceiverMesh()[receiver_index];
+    Vector3<FLOAT_TYPE> centroid_centroid_ray = receiver_triangle.centroid() - emitter_triangle.centroid();
+    return (centroid_centroid_ray.dot(emitter_triangle.normal()) < 0 || centroid_centroid_ray.dot(receiver_triangle.normal()) > 0);
   }
 
   template <typename FLOAT_TYPE>

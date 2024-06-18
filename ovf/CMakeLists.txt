@@ -3,6 +3,7 @@ set(_public_headers
     geometry/include/Vector3.hpp
     geometry/include/Triangle.hpp
     geometry/include/Triangulation.hpp
+    geometry/include/Blockers.hpp
     solver/include/Solver.hpp
     solver/include/SolverOptions.hpp
     solver/include/SolverFactory.hpp

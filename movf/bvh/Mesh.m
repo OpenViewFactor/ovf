@@ -66,7 +66,7 @@ classdef Mesh < handle
       centroids = Vector3.empty(size(obj.connectivity, 1), 0);
       for i=1:size(obj.connectivity,1)
         T = obj.getElement(i);
-        centroids(i) = T.centroid;
+        centroids(i) = T.getCentroid;
       end
     end
 
@@ -74,7 +74,7 @@ classdef Mesh < handle
       normals = Vector3.empty(size(obj.connectivity, 1), 0);
       for i=1:size(obj.connectivity,1)
         T = obj.getElement(i);
-        normals(i) = T.normal;
+        normals(i) = T.getNormal;
       end
     end
 
@@ -82,7 +82,7 @@ classdef Mesh < handle
       A = 0;
       for i=1:size(obj.connectivity,1)
         T = obj.getElement(i);
-        A = A + T.area;
+        A = A + T.getArea;
       end
     end
 

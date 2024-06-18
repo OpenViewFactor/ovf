@@ -3,8 +3,9 @@ classdef Triangle < handle
     OA (1,1) Vector3 = Vector3(0,0,0)
     OB (1,1) Vector3 = Vector3(0,0,0)
     OC (1,1) Vector3 = Vector3(0,0,0)
-    NORMAL (1,1) Vector3 = Vector3(0,0,0)
-    AREA (1,1) double = 0
+    normal_vector (1,1) Vector3 = Vector3(0,0,0)
+    triangle_centroid (1,1) Vector3 = Vector3(0,0,0)
+    triangle_area (1,1) double = 0
   end
 
   methods
@@ -17,8 +18,8 @@ classdef Triangle < handle
       obj.OA = OA;
       obj.OB = OB;
       obj.OC = OC;
-      obj.NORMAL = obj.getAB.crossProduct(obj.getCA.flip);
-      obj.AREA = obj.NORMAL.getMagnitude / 2;
+      obj.normal_vector = obj.getAB.crossProduct(obj.getCA.flip);
+      obj.triangle_area = obj.normal_vector.getMagnitude / 2;
     end
 
     function OA = getOA(obj)
@@ -41,15 +42,14 @@ classdef Triangle < handle
       CA = obj.getOA - obj.getOC;
     end
 
-    function N = normal(obj)
-      N = obj.NORMAL;
+    function N = getNormal(obj)
+      N = obj.normal_vector;
     end
-    function C = centroid(obj)
-      v = obj.getOA + obj.getOB + obj.getOC;
-      C = Vector3(v.getX / 3, v.getY / 3, v.getZ / 3);
+    function C = getCentroid(obj)
+      C = obj.triangle_centroid;
     end
-    function A = area(obj)
-      A = obj.AREA;
+    function A = getArea(obj)
+      A = obj.triangle_area;
     end
 
     function setOA(obj, x, y, z)

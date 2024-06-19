@@ -62,6 +62,42 @@ classdef Mesh < handle
       T = Triangle(pts(con(index,1)), pts(con(index,2)), pts(con(index,3)));
     end
 
+    function sub_mesh = getSubMesh(obj, indices)
+      arguments
+        obj Mesh
+        indices (1,:) uint64
+      end
+      sub_mesh = Mesh;
+      sub_mesh.setConnectivity(obj.connectivity(indices,:));
+      sub_mesh.setPoints(obj.points);
+    end
+    function setConnectivity(obj, con)
+      arguments
+        obj Mesh
+        con (:,3) uint64
+      end
+      obj.connectivity = con;
+    end
+    function setPoints(obj, pts)
+      arguments
+        obj Mesh
+        pts (:,1) Vector3
+      end
+      obj.points = pts;
+    end
+
+    function swapElements(obj, index_one, index_two)
+      arguments
+        obj Mesh
+        index_one (1,1) uint64
+        index_two (1,1) uint64
+      end
+      t1_connectivity = obj.connectivity(index_one, :);
+      t2_connectivity = obj.connectivity(index_two, :);
+      obj.connectivity(index_two, :) = t1_connectivity;
+      obj.connectivity(index_one, :) = t2_connectivity;
+    end
+
     function centroids = getCentroids(obj)
       centroids = Vector3.empty(size(obj.connectivity, 1), 0);
       for i=1:size(obj.connectivity,1)

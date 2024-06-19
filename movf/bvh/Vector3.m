@@ -26,6 +26,29 @@ classdef Vector3 < handle
     function z = getZ(obj)
       z = obj.z;
     end
+    function val = getComponentByAxis(obj, axis)
+      arguments
+        obj Vector3
+        axis (1,1) uint64
+      end
+      switch axis
+        case 1
+          val = obj.getX;
+        case 2
+          val = obj.getY;
+        case 3
+          val = obj.getZ;
+      end
+    end
+
+    function axis_index = getLongestDirection(obj)
+      axis_index = 1; % default axis to split to x
+      if obj.getY > obj.getX && obj.getY > obj.getZ
+        axis_index = 2; % set axis to split to y
+      elseif obj.getZ > obj.getX && obj.getZ > obj.getY
+        axis_index = 3;
+      end
+    end
 
     function magnitude = getMagnitude(obj)
       magnitude = norm([obj.getX, obj.getY, obj.getZ]);

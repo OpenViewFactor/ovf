@@ -46,7 +46,7 @@ classdef Ray < handle
         emitter Triangle
         receiver Triangle
       end
-      is_culled = obj.getDirection.dot(emitter.normal) < 0 || obj.getDirection.dot(receiver.normal) > 0;
+      is_culled = obj.getDirection.dotProduct(emitter.getNormal) < 0 || obj.getDirection.dotProduct(receiver.getNormal) > 0;
     end
     function triangleIntersection(obj, triangle)
       arguments
@@ -57,12 +57,12 @@ classdef Ray < handle
       E1 = triangle.getAB;
       E2 = triangle.getCA.flip;
     
-      T = V0 - ray.getOrigin;
-      D = ray.getDirection;
-      P = D.cross_product(E2);
-      Q = T.cross_product(E1);
+      T = obj.getOrigin - V0;
+      D = obj.getDirection;
+      P = D.crossProduct(E2);
+      Q = T.crossProduct(E1);
       
-      t = Q.dot(E2) * (1 / P.dot(E1));
+      t = Q.dotProduct(E2) * (1 / P.dotProduct(E1));
       if t > 0 && t < obj.getIntersectionDistance
         obj.setIntersectionDistance(t);
       end

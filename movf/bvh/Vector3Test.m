@@ -82,4 +82,21 @@ function testMinus(testCase)
   verifyEqual(testCase, a - b, c);
 end
 
+%* ----- TEST LONGEST DIRECTION METHOD ---- 8%
+function testLongestDirection(testCase)
+  a = Vector3(1,2,3);
+  verifyEqual(testCase, a.getLongestDirection, 3);
+  b = Vector3(2,3,1);
+  verifyEqual(testCase, b.getLongestDirection, 2);
+  c = Vector3(3,2,1);
+  verifyEqual(testCase, c.getLongestDirection, 1);
+end
+
+%* ----- TEST AXIS EXTRACTION METHOD ---- *%
+function testGetComponentByAxis(testCase)
+  a = Vector3(1,2,3);
+  verifyEqual(testCase, a.getComponentByAxis(1), 1);
+  verifyEqual(testCase, a.getComponentByAxis(2), 2);
+  verifyEqual(testCase, a.getComponentByAxis(3), 3);
+end
 %! the equality function is already being tested in every other test

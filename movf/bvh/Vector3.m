@@ -1,5 +1,5 @@
 classdef Vector3 < handle
-  properties (GetAccess = private, SetAccess = private)
+  properties
     x (1,1) double = 0
     y (1,1) double = 0
     z (1,1) double = 0
@@ -29,7 +29,7 @@ classdef Vector3 < handle
     function val = getComponentByAxis(obj, axis)
       arguments
         obj Vector3
-        axis (1,1) uint64
+        axis (1,1) uint8
       end
       switch axis
         case 1
@@ -43,9 +43,9 @@ classdef Vector3 < handle
 
     function axis_index = getLongestDirection(obj)
       axis_index = 1; % default axis to split to x
-      if obj.getY > obj.getX && obj.getY > obj.getZ
+      if obj.getY >= obj.getX && obj.getY >= obj.getZ
         axis_index = 2; % set axis to split to y
-      elseif obj.getZ > obj.getX && obj.getZ > obj.getY
+      elseif obj.getZ >= obj.getX && obj.getZ >= obj.getY
         axis_index = 3;
       end
     end
@@ -74,6 +74,13 @@ classdef Vector3 < handle
         z (1,1) double
       end
       obj.z = z;
+    end
+    function v = scaleVector(obj, scale)
+      arguments
+        obj Vector3
+        scale (1,1) double
+      end
+      v = Vector3(obj.getX * scale, obj.getY * scale, obj.getZ * scale);
     end
 
     function dot_product = dotProduct(obj, v)

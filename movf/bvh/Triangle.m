@@ -1,5 +1,5 @@
 classdef Triangle < handle
-  properties (GetAccess = private, SetAccess = private)
+  properties
     OA (1,1) Vector3 = Vector3(0,0,0)
     OB (1,1) Vector3 = Vector3(0,0,0)
     OC (1,1) Vector3 = Vector3(0,0,0)
@@ -20,6 +20,7 @@ classdef Triangle < handle
       obj.OC = OC;
       obj.normal_vector = obj.getAB.crossProduct(obj.getCA.flip);
       obj.triangle_area = obj.normal_vector.getMagnitude / 2;
+      obj.triangle_centroid = obj.getOA.scaleVector(1/3) + obj.getOB.scaleVector(1/3) + obj.getOC.scaleVector(1/3);
     end
 
     function OA = getOA(obj)

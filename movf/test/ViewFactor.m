@@ -1,5 +1,5 @@
 classdef ViewFactor < handle
-  properties (GetAccess = private, SetAccess = private)
+  properties
     state ViewFactorState = ViewFactorState.UNLINKED
     emitter Mesh
     receiver Mesh

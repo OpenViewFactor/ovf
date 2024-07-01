@@ -1,5 +1,5 @@
 classdef Ray < handle
-  properties (GetAccess = private, SetAccess = private)
+  properties
     origin Vector3 = Vector3(0,0,0)
     direction Vector3 = Vector3(0,0,0)
     intersection_distance (1,1) double = inf

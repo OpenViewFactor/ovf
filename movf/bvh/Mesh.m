@@ -1,5 +1,5 @@
 classdef Mesh < handle
-  properties (GetAccess = private, SetAccess = private)
+  properties
     points (:,1) Vector3
     connectivity (:,3) uint64
     name MeshType
@@ -122,5 +122,16 @@ classdef Mesh < handle
       end
     end
 
+    function plotMesh(obj)
+      double_points = zeros(obj.numPoints, 3, "double");
+      vector3_points = obj.points;
+      for i = 1 : obj.numPoints
+        double_points(i, :) = [vector3_points(i).getX, vector3_points(i).getY, vector3_points(i).getZ];
+      end
+      matlab_triangulation = triangulation(double(obj.connectivity), double_points);
+      trisurf(matlab_triangulation)
+      daspect([1,1,1])
+      view(3)
+    end
   end
 end

@@ -1,7 +1,7 @@
 classdef Ray < handle
   properties
     origin Vector3 = Vector3(0,0,0)
-    direction Vector3 = Vector3(0,0,0)
+    direction Vector3 = Vector3(1,0,0)
     intersection_distance (1,1) double = inf
   end
 
@@ -30,7 +30,7 @@ classdef Ray < handle
         obj Ray
         direction Vector3
       end
-      obj.direction = direction;
+      obj.direction = direction.direction;
     end
     function setIntersectionDistance(obj, distance)
       arguments
@@ -65,6 +65,15 @@ classdef Ray < handle
       t = Q.dotProduct(E2) * (1 / P.dotProduct(E1));
       if t > 0 && t < obj.getIntersectionDistance
         obj.setIntersectionDistance(t);
+      end
+    end
+
+    function plotRay(obj)
+      if obj.getIntersectionDistance ~= inf
+        origin_point = [obj.getOrigin.getX, obj.getOrigin.getY, obj.getOrigin.getZ];
+        end_point = origin_point + obj.getIntersectionDistance * [obj.getDirection.getX, obj.getDirection.getY, obj.getDirection.getZ];
+        points = [origin_point; end_point];
+        plot3(points(:,1), points(:,2), points(:,3), '-o', 'Color', 'b' , 'MarkerSize', 10, 'MarkerFaceColor', '#D9FFFF')
       end
     end
   end

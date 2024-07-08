@@ -86,18 +86,6 @@ classdef Mesh < handle
       obj.points = pts;
     end
 
-    function swapElements(obj, index_one, index_two)
-      arguments
-        obj Mesh
-        index_one (1,1) uint64
-        index_two (1,1) uint64
-      end
-      t1_connectivity = obj.connectivity(index_one, :);
-      t2_connectivity = obj.connectivity(index_two, :);
-      obj.connectivity(index_two, :) = t1_connectivity;
-      obj.connectivity(index_one, :) = t2_connectivity;
-    end
-
     function centroids = getCentroids(obj)
       centroids = Vector3.empty(size(obj.connectivity, 1), 0);
       for i=1:size(obj.connectivity,1)
@@ -111,6 +99,13 @@ classdef Mesh < handle
       for i=1:size(obj.connectivity,1)
         T = obj.getElement(i);
         normals(i) = T.getNormal;
+      end
+    end
+
+    function triangles = getTriangles(obj)
+      triangles = Triangle.empty(size(obj.connectivity, 1), 0);
+      for i=1:size(obj.connectivity,1)
+        triangles(i) = obj.getElement(i);
       end
     end
 
@@ -129,7 +124,7 @@ classdef Mesh < handle
         double_points(i, :) = [vector3_points(i).getX, vector3_points(i).getY, vector3_points(i).getZ];
       end
       matlab_triangulation = triangulation(double(obj.connectivity), double_points);
-      trisurf(matlab_triangulation)
+      trisurf(matlab_triangulation, 'FaceColor', '#444444', 'EdgeColor', '#AAAAAA')
       daspect([1,1,1])
       view(3)
     end

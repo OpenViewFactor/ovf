@@ -30,6 +30,7 @@ namespace openviewfactor {
       OVF_HOST_DEVICE V3& setY(FLOAT_TYPE y);  // set _y and return it
       OVF_HOST_DEVICE V3& setZ(FLOAT_TYPE z);  // set _z and return it
       OVF_HOST_DEVICE V3 scale(FLOAT_TYPE s) const;  // scale by a constant
+      OVF_HOST_DEVICE V3 flip() const;
 
       //* ----- VECTOR OPERATIONS ----- *//
       OVF_HOST_DEVICE FLOAT_TYPE dot(const V3 &rhs) const; // const method to dot two vectors

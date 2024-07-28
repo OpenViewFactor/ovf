@@ -45,6 +45,11 @@ namespace openviewfactor {
     Vector3<FLOAT_TYPE> scaled_vector(_x * s, _y * s, _z * s);
     return scaled_vector;
   }
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> Vector3<FLOAT_TYPE>::flip() const {
+    Vector3<FLOAT_TYPE> flipped_vector(_x * (-1), _y * (-1), _z * (-1));
+    return flipped_vector;
+  }
 
   //* ----- VECTOR OPERATIONS ----- *//
   // ! openviewfactor namespace dot product function

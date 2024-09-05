@@ -5,8 +5,8 @@ set(_geometry_headers
     headers/Triangulation.hpp
     headers/BVHNode.hpp
     headers/BVH.hpp
-    FileReader.hpp
-    STLReader.hpp
+    headers/FileReader.hpp
+    headers/STLReader.hpp
 )
 
 set(_geometry_sources
@@ -16,4 +16,5 @@ set(_geometry_sources
     src/Triangulation.cpp
     src/BVHNode.cpp
     src/BVH.cpp
+    src/STLReader.cpp
 )

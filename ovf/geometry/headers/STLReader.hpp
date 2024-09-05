@@ -9,9 +9,8 @@ namespace openviewfactor {
 
 template <typename FLOAT_TYPE> class STLReader : public FileReader<FLOAT_TYPE> {
 
-  using TGLN = Triangulation<FLOAT_TYPE>;
   public:
-    TGLN getMesh(const std::string &filename);
+    Triangulation<FLOAT_TYPE> getMesh(const std::string &filename);
 };
 }
 

@@ -1,4 +1,5 @@
 #include "geometry/include/Vector3.hpp"
+#include <cmath>
 
 namespace openviewfactor {
   //* ----- CLASS CONSTRUCTORS ----- *//
@@ -18,39 +19,9 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE Vector3<FLOAT_TYPE>::getZ() const { return _z; }
 
-  template<typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const FLOAT_TYPE Vector3<FLOAT_TYPE>::operator[](size_t index) const {
-    return (*this)[index];
-  }
-  template<typename FLOAT_TYPE>
-  OVF_HOST_DEVICE FLOAT_TYPE Vector3<FLOAT_TYPE>::operator[](size_t index) {
-    if (i != 0 && i != 1 && i != 2) {
-      throw std::runtime_error("Cannot access index %d", i);
-    }
-    if (i==1) {
-      return _x;
-    } else if (i == 2) {
-      return _y;
-    } else if (i == 3) {
-      return _z;
-    }
-  }
-
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE Vector3<FLOAT_TYPE>::getMagnitude() const {
     return sqrt(_x*_x + _y*_y + _z*_z);
-  }
-
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE unsigned int Vector3<FLOAT_TYPE>::getLongestDirection() const {
-    if (_y >= _x && _y >= _z) { return 1; }
-    if (_z >= _x && _z >= _y) { return 2; }
-    return 0;
-  }
-
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> Vector3<FLOAT_TYPE>::normalize() const {
-    return this->scale(1/this->getMagnitude());
   }
 
   //* ----- MUTATOR METHODS ----- *//
@@ -76,7 +47,8 @@ namespace openviewfactor {
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Vector3<FLOAT_TYPE> Vector3<FLOAT_TYPE>::flip() const {
-    return this->scale(-1);
+    Vector3<FLOAT_TYPE> flipped_vector(_x * (-1), _y * (-1), _z * (-1));
+    return flipped_vector;
   }
 
   //* ----- VECTOR OPERATIONS ----- *//
@@ -111,25 +83,16 @@ namespace openviewfactor {
     return openviewfactor::cross(*this, &rhs);
   }
 
-
-
-
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> vectorMinima(const Vector3<FLOAT_TYPE> v1, const Vector3<FLOAT_TYPE> v2) {
-    FLOAT_TYPE min_x = std::min(v1.getX(), v2.getX());
-    FLOAT_TYPE min_y = std::min(v1.getY(), v2.getY());
-    FLOAT_TYPE min_z = std::min(v1.getZ(), v2.getZ());
-    return Vector3<FLOAT_TYPE>(min_x, min_y, min_z);
+  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> Vector3<FLOAT_TYPE>::normalize() const {
+    FLOAT_TYPE magnitude = getMagnitude();
+    Vector3<FLOAT_TYPE> normalized_vector = {
+      _x / magnitude,
+      _y / magnitude,
+      _z / magnitude
+    };
+    return normalized_vector;
   }
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> vectorMaxima(const Vector3<FLOAT_TYPE> v1, const Vector3<FLOAT_TYPE> v2) {
-    FLOAT_TYPE max_x = std::max(v1.getX(), v2.getX());
-    FLOAT_TYPE max_y = std::max(v1.getY(), v2.getY());
-    FLOAT_TYPE max_z = std::max(v1.getZ(), v2.getZ());
-    return Vector3<FLOAT_TYPE>(max_x, max_y, max_z);
-  }
-
-
 
   //* ----- OPERATOR OVERLOADS ----- *//
   // ! openviewfactor namespace addition operator overload

@@ -1,14 +1,15 @@
 #include "geometry/include/Triangle.hpp"
+#include <cmath>
 
 namespace openviewfactor {
   //* ----- CLASS CONSTRUCTORS ----- *//
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangle<FLOAT_TYPE>::Triangle()
-    : _OA(Vector3<FLOAT_TYPE>()), _OB(Vector3<FLOAT_TYPE>()), _OC(Vector3<FLOAT_TYPE>()), _normal(Vector3<FLOAT_TYPE>()), _area(0), _centroid(Vector3<FLOAT_TYPE>()) {}
+    : _OA(Vector3()), _OB(Vector3()), _OC(Vector3()), _n(Vector3()), _a(0) {}
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangle<FLOAT_TYPE>::Triangle(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC)
-    : _OA(OA), _OB(OB), _OC(OC), _normal(cross(_OB - _OA, _OC - _OA)), _area(_normal.getMagnitude() / 2), _centroid((OA+OB+OC).scale(1/3)) {}
+    : _OA(OA), _OB(OB), _OC(OC), _n(cross(_OB - _OA, _OC - _OA)), _a(_n.getMagnitude() / 2) {}
   
   //* ----- ACCESSOR METHODS ----- *//
   template <typename FLOAT_TYPE>
@@ -26,13 +27,13 @@ namespace openviewfactor {
   OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getCA() const { return _OA - _OC; }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getNormal() const { return _normal; };
+  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::normal() const { return *_n; };
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getCentroid() const { 
-    return _centroid;
+  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::centroid() const { 
+    return (_OA + _OB + _OC).scale(1/3);
   }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const FLOAT_TYPE Triangle<FLOAT_TYPE>::getArea() const { return _area; }
+  OVF_HOST_DEVICE const FLOAT_TYPE Triangle<FLOAT_TYPE>::area() const { return _a; }
 
   //* ----- MUTATOR METHODS ----- *//
   template <typename FLOAT_TYPE>

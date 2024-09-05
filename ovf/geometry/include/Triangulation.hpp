@@ -6,42 +6,53 @@
 #include <vector>
 #include <algorithm>
 
+#include "config.hpp"
 #include "geometry/include/Triangle.hpp"
 
 namespace openviewfactor {
 
+enum MeshType { EMITTER, RECEIVER, BLOCKER, UNKNOWN };
+
 template <typename FLOAT_TYPE> class Triangulation {
 
-  using V3 = Vector3<FLOAT_TYPE>;
-  using T = Triangle<FLOAT_TYPE>;
-  using TGLN = Triangulation<FLOAT_TYPE>;
-
   private:
-    std::vector<V3> _pts;  // points list in the triangulation
+    std::vector<Vector3<FLOAT_TYPE>> _pts;  // points list in the triangulation
     std::vector<std::array<size_t, 3>> _con; // connectivity list in the triangulation
-    std::string _name;  // mesh name (i assume this was EMITTER, RECEIVER, BLOCKER)
+    MeshType _name;  // enumeration: EMITTER, RECEIVER, BLOCKER)
 
   public:
     //* ----- CLASS CONSTRUCTORS ----- *//
     OVF_HOST_DEVICE Triangulation();  // default constructor
-    OVF_HOST_DEVICE Triangulation(const std::string &name);  // name constructor
+    OVF_HOST_DEVICE Triangulation(MeshType name);  // name constructor
 
     //* ----- ACCESSOR METHODS ----- *//
-    OVF_HOST_DEVICE std::string getName() const;
-    OVF_HOST_DEVICE size_t numElem() const;
+    OVF_HOST_DEVICE MeshType getName() const;
+    OVF_HOST_DEVICE size_t getNumElements() const;
     OVF_HOST_DEVICE size_t numPts() const;
     OVF_HOST_DEVICE size_t numBytes() const;
+
     OVF_HOST_DEVICE std::vector<std::array<size_t, 3>>& getConPtr() const;
-    OVF_HOST_DEVICE std::vector<V3>& getPtsPtr() const;
-    OVF_HOST_DEVICE const T operator[](size_t index) const;
-    OVF_HOST_DEVICE T operator[](size_t index);
-    OVF_HOST_DEVICE FLOAT_TYPE area() const;
+    OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>>& getPtsPtr() const;
+    
+    OVF_HOST_DEVICE const Triangle<FLOAT_TYPE> operator[](size_t index) const;
+    OVF_HOST_DEVICE Triangle<FLOAT_TYPE> operator[](size_t index);
+    
+    OVF_HOST_DEVICE FLOAT_TYPE getMeshArea() const;
+
+    OVF_HOST_DEVICE Triangulation getSubMesh(std::vector<unsigned int> indices) const;
+
+    OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>> getCentroids() const;
+    OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>> getNormals() const;
+    OVF_HOST_DEVICE std::vector<Triangle<FLOAT_TYPE>> getTriangles() const;
 
     //* ----- MUTATOR METHODS ----- *//
-    OVF_HOST_DEVICE TGLN& setName(const std::string &name);
-    OVF_HOST_DEVICE TGLN& clear();
-    OVF_HOST_DEVICE TGLN& addElem(V3 OA, V3 OB, V3 OC);
-    OVF_HOST_DEVICE TGLN& addElem(T tri);
+    OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& setName(const MeshType &name);
+    OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& clear();
+    OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& addElement(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC);
+    OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& addElement(Triangle<FLOAT_TYPE> tri);
+
+    OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& setConnectivity(std::vector<std::array<size_t, 3>> con);
+    OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& setPoints(std::vector<Vector3<FLOAT_TYPE>> pts);
 };
 }
 

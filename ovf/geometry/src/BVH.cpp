@@ -2,10 +2,36 @@
 
 namespace openviewfactor {
 
+  //* ------------------------------ PUBLIC METHODS ------------------------------ *//
+
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVH<FLOAT_TYPE>::BVH()
     : _nodes(std::vector<BVHNode<FLOAT_TYPE>>()), _triangulation(nullptr), _mesh_element_indices(std::vector<unsigned int>()), _nodes_used(0), _minimum_triangle_threshold(2), _num_cost_evaluation_points(4) {}
-  
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::linkToTriangulation(const Triangulation<FLOAT_TYPE> &triangulation) {
+    _triangulation = std::make_unique(triangulation);
+    return *this;
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::setMinimumNumTriangles(unsigned int min_triangles) { _minimum_triangle_threshold = min_triangles; return *this; }
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::setNumCostEvaluationPoints(unsigned int num_cost_evaluation_points) { _num_cost_evaluation_points = num_cost_evaluation_points; return *this; }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::constructBVH() {
+    unsigned int root_node_index = 0;
+    _nodes_used = 1;
+    BVHNode<FLOAT_TYPE> root_node = _nodes[root_node_index];
+    root_node.growToIncludeTriangulation(_triangulation);
+    root_node.setNumTriangles((*_triangulation).getNumElements());
+    this->subdivideNode(root_node_index);
+    return *this;
+  }
+
+  //* ------------------------------ PRIVATE METHODS ------------------------------ *//
+
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE unsigned int BVH<FLOAT_TYPE>::getMaxNumNodes() const { return (this->_triangulation.getNumElements()); }
 
@@ -51,7 +77,7 @@ namespace openviewfactor {
     unsigned int index_of_last_unsorted_element = index_at_which_to_split + current_node.getNumTriangles();
 
     while (index_at_which_to_split <= index_of_last_unsorted_element) {
-      Triangle<FLOAT_TYPE> current_element = _triangulation.getElement(_mesh_element_indices[index_at_which_to_split]);
+      Triangle<FLOAT_TYPE> current_element = (*_triangulation).getElement(_mesh_element_indices[index_at_which_to_split]);
       if ((current_element.getCentroid())[axis_index] < split_location) {
         index_at_which_to_split++;
       } else {
@@ -86,13 +112,29 @@ namespace openviewfactor {
 
     current_node.setNumTriangles(0);
 
-    this->constructNewNode(left_child_index);
-    this->constructNewNode(left_child_index + 1);
+    (this->constructNewNode(left_child_index)).constructNewNode(left_child_index + 1);
+
+    return *this;
   }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::constructNewNode(unsigned int node_index) {
+    (_nodes[node_index]).growToIncludeTriangulation( (*_triangulation).getSubMesh( this->getSubMeshIndices(node_index) ) );
+    return *this;
+  }
 
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::intersectRayWithBVHNode(Ray<FLOAT_TYPE> ray, unsigned int node_index) const {
+    BVHNode<FLOAT_TYPE> current_node = _nodes[node_index];
+    if (!(current_node.intersectRayWithNodeBoundingBox(ray))) { return *this; }
+    if (current_node.isLeaf()) {
+      for (unsigned int i = current_node.getFirstTriangleIndex(); i < current_node.getFirstTriangleIndex + current_node.getNumTriangles(); i++) {
+        ray.triangleIntersection((*_triangulation)[_mesh_element_indices[i]]);
+      }
+    } else {
+      (this->intersectRayWithBVHNode(ray, current_node.getChildOneIndex())).intersectRayWithBVHNode(ray, current_node.getChildTwoIndex());
+    }
+    return *this;
   }
 
 }

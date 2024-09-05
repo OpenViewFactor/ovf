@@ -1,6 +1,6 @@
+% test 2
+
 clear all
-close all
-clc
 
 % delete(gcp('nocreate'))
 % parpool
@@ -10,7 +10,7 @@ filename = input("Enter the mesh filepath: ", "s");
 mesh = readMesh(filename);
 bvh = BVH;
 bvh.linkToMesh(mesh);
-bvh.setMinimumNumTriangles(16);
+bvh.setMinimumNumTriangles(5000);
 construction_start = tic;
 bvh.constructBVH;
 total_construction_time = toc(construction_start);
@@ -20,8 +20,6 @@ hold on
 bvh.plotLeafNodes;
 
 ray1 = Ray;
-% ray1.setOrigin(Vector3(-100, 0, 250));
-% ray1.setDirection(Vector3(1, 0, 0));
 ray1.setOrigin(Vector3(125, 0, 30));
 ray1.setDirection(Vector3(0, -1, 0));
 intersection_timer_start = tic;

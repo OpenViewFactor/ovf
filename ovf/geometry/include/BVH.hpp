@@ -26,7 +26,7 @@ template <typename FLOAT_TYPE> class BVH {
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& swapElements(unsigned int index_one, unsigned int index_two);
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& createChildNodes(unsigned int node_index, unsigned int split_index, unsigned int num_triangles_on_left);
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& constructNewNode(unsigned int node_index);
-    OVF_HOST_DEVICE void intersetRayWithBVHNode(Ray<FLOAT_TYPE> ray, unsigned int node_index) const;
+    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& intersectRayWithBVHNode(Ray<FLOAT_TYPE> ray, unsigned int node_index) const;
 
   public:
     //* ----- PUBLIC METHODS ----- *//

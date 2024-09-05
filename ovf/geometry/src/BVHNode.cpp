@@ -39,8 +39,8 @@ namespace openviewfactor {
     return *this;
   }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& BVHNode<FLOAT_TYPE>::growToIncludeTriangulation(Triangulation<FLOAT_TYPE> triangulation) {
-    for (unsigned int i = 0; i < trinagulation.getNumElements(); i++) {
+  OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& BVHNode<FLOAT_TYPE>::growToIncludeTriangulation(const Triangulation<FLOAT_TYPE> &triangulation) {
+    for (unsigned int i = 0; i < (*trinagulation).getNumElements(); i++) {
       this->growToIncludeTriangle(triangulation[i]);
     }
     return *this;

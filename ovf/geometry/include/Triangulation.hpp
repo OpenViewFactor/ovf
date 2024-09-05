@@ -28,8 +28,8 @@ template <typename FLOAT_TYPE> class Triangulation {
     //* ----- ACCESSOR METHODS ----- *//
     OVF_HOST_DEVICE MeshType getName() const;
     OVF_HOST_DEVICE size_t getNumElements() const;
-    OVF_HOST_DEVICE size_t numPts() const;
-    OVF_HOST_DEVICE size_t numBytes() const;
+    OVF_HOST_DEVICE size_t getNumPoints() const;
+    OVF_HOST_DEVICE size_t getNumBytes() const;
 
     OVF_HOST_DEVICE std::vector<std::array<size_t, 3>>& getConPtr() const;
     OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>>& getPtsPtr() const;

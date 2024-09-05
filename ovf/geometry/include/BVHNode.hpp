@@ -35,7 +35,7 @@ template <typename FLOAT_TYPE> class BVHNode {
     OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& setNumTriangles(unsigned int const n);
 
     OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& growToIncludeTriangle(Triangle<FLOAT_TYPE> triangle);
-    OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& growToIncludeTriangulation(Triangulation<FLOAT_TYPE> triangulation);
+    OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& growToIncludeTriangulation(const Triangulation<FLOAT_TYPE> &triangulation);
 
     OVF_HOST_DEVICE bool intersectRayWithNodeBoundingBox(Ray<FLOAT_TYPE> ray) const;
 

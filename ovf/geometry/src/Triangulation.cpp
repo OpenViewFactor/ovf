@@ -16,9 +16,9 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE size_t Triangulation<FLOAT_TYPE>::getNumElements() const { return _con.size(); }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE size_t Triangulation<FLOAT_TYPE>::numPts() const { return _pts.size(); }
+  OVF_HOST_DEVICE size_t Triangulation<FLOAT_TYPE>::getNumPoints() const { return _pts.size(); }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE size_t Triangulation<FLOAT_TYPE>::numBytes() const { return (_con.size() * sizeof(size_t) * 3) + (_pts.size() * sizeof(FLOAT_TYPE) * 9); }
+  OVF_HOST_DEVICE size_t Triangulation<FLOAT_TYPE>::getNumBytes() const { return (_con.size() * sizeof(size_t) * 3) + (_pts.size() * sizeof(FLOAT_TYPE) * 9); }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE std::vector<std::array<size_t, 3>>& Triangulation<FLOAT_TYPE>::getConPtr() const { return _con.data(); }

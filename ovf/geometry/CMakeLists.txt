@@ -1,0 +1,19 @@
+set(_geometry_headers
+    headers/Vector3.hpp
+    headers/Ray.hpp
+    headers/Triangle.hpp
+    headers/Triangulation.hpp
+    headers/BVHNode.hpp
+    headers/BVH.hpp
+    FileReader.hpp
+    STLReader.hpp
+)
+
+set(_geometry_sources
+    src/Vector3.cpp
+    src/Ray.cpp
+    src/Triangle.cpp
+    src/Triangulation.cpp
+    src/BVHNode.cpp
+    src/BVH.cpp
+)

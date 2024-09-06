@@ -37,4 +37,5 @@ include_directories(${PROJECT_BINARY_DIR}/include)
 # -------------------- BUILD COMMAND-LINE EXECUTABLE -------------------- #
 add_executable(openviewfactor ${_ovf_cli_sources})
 set_target_properties(openviewfactor PROPERTIES LINKER_LANGUAGE CXX)
-target_link_libraries(openviewfactor ovfgeometry Boost::boost)
+
+target_link_libraries(openviewfactor ovfgeometry Boost::program_options Boost::boost)

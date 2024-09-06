@@ -1,11 +1,11 @@
 #ifndef OVF_BVHNODE_H_
 #define OVF_BVHNODE_H_
 
-#include "config.hpp"
-#include "geometry/include/Vector3.hpp"
-#include "geometry/include/Triangle.hpp"
-#include "geometry/include/Triangulation.hpp"
-#include "geometry/include/Ray.hpp"
+#include "../../config.hpp"
+#include "Vector3.hpp"
+#include "Triangle.hpp"
+#include "Triangulation.hpp"
+#include "Ray.hpp"
 #include <algorithm>
 
 namespace openviewfactor {

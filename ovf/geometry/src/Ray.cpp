@@ -1,4 +1,4 @@
-#include "geometry/include/Ray.hpp"
+#include "../headers/Ray.hpp"
 
 namespace openviewfactor {
   template <typename FLOAT_TYPE>

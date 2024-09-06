@@ -1,4 +1,4 @@
-#include "geometry/include/BVH.hpp"
+#include "../headers/BVH.hpp"
 
 namespace openviewfactor {
 

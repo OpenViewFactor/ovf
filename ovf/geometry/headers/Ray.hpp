@@ -1,9 +1,9 @@
 #ifndef OVF_RAY_H_
 #define OVF_RAY_H_
 
-#include "config.hpp"
-#include "geometry/include/Vector3.hpp"
-#include "geometry/include/Triangle.hpp"
+#include "../../config.hpp"
+#include "Vector3.hpp"
+#include "Triangle.hpp"
 #include <cmath>
 
 namespace openviewfactor {

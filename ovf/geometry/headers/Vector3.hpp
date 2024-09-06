@@ -1,8 +1,8 @@
 #ifndef OVF_VECTOR3_H_
 #define OVF_VECTOR3_H_
 
-#include "config.hpp"
-#include <exception>
+#include "../../config.hpp"
+#include <stdexcept>
 #include <cmath>
 
 namespace openviewfactor {

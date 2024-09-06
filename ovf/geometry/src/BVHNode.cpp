@@ -1,4 +1,4 @@
-#include "geometry/include/BVHNode.hpp"
+#include "../headers/BVHNode.hpp"
 
 namespace openviewfactor {
   template <typename FLOAT_TYPE>
@@ -40,31 +40,31 @@ namespace openviewfactor {
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& BVHNode<FLOAT_TYPE>::growToIncludeTriangulation(const Triangulation<FLOAT_TYPE> &triangulation) {
-    for (unsigned int i = 0; i < (*trinagulation).getNumElements(); i++) {
+    for (unsigned int i = 0; i < (*triangulation ).getNumElements(); i++) {
       this->growToIncludeTriangle(triangulation[i]);
     }
     return *this;
   }
-
+  
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE bool BVHNode<FLOAT_TYPE>::intersectRayWithNodeBoundingBox(Ray<FLOAT_TYPE> ray) const {
-    FLOAT_TYPE tx1 = (this->getBoundingBoxMin.getX() - ray.getOrigin().getX()) / ray.getDirection().getX();
-    FLOAT_TYPE tx2 = (this->getBoundingBoxMax.getX() - ray.getOrigin().getX()) / ray.getDirection().getX();
+    FLOAT_TYPE tx1 = (this->getBoundingBoxMin().getX() - ray.getOrigin().getX()) / ray.getDirection().getX();
+    FLOAT_TYPE tx2 = (this->getBoundingBoxMax().getX() - ray.getOrigin().getX()) / ray.getDirection().getX();
 
     FLOAT_TYPE tmin = std::min(tx1, tx2);
     FLOAT_TYPE tmax = std::max(tx1, tx2);
 
-    FLOAT_TYPE ty1 = (this->getBoundingBoxMin.getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
-    FLOAT_TYPE ty2 = (this->getBoundingBoxMax.getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
+    FLOAT_TYPE ty1 = (this->getBoundingBoxMin().getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
+    FLOAT_TYPE ty2 = (this->getBoundingBoxMax().getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
 
-    FLOAT_TYPE tmin = std::min(tmin, std::min(ty1, ty2));
-    FLOAT_TYPE tmax = std::max(tmax, std::max(ty1, ty2));
+    tmin = std::min(tmin, std::min(ty1, ty2));
+    tmax = std::max(tmax, std::max(ty1, ty2));
 
-    FLOAT_TYPE ty1 = (this->getBoundingBoxMin.getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
-    FLOAT_TYPE ty2 = (this->getBoundingBoxMax.getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
+    FLOAT_TYPE tz1 = (this->getBoundingBoxMin().getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
+    FLOAT_TYPE tz2 = (this->getBoundingBoxMax().getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
 
-    FLOAT_TYPE tmin = std::min(tmin, std::min(tz1, tz2));
-    FLOAT_TYPE tmax = std::max(tmax, std::max(tz1, tz2));
+    tmin = std::min(tmin, std::min(tz1, tz2));
+    tmax = std::max(tmax, std::max(tz1, tz2));
 
     return (tmax >= tmin && tmin < ray.getIntersectionDistance() && tmax > 0);
   }
@@ -124,9 +124,9 @@ namespace openviewfactor {
       evaluation_point_costs.push_back(this->evaluateNodeChildrenSurfaceAreaHeuristic(submesh, axis_index, evaluation_point_positions[i]));
     }
 
-    std::vector<FLOAT_TYPE>::iterator best_cost_iterator = std::min_element(evaluation_point_costs.begin(), evaluation_point_costs.end());
+    typename std::vector<FLOAT_TYPE>::iterator best_cost_iterator = std::min_element(evaluation_point_costs.begin(), evaluation_point_costs.end());
     FLOAT_TYPE best_cost = *best_cost_iterator;
-    unsigned int best_cost_index = std::distance(v.begin(), best_cost_iterator);
+    unsigned int best_cost_index = std::distance(evaluation_point_costs.begin(), best_cost_iterator);
 
     std::pair<FLOAT_TYPE, FLOAT_TYPE> split_location_and_cost;
     split_location_and_cost.first = evaluation_point_positions(best_cost_index);
@@ -137,7 +137,7 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE std::vector<unsigned int> BVHNode<FLOAT_TYPE>::getElementArraySubindices() const {
     std::vector<unsigned int> subindices(this->getNumTriangles());
-    std::generate(subindices.begin(), subindices.end(), [n=0] () mutable { return (this->getFirstTriangleIndex() + n++); });
+    std::generate(subindices.begin(), subindices.end(), [this, n=0] () mutable { return (this->getFirstTriangleIndex() + n++); });
     return subindices;
   }
   

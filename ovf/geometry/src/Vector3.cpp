@@ -1,4 +1,4 @@
-#include "geometry/include/Vector3.hpp"
+#include "../headers/Vector3.hpp"
 
 namespace openviewfactor {
   //* ----- CLASS CONSTRUCTORS ----- *//
@@ -24,16 +24,17 @@ namespace openviewfactor {
   }
   template<typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE Vector3<FLOAT_TYPE>::operator[](size_t index) {
-    if (i != 0 && i != 1 && i != 2) {
-      throw std::runtime_error("Cannot access index %d", i);
-    }
-    if (i==1) {
+    if (index==1) {
       return _x;
-    } else if (i == 2) {
+    } else if (index == 2) {
       return _y;
-    } else if (i == 3) {
+    } else if (index == 3) {
       return _z;
     }
+    if (index != 0 && index != 1 && index != 2) {
+      throw std::runtime_error("Cannot access index");
+    }
+    return 0;
   }
 
   template <typename FLOAT_TYPE>
@@ -91,24 +92,23 @@ namespace openviewfactor {
   // ! Vector3 namespace dot product function
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE Vector3<FLOAT_TYPE>::dot(const Vector3<FLOAT_TYPE> &rhs) const {
-    return openviewfactor::dot(*this, &rhs);
+    return openviewfactor::dot<FLOAT_TYPE>(*this, rhs);
   }
 
   // ! openviewfactor namespace cross product function
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE FLOAT_TYPE cross(const Vector3<FLOAT_TYPE> &lhs,
+  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> cross(const Vector3<FLOAT_TYPE> &lhs,
                                    const Vector3<FLOAT_TYPE> &rhs) {
-    Vector3<FLOAT_TYPE> crossed_vector = {
-      lhs.getY() * rhs.getZ() - lhs.getZ() * rhs.getY(),
-      lhs.getZ() * rhs.getX() - lhs.getX() * rhs.getZ(),
-      lhs.getX() * rhs.getY() - lhs.getY() * rhs.getX()
-    };
+    Vector3<FLOAT_TYPE> crossed_vector;
+    crossed_vector.setX(lhs.getY() * rhs.getZ() - lhs.getZ() * rhs.getY());
+    crossed_vector.setY(lhs.getZ() * rhs.getX() - lhs.getX() * rhs.getZ());
+    crossed_vector.setZ(lhs.getX() * rhs.getY() - lhs.getY() * rhs.getX());
     return crossed_vector;
   }
   // ! Vector3 namespace cross product function
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Vector3<FLOAT_TYPE> Vector3<FLOAT_TYPE>::cross(const Vector3<FLOAT_TYPE> &rhs) const {
-    return openviewfactor::cross(*this, &rhs);
+    return openviewfactor::cross<FLOAT_TYPE>(*this, rhs);
   }
 
 
@@ -134,43 +134,31 @@ namespace openviewfactor {
   //* ----- OPERATOR OVERLOADS ----- *//
   // ! openviewfactor namespace addition operator overload
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> operator+(const Vector3<FLOAT_TYPE> &rhs) {
-    Vector3<FLOAT_TYPE> vector_sum = {
-      lhs._x + rhs._x,
-      lhs._y + rhs._y,
-      lhs._z + rhs._z
-    };
+  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> operator+(const Vector3<FLOAT_TYPE>& lhs, const Vector3<FLOAT_TYPE> &rhs) {
+    Vector3<FLOAT_TYPE> vector_sum;
+    vector_sum.setX(lhs.getX() + rhs.getX()).setY(lhs.getY() + rhs.getY()).setZ(lhs.getZ() + rhs.getZ());
     return vector_sum;
   }
   // ! Vector3 namespace addition operator overload
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Vector3<FLOAT_TYPE> Vector3<FLOAT_TYPE>::operator+(const Vector3<FLOAT_TYPE> &rhs) {
-    Vector3<FLOAT_TYPE> vector_sum = {
-      _x + rhs._x,
-      _y + rhs._y,
-      _z + rhs._z
-    };
+    Vector3<FLOAT_TYPE> vector_sum;
+    vector_sum.setX(this->getX() + rhs.getX()).setY(this->getY() + rhs.getY()).setZ(this->getZ() + rhs.getZ());
     return vector_sum;
   }
 
   // ! openviewfactor namespace subtraction operator overload
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> operator-(const Vector3<FLOAT_TYPE> &rhs) {
-    Vector3<FLOAT_TYPE> vector_diff = {
-      lhs._x + rhs._x,
-      lhs._y + rhs._y,
-      lhs._z + rhs._z
-    };
+  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> operator-(const Vector3<FLOAT_TYPE>& lhs, const Vector3<FLOAT_TYPE> &rhs) {
+    Vector3<FLOAT_TYPE> vector_diff;
+    vector_diff.setX(lhs.getX() - rhs.getX()).setY(lhs.getY() - rhs.getY()).setZ(lhs.getZ() - rhs.getZ());
     return vector_diff;
   }
   // ! Vector3 namespace subtraction operator overload
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Vector3<FLOAT_TYPE> Vector3<FLOAT_TYPE>::operator-(const Vector3<FLOAT_TYPE> &rhs) {
-    Vector3<FLOAT_TYPE> vector_diff = {
-      _x + rhs._x,
-      _y + rhs._y,
-      _z + rhs._z
-    };
+   Vector3<FLOAT_TYPE> vector_diff;
+    vector_diff.setX(this->getX() - rhs.getX()).setY(this->getY() - rhs.getY()).setZ(this->getZ() - rhs.getZ());
     return vector_diff;
   }
 

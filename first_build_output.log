@@ -1,0 +1,591 @@
+[main] Building folder: /home/natan/Development/OpenViewFactor/ovf/build 
+[build] Starting build
+[proc] Executing command: /usr/bin/cmake --build /home/natan/Development/OpenViewFactor/ovf/build --config Debug --target all --
+[build] [9/12   8% :: 0.165] Building CXX object ovf/CMakeFiles/ovfgeometry.dir/geometry/src/Triangle.cpp.o
+[build] FAILED: ovf/CMakeFiles/ovfgeometry.dir/geometry/src/Triangle.cpp.o 
+[build] /usr/bin/g++  -I/home/natan/Development/OpenViewFactor/ovf/ovf/geometry/headers -I/home/natan/Development/OpenViewFactor/ovf/build/include -g -std=gnu++17 -MD -MT ovf/CMakeFiles/ovfgeometry.dir/geometry/src/Triangle.cpp.o -MF ovf/CMakeFiles/ovfgeometry.dir/geometry/src/Triangle.cpp.o.d -o ovf/CMakeFiles/ovfgeometry.dir/geometry/src/Triangle.cpp.o -c /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘const openviewfactor::Vector3<FLOAT_TYPE>& openviewfactor::Triangle<FLOAT_TYPE>::getOA() const [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:80:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:15:91: error: no match for ‘operator*’ (operand type is ‘const openviewfactor::Vector3<float>’)
+[build]    15 |   OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::getOA() const { return *_OA; }
+[build]       |                                                                                           ^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘const openviewfactor::Vector3<FLOAT_TYPE>& openviewfactor::Triangle<FLOAT_TYPE>::getOB() const [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:80:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:17:91: error: no match for ‘operator*’ (operand type is ‘const openviewfactor::Vector3<float>’)
+[build]    17 |   OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::getOB() const { return *_OB; }
+[build]       |                                                                                           ^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘const openviewfactor::Vector3<FLOAT_TYPE>& openviewfactor::Triangle<FLOAT_TYPE>::getOC() const [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:80:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:19:91: error: no match for ‘operator*’ (operand type is ‘const openviewfactor::Vector3<float>’)
+[build]    19 |   OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::getOC() const { return *_OC; }
+[build]       |                                                                                           ^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘bool openviewfactor::Triangle<FLOAT_TYPE>::operator!=(const openviewfactor::Triangle<FLOAT_TYPE>&) const [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:80:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:77:19: error: no match for ‘operator==’ (operand types are ‘const openviewfactor::Triangle<float>*’ and ‘const openviewfactor::Triangle<float>’)
+[build]    77 |     return !(this == rhs);
+[build]       |             ~~~~~~^~~~~~~
+[build] In file included from /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangle.hpp:5,
+[build]                  from /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:1:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Vector3.hpp:66:24: note: candidate: ‘template<class FLOAT_TYPE> bool openviewfactor::operator==(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&)’
+[build]    66 |   OVF_HOST_DEVICE bool operator==(const Vector3<FLOAT_TYPE> &lhs,
+[build]       |                        ^~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Vector3.hpp:66:24: note:   template argument deduction/substitution failed:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:77:19: note:   mismatched types ‘const openviewfactor::Vector3<FLOAT_TYPE>’ and ‘const openviewfactor::Triangle<float>*’
+[build]    77 |     return !(this == rhs);
+[build]       |             ~~~~~~^~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangle.hpp:50:6: note: candidate: ‘template<class FLOAT_TYPE> bool openviewfactor::operator==(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&)’
+[build]    50 | bool operator==(const Triangle<FLOAT_TYPE> &lhs,
+[build]       |      ^~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangle.hpp:50:6: note:   template argument deduction/substitution failed:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:77:19: note:   mismatched types ‘const openviewfactor::Triangle<FLOAT_TYPE>’ and ‘const openviewfactor::Triangle<float>*’
+[build]    77 |     return !(this == rhs);
+[build]       |             ~~~~~~^~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘const openviewfactor::Vector3<FLOAT_TYPE>& openviewfactor::Triangle<FLOAT_TYPE>::getOA() const [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:81:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:15:91: error: no match for ‘operator*’ (operand type is ‘const openviewfactor::Vector3<double>’)
+[build]    15 |   OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::getOA() const { return *_OA; }
+[build]       |                                                                                           ^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘const openviewfactor::Vector3<FLOAT_TYPE>& openviewfactor::Triangle<FLOAT_TYPE>::getOB() const [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:81:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:17:91: error: no match for ‘operator*’ (operand type is ‘const openviewfactor::Vector3<double>’)
+[build]    17 |   OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::getOB() const { return *_OB; }
+[build]       |                                                                                           ^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘const openviewfactor::Vector3<FLOAT_TYPE>& openviewfactor::Triangle<FLOAT_TYPE>::getOC() const [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:81:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:19:91: error: no match for ‘operator*’ (operand type is ‘const openviewfactor::Vector3<double>’)
+[build]    19 |   OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::getOC() const { return *_OC; }
+[build]       |                                                                                           ^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘bool openviewfactor::Triangle<FLOAT_TYPE>::operator!=(const openviewfactor::Triangle<FLOAT_TYPE>&) const [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:81:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:77:19: error: no match for ‘operator==’ (operand types are ‘const openviewfactor::Triangle<double>*’ and ‘const openviewfactor::Triangle<double>’)
+[build]    77 |     return !(this == rhs);
+[build]       |             ~~~~~~^~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Vector3.hpp:66:24: note: candidate: ‘template<class FLOAT_TYPE> bool openviewfactor::operator==(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&)’
+[build]    66 |   OVF_HOST_DEVICE bool operator==(const Vector3<FLOAT_TYPE> &lhs,
+[build]       |                        ^~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Vector3.hpp:66:24: note:   template argument deduction/substitution failed:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:77:19: note:   mismatched types ‘const openviewfactor::Vector3<FLOAT_TYPE>’ and ‘const openviewfactor::Triangle<double>*’
+[build]    77 |     return !(this == rhs);
+[build]       |             ~~~~~~^~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangle.hpp:50:6: note: candidate: ‘template<class FLOAT_TYPE> bool openviewfactor::operator==(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&)’
+[build]    50 | bool operator==(const Triangle<FLOAT_TYPE> &lhs,
+[build]       |      ^~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangle.hpp:50:6: note:   template argument deduction/substitution failed:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:77:19: note:   mismatched types ‘const openviewfactor::Triangle<FLOAT_TYPE>’ and ‘const openviewfactor::Triangle<double>*’
+[build]    77 |     return !(this == rhs);
+[build]       |             ~~~~~~^~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘bool openviewfactor::operator==(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:82:74:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:82:74: error: explicit instantiation of ‘bool openviewfactor::operator==(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’ but no definition available [-fpermissive]
+[build]    82 | template bool operator==(const Triangle<float> &, const Triangle<float> &);
+[build]       |                                                                          ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘bool openviewfactor::operator==(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:83:76:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:83:76: error: explicit instantiation of ‘bool openviewfactor::operator==(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’ but no definition available [-fpermissive]
+[build]    83 | template bool operator==(const Triangle<double> &, const Triangle<double> &);
+[build]       |                                                                            ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘bool openviewfactor::operator!=(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:84:74:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:84:74: error: explicit instantiation of ‘bool openviewfactor::operator!=(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’ but no definition available [-fpermissive]
+[build]    84 | template bool operator!=(const Triangle<float> &, const Triangle<float> &);
+[build]       |                                                                          ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘bool openviewfactor::operator!=(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:85:76:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:85:76: error: explicit instantiation of ‘bool openviewfactor::operator!=(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’ but no definition available [-fpermissive]
+[build]    85 | template bool operator!=(const Triangle<double> &, const Triangle<double> &);
+[build]       |                                                                            ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘bool openviewfactor::operator==(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:82:74:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:82:74: error: explicit instantiation of ‘bool openviewfactor::operator==(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’ but no definition available [-fpermissive]
+[build]    82 | template bool operator==(const Triangle<float> &, const Triangle<float> &);
+[build]       |                                                                          ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘bool openviewfactor::operator==(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:83:76:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:83:76: error: explicit instantiation of ‘bool openviewfactor::operator==(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’ but no definition available [-fpermissive]
+[build]    83 | template bool operator==(const Triangle<double> &, const Triangle<double> &);
+[build]       |                                                                            ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘bool openviewfactor::operator!=(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:84:74:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:84:74: error: explicit instantiation of ‘bool openviewfactor::operator!=(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’ but no definition available [-fpermissive]
+[build]    84 | template bool operator!=(const Triangle<float> &, const Triangle<float> &);
+[build]       |                                                                          ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘bool openviewfactor::operator!=(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:85:76:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:85:76: error: explicit instantiation of ‘bool openviewfactor::operator!=(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’ but no definition available [-fpermissive]
+[build]    85 | template bool operator!=(const Triangle<double> &, const Triangle<double> &);
+[build]       |                                                                            ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘bool openviewfactor::operator==(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:82:74:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:82:74: error: explicit instantiation of ‘bool openviewfactor::operator==(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’ but no definition available [-fpermissive]
+[build]    82 | template bool operator==(const Triangle<float> &, const Triangle<float> &);
+[build]       |                                                                          ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘bool openviewfactor::operator==(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:83:76:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:83:76: error: explicit instantiation of ‘bool openviewfactor::operator==(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’ but no definition available [-fpermissive]
+[build]    83 | template bool operator==(const Triangle<double> &, const Triangle<double> &);
+[build]       |                                                                            ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘bool openviewfactor::operator!=(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:84:74:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:84:74: error: explicit instantiation of ‘bool openviewfactor::operator!=(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’ but no definition available [-fpermissive]
+[build]    84 | template bool operator!=(const Triangle<float> &, const Triangle<float> &);
+[build]       |                                                                          ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp: In instantiation of ‘bool openviewfactor::operator!=(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:85:76:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangle.cpp:85:76: error: explicit instantiation of ‘bool openviewfactor::operator!=(const Triangle<FLOAT_TYPE>&, const Triangle<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’ but no definition available [-fpermissive]
+[build]    85 | template bool operator!=(const Triangle<double> &, const Triangle<double> &);
+[build]       |                                                                            ^
+[build] [9/12  16% :: 0.169] Building CXX object ovf/CMakeFiles/ovfgeometry.dir/geometry/src/Vector3.cpp.o
+[build] FAILED: ovf/CMakeFiles/ovfgeometry.dir/geometry/src/Vector3.cpp.o 
+[build] /usr/bin/g++  -I/home/natan/Development/OpenViewFactor/ovf/ovf/geometry/headers -I/home/natan/Development/OpenViewFactor/ovf/build/include -g -std=gnu++17 -MD -MT ovf/CMakeFiles/ovfgeometry.dir/geometry/src/Vector3.cpp.o -MF ovf/CMakeFiles/ovfgeometry.dir/geometry/src/Vector3.cpp.o.d -o ovf/CMakeFiles/ovfgeometry.dir/geometry/src/Vector3.cpp.o -c /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In member function ‘FLOAT_TYPE openviewfactor::Vector3<FLOAT_TYPE>::operator[](size_t)’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:27:9: error: ‘i’ was not declared in this scope
+[build]    27 |     if (i != 0 && i != 1 && i != 2) {
+[build]       |         ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:28:18: error: ‘runtime_error’ is not a member of ‘std’
+[build]    28 |       throw std::runtime_error("Cannot access index %d", i);
+[build]       |                  ^~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:2:1: note: ‘std::runtime_error’ is defined in header ‘<stdexcept>’; did you forget to ‘#include <stdexcept>’?
+[build]     1 | #include "../headers/Vector3.hpp"
+[build]   +++ |+#include <stdexcept>
+[build]     2 | 
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:30:9: error: ‘i’ was not declared in this scope
+[build]    30 |     if (i==1) {
+[build]       |         ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In function ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator+(const Vector3<FLOAT_TYPE>&)’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:139:7: error: ‘lhs’ was not declared in this scope; did you mean ‘rhs’?
+[build]   139 |       lhs._x + rhs._x,
+[build]       |       ^~~
+[build]       |       rhs
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In function ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator-(const Vector3<FLOAT_TYPE>&)’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:160:7: error: ‘lhs’ was not declared in this scope; did you mean ‘rhs’?
+[build]   160 |       lhs._x + rhs._x,
+[build]       |       ^~~
+[build]       |       rhs
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘FLOAT_TYPE openviewfactor::Vector3<FLOAT_TYPE>::dot(const openviewfactor::Vector3<FLOAT_TYPE>&) const [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:201:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:94:31: error: no matching function for call to ‘dot(const openviewfactor::Vector3<float>&, const openviewfactor::Vector3<float>*)’
+[build]    94 |     return openviewfactor::dot(*this, &rhs);
+[build]       |            ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:85:30: note: candidate: ‘template<class FLOAT_TYPE> FLOAT_TYPE openviewfactor::dot(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&)’
+[build]    85 |   OVF_HOST_DEVICE FLOAT_TYPE dot(const Vector3<FLOAT_TYPE> &lhs,
+[build]       |                              ^~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:85:30: note:   template argument deduction/substitution failed:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:94:31: note:   mismatched types ‘const openviewfactor::Vector3<FLOAT_TYPE>’ and ‘const openviewfactor::Vector3<float>*’
+[build]    94 |     return openviewfactor::dot(*this, &rhs);
+[build]       |            ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::Vector3<FLOAT_TYPE>::cross(const openviewfactor::Vector3<FLOAT_TYPE>&) const [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:201:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:111:33: error: no matching function for call to ‘cross(const openviewfactor::Vector3<float>&, const openviewfactor::Vector3<float>*)’
+[build]   111 |     return openviewfactor::cross(*this, &rhs);
+[build]       |            ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+[build] In file included from /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:1:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Vector3.hpp:76:39: note: candidate: ‘template<class FLOAT_TYPE> openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::cross(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&)’
+[build]    76 |   OVF_HOST_DEVICE Vector3<FLOAT_TYPE> cross(const Vector3<FLOAT_TYPE> &lhs,
+[build]       |                                       ^~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Vector3.hpp:76:39: note:   template argument deduction/substitution failed:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:111:33: note:   mismatched types ‘const openviewfactor::Vector3<FLOAT_TYPE>’ and ‘const openviewfactor::Vector3<float>*’
+[build]   111 |     return openviewfactor::cross(*this, &rhs);
+[build]       |            ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:99:30: note: candidate: ‘template<class FLOAT_TYPE> FLOAT_TYPE openviewfactor::cross(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&)’
+[build]    99 |   OVF_HOST_DEVICE FLOAT_TYPE cross(const Vector3<FLOAT_TYPE> &lhs,
+[build]       |                              ^~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:99:30: note:   template argument deduction/substitution failed:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:111:33: note:   mismatched types ‘const openviewfactor::Vector3<FLOAT_TYPE>’ and ‘const openviewfactor::Vector3<float>*’
+[build]   111 |     return openviewfactor::cross(*this, &rhs);
+[build]       |            ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘FLOAT_TYPE openviewfactor::Vector3<FLOAT_TYPE>::dot(const openviewfactor::Vector3<FLOAT_TYPE>&) const [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:202:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:94:31: error: no matching function for call to ‘dot(const openviewfactor::Vector3<double>&, const openviewfactor::Vector3<double>*)’
+[build]    94 |     return openviewfactor::dot(*this, &rhs);
+[build]       |            ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:85:30: note: candidate: ‘template<class FLOAT_TYPE> FLOAT_TYPE openviewfactor::dot(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&)’
+[build]    85 |   OVF_HOST_DEVICE FLOAT_TYPE dot(const Vector3<FLOAT_TYPE> &lhs,
+[build]       |                              ^~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:85:30: note:   template argument deduction/substitution failed:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:94:31: note:   mismatched types ‘const openviewfactor::Vector3<FLOAT_TYPE>’ and ‘const openviewfactor::Vector3<double>*’
+[build]    94 |     return openviewfactor::dot(*this, &rhs);
+[build]       |            ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::Vector3<FLOAT_TYPE>::cross(const openviewfactor::Vector3<FLOAT_TYPE>&) const [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:202:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:111:33: error: no matching function for call to ‘cross(const openviewfactor::Vector3<double>&, const openviewfactor::Vector3<double>*)’
+[build]   111 |     return openviewfactor::cross(*this, &rhs);
+[build]       |            ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Vector3.hpp:76:39: note: candidate: ‘template<class FLOAT_TYPE> openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::cross(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&)’
+[build]    76 |   OVF_HOST_DEVICE Vector3<FLOAT_TYPE> cross(const Vector3<FLOAT_TYPE> &lhs,
+[build]       |                                       ^~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Vector3.hpp:76:39: note:   template argument deduction/substitution failed:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:111:33: note:   mismatched types ‘const openviewfactor::Vector3<FLOAT_TYPE>’ and ‘const openviewfactor::Vector3<double>*’
+[build]   111 |     return openviewfactor::cross(*this, &rhs);
+[build]       |            ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:99:30: note: candidate: ‘template<class FLOAT_TYPE> FLOAT_TYPE openviewfactor::cross(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&)’
+[build]    99 |   OVF_HOST_DEVICE FLOAT_TYPE cross(const Vector3<FLOAT_TYPE> &lhs,
+[build]       |                              ^~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:99:30: note:   template argument deduction/substitution failed:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:111:33: note:   mismatched types ‘const openviewfactor::Vector3<FLOAT_TYPE>’ and ‘const openviewfactor::Vector3<double>*’
+[build]   111 |     return openviewfactor::cross(*this, &rhs);
+[build]       |            ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator+(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:209:81:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:209:81: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator+(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’ but no definition available [-fpermissive]
+[build]   209 | template Vector3<float> operator+(const Vector3<float> &, const Vector3<float> &);
+[build]       |                                                                                 ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator+(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:210:84:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:210:84: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator+(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’ but no definition available [-fpermissive]
+[build]   210 | template Vector3<double> operator+(const Vector3<double> &, const Vector3<double> &);
+[build]       |                                                                                    ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator-(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:211:81:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:211:81: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator-(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’ but no definition available [-fpermissive]
+[build]   211 | template Vector3<float> operator-(const Vector3<float> &, const Vector3<float> &);
+[build]       |                                                                                 ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator-(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:212:84:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:212:84: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator-(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’ but no definition available [-fpermissive]
+[build]   212 | template Vector3<double> operator-(const Vector3<double> &, const Vector3<double> &);
+[build]       |                                                                                    ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::cross(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:216:77:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:216:77: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::cross(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’ but no definition available [-fpermissive]
+[build]   216 | template Vector3<float> cross(const Vector3<float> &, const Vector3<float> &);
+[build]       |                                                                             ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::cross(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:217:80:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:217:80: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::cross(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’ but no definition available [-fpermissive]
+[build]   217 | template Vector3<double> cross(const Vector3<double> &, const Vector3<double> &);
+[build]       |                                                                                ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator+(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:209:81:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:209:81: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator+(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’ but no definition available [-fpermissive]
+[build]   209 | template Vector3<float> operator+(const Vector3<float> &, const Vector3<float> &);
+[build]       |                                                                                 ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator+(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:210:84:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:210:84: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator+(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’ but no definition available [-fpermissive]
+[build]   210 | template Vector3<double> operator+(const Vector3<double> &, const Vector3<double> &);
+[build]       |                                                                                    ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator-(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:211:81:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:211:81: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator-(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’ but no definition available [-fpermissive]
+[build]   211 | template Vector3<float> operator-(const Vector3<float> &, const Vector3<float> &);
+[build]       |                                                                                 ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator-(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:212:84:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:212:84: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator-(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’ but no definition available [-fpermissive]
+[build]   212 | template Vector3<double> operator-(const Vector3<double> &, const Vector3<double> &);
+[build]       |                                                                                    ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::cross(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:216:77:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:216:77: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::cross(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’ but no definition available [-fpermissive]
+[build]   216 | template Vector3<float> cross(const Vector3<float> &, const Vector3<float> &);
+[build]       |                                                                             ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::cross(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:217:80:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:217:80: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::cross(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’ but no definition available [-fpermissive]
+[build]   217 | template Vector3<double> cross(const Vector3<double> &, const Vector3<double> &);
+[build]       |                                                                                ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator+(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:209:81:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:209:81: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator+(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’ but no definition available [-fpermissive]
+[build]   209 | template Vector3<float> operator+(const Vector3<float> &, const Vector3<float> &);
+[build]       |                                                                                 ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator+(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:210:84:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:210:84: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator+(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’ but no definition available [-fpermissive]
+[build]   210 | template Vector3<double> operator+(const Vector3<double> &, const Vector3<double> &);
+[build]       |                                                                                    ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator-(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:211:81:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:211:81: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator-(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’ but no definition available [-fpermissive]
+[build]   211 | template Vector3<float> operator-(const Vector3<float> &, const Vector3<float> &);
+[build]       |                                                                                 ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator-(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:212:84:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:212:84: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::operator-(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’ but no definition available [-fpermissive]
+[build]   212 | template Vector3<double> operator-(const Vector3<double> &, const Vector3<double> &);
+[build]       |                                                                                    ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::cross(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:216:77:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:216:77: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::cross(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = float]’ but no definition available [-fpermissive]
+[build]   216 | template Vector3<float> cross(const Vector3<float> &, const Vector3<float> &);
+[build]       |                                                                             ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::cross(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:217:80:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:217:80: error: explicit instantiation of ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::cross(const Vector3<FLOAT_TYPE>&, const Vector3<FLOAT_TYPE>&) [with FLOAT_TYPE = double]’ but no definition available [-fpermissive]
+[build]   217 | template Vector3<double> cross(const Vector3<double> &, const Vector3<double> &);
+[build]       |                                                                                ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In member function ‘FLOAT_TYPE openviewfactor::Vector3<FLOAT_TYPE>::operator[](size_t) [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:37:3: warning: control reaches end of non-void function [-Wreturn-type]
+[build]    37 |   }
+[build]       |   ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp: In member function ‘FLOAT_TYPE openviewfactor::Vector3<FLOAT_TYPE>::operator[](size_t) [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Vector3.cpp:37:3: warning: control reaches end of non-void function [-Wreturn-type]
+[build] [9/12  25% :: 0.236] Building CXX object ovf/CMakeFiles/ovfgeometry.dir/geometry/src/Ray.cpp.o
+[build] [9/12  33% :: 0.369] Building CXX object ovf/CMakeFiles/ovfgeometry.dir/geometry/src/BVHNode.cpp.o
+[build] FAILED: ovf/CMakeFiles/ovfgeometry.dir/geometry/src/BVHNode.cpp.o 
+[build] /usr/bin/g++  -I/home/natan/Development/OpenViewFactor/ovf/ovf/geometry/headers -I/home/natan/Development/OpenViewFactor/ovf/build/include -g -std=gnu++17 -MD -MT ovf/CMakeFiles/ovfgeometry.dir/geometry/src/BVHNode.cpp.o -MF ovf/CMakeFiles/ovfgeometry.dir/geometry/src/BVHNode.cpp.o.d -o ovf/CMakeFiles/ovfgeometry.dir/geometry/src/BVHNode.cpp.o -c /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp: In member function ‘openviewfactor::BVHNode<FLOAT_TYPE>& openviewfactor::BVHNode<FLOAT_TYPE>::growToIncludeTriangulation(const openviewfactor::Triangulation<FLOAT_TYPE>&)’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:43:36: error: ‘trinagulation’ was not declared in this scope; did you mean ‘triangulation’?
+[build]    43 |     for (unsigned int i = 0; i < (*trinagulation).getNumElements(); i++) {
+[build]       |                                    ^~~~~~~~~~~~~
+[build]       |                                    triangulation
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp: In member function ‘bool openviewfactor::BVHNode<FLOAT_TYPE>::intersectRayWithNodeBoundingBox(openviewfactor::Ray<FLOAT_TYPE>) const’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:51:29: error: invalid use of member function ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::BVHNode<FLOAT_TYPE>::getBoundingBoxMin() const’ (did you forget the ‘()’ ?)
+[build]    51 |     FLOAT_TYPE tx1 = (this->getBoundingBoxMin.getX() - ray.getOrigin().getX()) / ray.getDirection().getX();
+[build]       |                       ~~~~~~^~~~~~~~~~~~~~~~~
+[build]       |                                              ()
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:51:47: error: expected ‘)’ before ‘getX’
+[build]    51 |     FLOAT_TYPE tx1 = (this->getBoundingBoxMin.getX() - ray.getOrigin().getX()) / ray.getDirection().getX();
+[build]       |                      ~                        ^~~~
+[build]       |                                               )
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:52:29: error: invalid use of member function ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::BVHNode<FLOAT_TYPE>::getBoundingBoxMax() const’ (did you forget the ‘()’ ?)
+[build]    52 |     FLOAT_TYPE tx2 = (this->getBoundingBoxMax.getX() - ray.getOrigin().getX()) / ray.getDirection().getX();
+[build]       |                       ~~~~~~^~~~~~~~~~~~~~~~~
+[build]       |                                              ()
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:52:47: error: expected ‘)’ before ‘getX’
+[build]    52 |     FLOAT_TYPE tx2 = (this->getBoundingBoxMax.getX() - ray.getOrigin().getX()) / ray.getDirection().getX();
+[build]       |                      ~                        ^~~~
+[build]       |                                               )
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:57:29: error: invalid use of member function ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::BVHNode<FLOAT_TYPE>::getBoundingBoxMin() const’ (did you forget the ‘()’ ?)
+[build]    57 |     FLOAT_TYPE ty1 = (this->getBoundingBoxMin.getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
+[build]       |                       ~~~~~~^~~~~~~~~~~~~~~~~
+[build]       |                                              ()
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:57:47: error: expected ‘)’ before ‘getY’
+[build]    57 |     FLOAT_TYPE ty1 = (this->getBoundingBoxMin.getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
+[build]       |                      ~                        ^~~~
+[build]       |                                               )
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:58:29: error: invalid use of member function ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::BVHNode<FLOAT_TYPE>::getBoundingBoxMax() const’ (did you forget the ‘()’ ?)
+[build]    58 |     FLOAT_TYPE ty2 = (this->getBoundingBoxMax.getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
+[build]       |                       ~~~~~~^~~~~~~~~~~~~~~~~
+[build]       |                                              ()
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:58:47: error: expected ‘)’ before ‘getY’
+[build]    58 |     FLOAT_TYPE ty2 = (this->getBoundingBoxMax.getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
+[build]       |                      ~                        ^~~~
+[build]       |                                               )
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:60:16: error: redeclaration of ‘FLOAT_TYPE tmin’
+[build]    60 |     FLOAT_TYPE tmin = std::min(tmin, std::min(ty1, ty2));
+[build]       |                ^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:54:16: note: ‘FLOAT_TYPE tmin’ previously declared here
+[build]    54 |     FLOAT_TYPE tmin = std::min(tx1, tx2);
+[build]       |                ^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:61:16: error: redeclaration of ‘FLOAT_TYPE tmax’
+[build]    61 |     FLOAT_TYPE tmax = std::max(tmax, std::max(ty1, ty2));
+[build]       |                ^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:55:16: note: ‘FLOAT_TYPE tmax’ previously declared here
+[build]    55 |     FLOAT_TYPE tmax = std::max(tx1, tx2);
+[build]       |                ^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:63:16: error: redeclaration of ‘FLOAT_TYPE ty1’
+[build]    63 |     FLOAT_TYPE ty1 = (this->getBoundingBoxMin.getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
+[build]       |                ^~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:57:16: note: ‘FLOAT_TYPE ty1’ previously declared here
+[build]    57 |     FLOAT_TYPE ty1 = (this->getBoundingBoxMin.getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
+[build]       |                ^~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:63:29: error: invalid use of member function ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::BVHNode<FLOAT_TYPE>::getBoundingBoxMin() const’ (did you forget the ‘()’ ?)
+[build]    63 |     FLOAT_TYPE ty1 = (this->getBoundingBoxMin.getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
+[build]       |                       ~~~~~~^~~~~~~~~~~~~~~~~
+[build]       |                                              ()
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:63:47: error: expected ‘)’ before ‘getZ’
+[build]    63 |     FLOAT_TYPE ty1 = (this->getBoundingBoxMin.getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
+[build]       |                      ~                        ^~~~
+[build]       |                                               )
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:64:16: error: redeclaration of ‘FLOAT_TYPE ty2’
+[build]    64 |     FLOAT_TYPE ty2 = (this->getBoundingBoxMax.getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
+[build]       |                ^~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:58:16: note: ‘FLOAT_TYPE ty2’ previously declared here
+[build]    58 |     FLOAT_TYPE ty2 = (this->getBoundingBoxMax.getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
+[build]       |                ^~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:64:29: error: invalid use of member function ‘openviewfactor::Vector3<FLOAT_TYPE> openviewfactor::BVHNode<FLOAT_TYPE>::getBoundingBoxMax() const’ (did you forget the ‘()’ ?)
+[build]    64 |     FLOAT_TYPE ty2 = (this->getBoundingBoxMax.getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
+[build]       |                       ~~~~~~^~~~~~~~~~~~~~~~~
+[build]       |                                              ()
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:64:47: error: expected ‘)’ before ‘getZ’
+[build]    64 |     FLOAT_TYPE ty2 = (this->getBoundingBoxMax.getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
+[build]       |                      ~                        ^~~~
+[build]       |                                               )
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:66:16: error: redeclaration of ‘FLOAT_TYPE tmin’
+[build]    66 |     FLOAT_TYPE tmin = std::min(tmin, std::min(tz1, tz2));
+[build]       |                ^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:54:16: note: ‘FLOAT_TYPE tmin’ previously declared here
+[build]    54 |     FLOAT_TYPE tmin = std::min(tx1, tx2);
+[build]       |                ^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:66:47: error: ‘tz1’ was not declared in this scope; did you mean ‘ty1’?
+[build]    66 |     FLOAT_TYPE tmin = std::min(tmin, std::min(tz1, tz2));
+[build]       |                                               ^~~
+[build]       |                                               ty1
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:66:52: error: ‘tz2’ was not declared in this scope; did you mean ‘ty2’?
+[build]    66 |     FLOAT_TYPE tmin = std::min(tmin, std::min(tz1, tz2));
+[build]       |                                                    ^~~
+[build]       |                                                    ty2
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:67:16: error: redeclaration of ‘FLOAT_TYPE tmax’
+[build]    67 |     FLOAT_TYPE tmax = std::max(tmax, std::max(tz1, tz2));
+[build]       |                ^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:55:16: note: ‘FLOAT_TYPE tmax’ previously declared here
+[build]    55 |     FLOAT_TYPE tmax = std::max(tx1, tx2);
+[build]       |                ^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp: In member function ‘std::pair<_FIter, _FIter> openviewfactor::BVHNode<FLOAT_TYPE>::getBestSplitLocationAndCost(const openviewfactor::Triangulation<FLOAT_TYPE>&, unsigned int) const’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:127:5: error: need ‘typename’ before ‘std::vector<FLOAT_TYPE>::iterator’ because ‘std::vector<FLOAT_TYPE>’ is a dependent scope
+[build]   127 |     std::vector<FLOAT_TYPE>::iterator best_cost_iterator = std::min_element(evaluation_point_costs.begin(), evaluation_point_costs.end());
+[build]       |     ^~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:127:38: error: expected ‘;’ before ‘best_cost_iterator’
+[build]   127 |     std::vector<FLOAT_TYPE>::iterator best_cost_iterator = std::min_element(evaluation_point_costs.begin(), evaluation_point_costs.end());
+[build]       |                                      ^~~~~~~~~~~~~~~~~~~
+[build]       |                                      ;
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:128:29: error: ‘best_cost_iterator’ was not declared in this scope
+[build]   128 |     FLOAT_TYPE best_cost = *best_cost_iterator;
+[build]       |                             ^~~~~~~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:129:50: error: ‘v’ was not declared in this scope
+[build]   129 |     unsigned int best_cost_index = std::distance(v.begin(), best_cost_iterator);
+[build]       |                                                  ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp: In lambda function:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/BVHNode.cpp:140:84: error: ‘this’ was not captured for this lambda function
+[build]   140 |     std::generate(subindices.begin(), subindices.end(), [n=0] () mutable { return (this->getFirstTriangleIndex() + n++); });
+[build]       |                                                                                    ^~~~
+[build] [9/12  41% :: 0.504] Building CXX object ovf/CMakeFiles/ovfgeometry.dir/geometry/src/BVH.cpp.o
+[build] [9/12  50% :: 0.530] Building CXX object third_party/lean-vtk/CMakeFiles/LeanVTK.dir/src/lean_vtk.cpp.o
+[build] [9/12  58% :: 0.560] Building CXX object ovf/CMakeFiles/ovfgeometry.dir/geometry/src/Triangulation.cpp.o
+[build] FAILED: ovf/CMakeFiles/ovfgeometry.dir/geometry/src/Triangulation.cpp.o 
+[build] /usr/bin/g++  -I/home/natan/Development/OpenViewFactor/ovf/ovf/geometry/headers -I/home/natan/Development/OpenViewFactor/ovf/build/include -g -std=gnu++17 -MD -MT ovf/CMakeFiles/ovfgeometry.dir/geometry/src/Triangulation.cpp.o -MF ovf/CMakeFiles/ovfgeometry.dir/geometry/src/Triangulation.cpp.o.d -o ovf/CMakeFiles/ovfgeometry.dir/geometry/src/Triangulation.cpp.o -c /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp: In constructor ‘openviewfactor::Triangulation<FLOAT_TYPE>::Triangulation()’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:7:88: error: expected primary-expression before ‘>’ token
+[build]     7 |     : _pts(std::vector<Vector3<FLOAT_TYPE>>()), _con(std::vector<std::array<size_t, 3>>>()), _name(UNKNOWN) {}
+[build]       |                                                                                        ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:7:90: error: expected primary-expression before ‘)’ token
+[build]     7 |     : _pts(std::vector<Vector3<FLOAT_TYPE>>()), _con(std::vector<std::array<size_t, 3>>>()), _name(UNKNOWN) {}
+[build]       |                                                                                          ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp: In constructor ‘openviewfactor::Triangulation<FLOAT_TYPE>::Triangulation(openviewfactor::MeshType)’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:11:88: error: expected primary-expression before ‘>’ token
+[build]    11 |     : _pts(std::vector<Vector3<FLOAT_TYPE>>()), _con(std::vector<std::array<size_t, 3>>>()), _name(name) {}
+[build]       |                                                                                        ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:11:90: error: expected primary-expression before ‘)’ token
+[build]    11 |     : _pts(std::vector<Vector3<FLOAT_TYPE>>()), _con(std::vector<std::array<size_t, 3>>>()), _name(name) {}
+[build]       |                                                                                          ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp: In member function ‘std::vector<std::array<long unsigned int, 3> >& openviewfactor::Triangulation<FLOAT_TYPE>::getConPtr() const’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:24:118: error: invalid initialization of non-const reference of type ‘std::vector<std::array<long unsigned int, 3> >&’ from an rvalue of type ‘const std::array<long unsigned int, 3>*’
+[build]    24 |   OVF_HOST_DEVICE std::vector<std::array<size_t, 3>>& Triangulation<FLOAT_TYPE>::getConPtr() const { return _con.data(); }
+[build]       |                                                                                                             ~~~~~~~~~^~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp: In member function ‘openviewfactor::Triangle<FLOAT_TYPE> openviewfactor::Triangulation<FLOAT_TYPE>::operator[](size_t)’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:35:28: error: ‘_pos’ was not declared in this scope; did you mean ‘_pts’?
+[build]    35 |     Triangle<FLOAT_TYPE> T(_pos[_con[index][0]], _pos[_con[index][1]], _pos[_con[index][2]]);
+[build]       |                            ^~~~
+[build]       |                            _pts
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp: In member function ‘std::vector<openviewfactor::Triangle<FLOAT_TYPE> > openviewfactor::Triangulation<FLOAT_TYPE>::getTriangles() const’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:80:17: error: ‘triangle’ was not declared in this scope; did you mean ‘Triangle’?
+[build]    80 |     std::vector<triangle<FLOAT_TYPE>> mesh_triangles;
+[build]       |                 ^~~~~~~~
+[build]       |                 Triangle
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:80:26: error: template argument 1 is invalid
+[build]    80 |     std::vector<triangle<FLOAT_TYPE>> mesh_triangles;
+[build]       |                          ^~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:80:26: error: template argument 2 is invalid
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:80:36: error: expected unqualified-id before ‘>’ token
+[build]    80 |     std::vector<triangle<FLOAT_TYPE>> mesh_triangles;
+[build]       |                                    ^~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:82:7: error: ‘mesh_triangles’ was not declared in this scope; did you mean ‘getTriangles’?
+[build]    82 |       mesh_triangles.push_back(Triangle<FLOAT_TYPE>(_pts[connections[0]], _pts[connections[1]], _pts[connections[2]]));
+[build]       |       ^~~~~~~~~~~~~~
+[build]       |       getTriangles
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:84:12: error: ‘mesh_triangles’ was not declared in this scope; did you mean ‘getTriangles’?
+[build]    84 |     return mesh_triangles;
+[build]       |            ^~~~~~~~~~~~~~
+[build]       |            getTriangles
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp: In member function ‘openviewfactor::Triangulation<FLOAT_TYPE>& openviewfactor::Triangulation<FLOAT_TYPE>::addElement(openviewfactor::Vector3<FLOAT_TYPE>, openviewfactor::Vector3<FLOAT_TYPE>, openviewfactor::Vector3<FLOAT_TYPE>)’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:104:46: error: ‘_pos’ was not declared in this scope; did you mean ‘_pts’?
+[build]   104 |       auto pos_location_iterator = std::find(_pos.begin(), _pos.end(), pos[i]);
+[build]       |                                              ^~~~
+[build]       |                                              _pts
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:108:24: error: ‘p’ was not declared in this scope
+[build]   108 |         _pos.push_back(p[i]);
+[build]       |                        ^
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp: In instantiation of ‘std::vector<openviewfactor::Vector3<FLOAT_TYPE> >& openviewfactor::Triangulation<FLOAT_TYPE>::getPtsPtr() const [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:132:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:27:116: error: invalid initialization of non-const reference of type ‘std::vector<openviewfactor::Vector3<float>, std::allocator<openviewfactor::Vector3<float> > >&’ from an rvalue of type ‘const openviewfactor::Vector3<float>*’
+[build]    27 |   OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>>& Triangulation<FLOAT_TYPE>::getPtsPtr() const { return _pts.data(); }
+[build]       |                                                                                                           ~~~~~~~~~^~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp: In instantiation of ‘FLOAT_TYPE openviewfactor::Triangulation<FLOAT_TYPE>::getMeshArea() const [with FLOAT_TYPE = float]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:132:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:43:32: error: ‘const class openviewfactor::Triangle<float>’ has no member named ‘area’; did you mean ‘float openviewfactor::Triangle<float>::_area’? (not accessible from this context)
+[build]    43 |       total_area += (*this)[i].area();
+[build]       |                     ~~~~~~~~~~~^~~~
+[build] In file included from /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:10,
+[build]                  from /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:1:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangle.hpp:17:16: note: declared private here
+[build]    17 |     FLOAT_TYPE _area;                 // triangle area
+[build]       |                ^~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp: In instantiation of ‘std::vector<openviewfactor::Vector3<FLOAT_TYPE> >& openviewfactor::Triangulation<FLOAT_TYPE>::getPtsPtr() const [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:133:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:27:116: error: invalid initialization of non-const reference of type ‘std::vector<openviewfactor::Vector3<double>, std::allocator<openviewfactor::Vector3<double> > >&’ from an rvalue of type ‘const openviewfactor::Vector3<double>*’
+[build]    27 |   OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>>& Triangulation<FLOAT_TYPE>::getPtsPtr() const { return _pts.data(); }
+[build]       |                                                                                                           ~~~~~~~~~^~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp: In instantiation of ‘FLOAT_TYPE openviewfactor::Triangulation<FLOAT_TYPE>::getMeshArea() const [with FLOAT_TYPE = double]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:133:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/Triangulation.cpp:43:32: error: ‘const class openviewfactor::Triangle<double>’ has no member named ‘area’; did you mean ‘double openviewfactor::Triangle<double>::_area’? (not accessible from this context)
+[build]    43 |       total_area += (*this)[i].area();
+[build]       |                     ~~~~~~~~~~~^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangle.hpp:17:16: note: declared private here
+[build]    17 |     FLOAT_TYPE _area;                 // triangle area
+[build]       |                ^~~~~
+[build] [9/12  66% :: 0.631] Building CXX object ovf/CMakeFiles/ovfgeometry.dir/geometry/src/STLReader.cpp.o
+[build] FAILED: ovf/CMakeFiles/ovfgeometry.dir/geometry/src/STLReader.cpp.o 
+[build] /usr/bin/g++  -I/home/natan/Development/OpenViewFactor/ovf/ovf/geometry/headers -I/home/natan/Development/OpenViewFactor/ovf/build/include -g -std=gnu++17 -MD -MT ovf/CMakeFiles/ovfgeometry.dir/geometry/src/STLReader.cpp.o -MF ovf/CMakeFiles/ovfgeometry.dir/geometry/src/STLReader.cpp.o.d -o ovf/CMakeFiles/ovfgeometry.dir/geometry/src/STLReader.cpp.o -c /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/STLReader.cpp
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/STLReader.cpp: In member function ‘openviewfactor::Triangulation<FLOAT_TYPE> openviewfactor::STLReader<FLOAT_TYPE>::getMesh(const std::string&)’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/STLReader.cpp:14:73: error: ‘coords’ was not declared in this scope
+[build]    14 |       Vector3<FLOAT_TYPE> OA = (reinterpret_cast<Vector3<FLOAT_TYPE> *>(coords.data()))[triangulations[3*i + 0]];
+[build]       |                                                                         ^~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/STLReader.cpp: In instantiation of ‘openviewfactor::Triangulation<FLOAT_TYPE> openviewfactor::STLReader<FLOAT_TYPE>::getMesh(const std::string&) [with FLOAT_TYPE = float; std::string = std::__cxx11::basic_string<char>]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/STLReader.cpp:25:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/STLReader.cpp:8:31: error: no matching function for call to ‘openviewfactor::Triangulation<float>::Triangulation(const std::string&)’
+[build]     8 |     Triangulation<FLOAT_TYPE> mesh(filename);
+[build]       |                               ^~~~
+[build] In file included from /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/FileReader.hpp:4,
+[build]                  from /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/STLReader.hpp:5,
+[build]                  from /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/STLReader.cpp:1:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:26:21: note: candidate: ‘openviewfactor::Triangulation<FLOAT_TYPE>::Triangulation(openviewfactor::MeshType) [with FLOAT_TYPE = float]’
+[build]    26 |     OVF_HOST_DEVICE Triangulation(MeshType name);  // name constructor
+[build]       |                     ^~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:26:44: note:   no known conversion for argument 1 from ‘const std::string’ {aka ‘const std::__cxx11::basic_string<char>’} to ‘openviewfactor::MeshType’
+[build]    26 |     OVF_HOST_DEVICE Triangulation(MeshType name);  // name constructor
+[build]       |                                   ~~~~~~~~~^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:25:21: note: candidate: ‘openviewfactor::Triangulation<FLOAT_TYPE>::Triangulation() [with FLOAT_TYPE = float]’
+[build]    25 |     OVF_HOST_DEVICE Triangulation();  // default constructor
+[build]       |                     ^~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:25:21: note:   candidate expects 0 arguments, 1 provided
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:16:38: note: candidate: ‘openviewfactor::Triangulation<float>::Triangulation(const openviewfactor::Triangulation<float>&)’
+[build]    16 | template <typename FLOAT_TYPE> class Triangulation {
+[build]       |                                      ^~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:16:38: note:   no known conversion for argument 1 from ‘const std::string’ {aka ‘const std::__cxx11::basic_string<char>’} to ‘const openviewfactor::Triangulation<float>&’
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:16:38: note: candidate: ‘openviewfactor::Triangulation<float>::Triangulation(openviewfactor::Triangulation<float>&&)’
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:16:38: note:   no known conversion for argument 1 from ‘const std::string’ {aka ‘const std::__cxx11::basic_string<char>’} to ‘openviewfactor::Triangulation<float>&&’
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/STLReader.cpp:19:12: error: ‘class openviewfactor::Triangulation<float>’ has no member named ‘addElem’; did you mean ‘addElement’?
+[build]    19 |       mesh.addElem(t);
+[build]       |       ~~~~~^~~~~~~
+[build]       |       addElement
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/STLReader.cpp: In instantiation of ‘openviewfactor::Triangulation<FLOAT_TYPE> openviewfactor::STLReader<FLOAT_TYPE>::getMesh(const std::string&) [with FLOAT_TYPE = double; std::string = std::__cxx11::basic_string<char>]’:
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/STLReader.cpp:26:16:   required from here
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/STLReader.cpp:8:31: error: no matching function for call to ‘openviewfactor::Triangulation<double>::Triangulation(const std::string&)’
+[build]     8 |     Triangulation<FLOAT_TYPE> mesh(filename);
+[build]       |                               ^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:26:21: note: candidate: ‘openviewfactor::Triangulation<FLOAT_TYPE>::Triangulation(openviewfactor::MeshType) [with FLOAT_TYPE = double]’
+[build]    26 |     OVF_HOST_DEVICE Triangulation(MeshType name);  // name constructor
+[build]       |                     ^~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:26:44: note:   no known conversion for argument 1 from ‘const std::string’ {aka ‘const std::__cxx11::basic_string<char>’} to ‘openviewfactor::MeshType’
+[build]    26 |     OVF_HOST_DEVICE Triangulation(MeshType name);  // name constructor
+[build]       |                                   ~~~~~~~~~^~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:25:21: note: candidate: ‘openviewfactor::Triangulation<FLOAT_TYPE>::Triangulation() [with FLOAT_TYPE = double]’
+[build]    25 |     OVF_HOST_DEVICE Triangulation();  // default constructor
+[build]       |                     ^~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:25:21: note:   candidate expects 0 arguments, 1 provided
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:16:38: note: candidate: ‘openviewfactor::Triangulation<double>::Triangulation(const openviewfactor::Triangulation<double>&)’
+[build]    16 | template <typename FLOAT_TYPE> class Triangulation {
+[build]       |                                      ^~~~~~~~~~~~~
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:16:38: note:   no known conversion for argument 1 from ‘const std::string’ {aka ‘const std::__cxx11::basic_string<char>’} to ‘const openviewfactor::Triangulation<double>&’
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:16:38: note: candidate: ‘openviewfactor::Triangulation<double>::Triangulation(openviewfactor::Triangulation<double>&&)’
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/../headers/Triangulation.hpp:16:38: note:   no known conversion for argument 1 from ‘const std::string’ {aka ‘const std::__cxx11::basic_string<char>’} to ‘openviewfactor::Triangulation<double>&&’
+[build] /home/natan/Development/OpenViewFactor/ovf/ovf/geometry/src/STLReader.cpp:19:12: error: ‘class openviewfactor::Triangulation<double>’ has no member named ‘addElem’; did you mean ‘addElement’?
+[build]    19 |       mesh.addElem(t);
+[build]       |       ~~~~~^~~~~~~
+[build]       |       addElement
+[build] [9/12  75% :: 8.281] Building CXX object third_party/lean-vtk/tests/CMakeFiles/TestLeanVTK.dir/test_lean_vtk.cpp.o
+[build] ninja: build stopped: subcommand failed.
+[proc] The command: /usr/bin/cmake --build /home/natan/Development/OpenViewFactor/ovf/build --config Debug --target all -- exited with code: 1
+[driver] Build completed: 00:00:08.296
+[build] Build finished with exit code 1

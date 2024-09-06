@@ -1,7 +1,7 @@
 #ifndef OVF_FILEREADER_H_
 #define OVF_FILEREADER_H_
 
-#include "geometry/include/Triangulation.hpp"
+#include "Triangulation.hpp"
 #include <string>
 
 namespace openviewfactor {

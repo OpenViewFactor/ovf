@@ -6,8 +6,8 @@
 #include <vector>
 #include <algorithm>
 
-#include "config.hpp"
-#include "geometry/include/Triangle.hpp"
+#include "../../config.hpp"
+#include "Triangle.hpp"
 
 namespace openviewfactor {
 
@@ -31,8 +31,8 @@ template <typename FLOAT_TYPE> class Triangulation {
     OVF_HOST_DEVICE size_t getNumPoints() const;
     OVF_HOST_DEVICE size_t getNumBytes() const;
 
-    OVF_HOST_DEVICE std::vector<std::array<size_t, 3>>& getConPtr() const;
-    OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>>& getPtsPtr() const;
+    OVF_HOST_DEVICE const std::array<size_t,3>* getConPtr() const;
+    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>* getPtsPtr() const;
     
     OVF_HOST_DEVICE const Triangle<FLOAT_TYPE> operator[](size_t index) const;
     OVF_HOST_DEVICE Triangle<FLOAT_TYPE> operator[](size_t index);

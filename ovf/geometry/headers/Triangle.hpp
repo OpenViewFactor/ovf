@@ -1,8 +1,8 @@
 #ifndef OVF_TRIANGLE_H_
 #define OVF_TRIANGLE_H_
 
-#include "config.hpp"
-#include "geometry/include/Vector3.hpp"
+#include "../../config.hpp"
+#include "Vector3.hpp"
 #include <cmath>
 
 namespace openviewfactor {
@@ -23,9 +23,9 @@ template <typename FLOAT_TYPE> class Triangle {
     OVF_HOST_DEVICE Triangle(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC);    
 
     //* ----- ACCESSOR METHODS ----- *//
-    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& getOA() const;
-    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& getOB() const;
-    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& getOC() const;
+    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> getOA() const;
+    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> getOB() const;
+    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> getOC() const;
     OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> getAB() const;
     OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> getBC() const;
     OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> getCA() const;

@@ -1,4 +1,4 @@
-#include "geometry/include/Triangle.hpp"
+#include "../headers/Triangle.hpp"
 
 namespace openviewfactor {
   //* ----- CLASS CONSTRUCTORS ----- *//
@@ -12,11 +12,11 @@ namespace openviewfactor {
   
   //* ----- ACCESSOR METHODS ----- *//
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::getOA() const { return *_OA; }
+  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getOA() const { return _OA; }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::getOB() const { return *_OB; }
+  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getOB() const { return _OB; }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::getOC() const { return *_OC; }
+  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getOC() const { return _OC; }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getAB() const { return _OB - _OA; }
@@ -74,7 +74,16 @@ namespace openviewfactor {
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE bool Triangle<FLOAT_TYPE>::operator!=(const Triangle<FLOAT_TYPE> &rhs) const {
-    return !(this == rhs);
+    return !(*this == rhs);
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE bool operator==(const Triangle<FLOAT_TYPE> &lhs, const Triangle<FLOAT_TYPE> &rhs) {
+    return (lhs.getOA() == rhs.getOA() && lhs.getOB() == rhs.getOB() && lhs.getOC() == rhs.getOC());
+  }
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE bool operator!=(const Triangle<FLOAT_TYPE> &lhs, const Triangle<FLOAT_TYPE> &rhs) {
+    return !(lhs == rhs);
   }
 
 template class Triangle<float>;

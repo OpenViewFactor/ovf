@@ -1,23 +1,27 @@
-#include "geometry/include/STLReader.hpp"
+#include "../headers/STLReader.hpp"
 #include <vector>
 
 namespace openviewfactor {
   template <typename FLOAT_TYPE>
   Triangulation<FLOAT_TYPE> STLReader<FLOAT_TYPE>::getMesh(const std::string &filename) {
     //! set up inputs for the third-party library
-    Triangulation<FLOAT_TYPE> mesh(filename);
+    Triangulation<FLOAT_TYPE> mesh;
     std::vector<FLOAT_TYPE> coordinates, normals;
     std::vector<size_t> triangulations, solids;
     stl_reader::ReadStlFile(filename.c_str(), coordinates, normals, triangulations, solids);  //! make use of third-party function
 
-    for (size_t i = 0; i < (triangulations.size() / 3); i++) {
-      Vector3<FLOAT_TYPE> OA = (reinterpret_cast<Vector3<FLOAT_TYPE> *>(coords.data()))[triangulations[3*i + 0]];
-      Vector3<FLOAT_TYPE> OB = (reinterpret_cast<Vector3<FLOAT_TYPE> *>(coords.data()))[triangulations[3*i + 1]];
-      Vector3<FLOAT_TYPE> OC = (reinterpret_cast<Vector3<FLOAT_TYPE> *>(coords.data()))[triangulations[3*i + 2]];
-      Triangle<FLOAT_TYPE> t(OA, OB, OC);
-
-      mesh.addElem(t);
+    std::vector<Vector3<FLOAT_TYPE>> coordinates_vector;
+    for (unsigned int point_index = 0; point_index < coordinates.size(); point_index++) {
+      Vector3<FLOAT_TYPE> v(coordinates[(point_index*3)+1], coordinates[(point_index*3)+2], coordinates[(point_index*3)+3]);
+      coordinates_vector.push_back(v);
     }
+
+    std::vector<std::array<size_t, 3>> triangulations_vector;
+    for (unsigned int triangle_index = 0; triangle_index < triangulations.size(); triangle_index++) {
+      std::array<size_t, 3> v = {triangulations[(triangle_index*3)+1], triangulations[(triangle_index*3)+2], triangulations[(triangle_index*3)+3]};
+      triangulations_vector.push_back(v);
+    }
+    mesh.setPoints(coordinates_vector).setConnectivity(triangulations_vector);
     return mesh;
   }
 

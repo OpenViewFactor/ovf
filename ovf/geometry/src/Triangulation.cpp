@@ -1,14 +1,14 @@
-#include "geometry/include/Triangulation.hpp"
+#include "../headers/Triangulation.hpp"
 
 namespace openviewfactor {
   //* ----- CLASS CONSTRUCTORS ----- *//
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>::Triangulation()
-    : _pts(std::vector<Vector3<FLOAT_TYPE>>()), _con(std::vector<std::array<size_t, 3>>>()), _name(UNKNOWN) {}
+    : _pts(std::vector<Vector3<FLOAT_TYPE>>()), _con(std::vector<std::array<size_t, 3>>()), _name(UNKNOWN) {}
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>::Triangulation(MeshType name)
-    : _pts(std::vector<Vector3<FLOAT_TYPE>>()), _con(std::vector<std::array<size_t, 3>>>()), _name(name) {}
+    : _pts(std::vector<Vector3<FLOAT_TYPE>>()), _con(std::vector<std::array<size_t, 3>>()), _name(name) {}
 
   //* ----- ACCESSOR METHODS ----- *//
   template <typename FLOAT_TYPE>
@@ -21,10 +21,10 @@ namespace openviewfactor {
   OVF_HOST_DEVICE size_t Triangulation<FLOAT_TYPE>::getNumBytes() const { return (_con.size() * sizeof(size_t) * 3) + (_pts.size() * sizeof(FLOAT_TYPE) * 9); }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::vector<std::array<size_t, 3>>& Triangulation<FLOAT_TYPE>::getConPtr() const { return _con.data(); }
+  OVF_HOST_DEVICE const std::array<size_t,3>* Triangulation<FLOAT_TYPE>::getConPtr() const { return _con.data(); }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>>& Triangulation<FLOAT_TYPE>::getPtsPtr() const { return _pts.data(); }
+  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>* Triangulation<FLOAT_TYPE>::getPtsPtr() const { return _pts.data(); }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE const Triangle<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::operator[](size_t index) const {
@@ -32,7 +32,7 @@ namespace openviewfactor {
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangle<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::operator[](size_t index) {
-    Triangle<FLOAT_TYPE> T(_pos[_con[index][0]], _pos[_con[index][1]], _pos[_con[index][2]]);
+    Triangle<FLOAT_TYPE> T(_pts[_con[index][0]], _pts[_con[index][1]], _pts[_con[index][2]]);
     return T;
   }
 
@@ -40,7 +40,7 @@ namespace openviewfactor {
   OVF_HOST_DEVICE FLOAT_TYPE Triangulation<FLOAT_TYPE>::getMeshArea() const {
     FLOAT_TYPE total_area = 0;
     for (int i = 0; i < getNumElements(); i++) {
-      total_area += (*this)[i].area();
+      total_area += (*this)[i].getArea();
     }
     return total_area;
   }
@@ -77,7 +77,7 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE std::vector<Triangle<FLOAT_TYPE>> Triangulation<FLOAT_TYPE>::getTriangles() const {
-    std::vector<triangle<FLOAT_TYPE>> mesh_triangles;
+    std::vector<Triangle<FLOAT_TYPE>> mesh_triangles;
     for (std::array<size_t, 3> connections : _con) {
       mesh_triangles.push_back(Triangle<FLOAT_TYPE>(_pts[connections[0]], _pts[connections[1]], _pts[connections[2]]));
     }
@@ -101,12 +101,12 @@ namespace openviewfactor {
     std::vector<Vector3<FLOAT_TYPE>> pos = {OA, OB, OC};
     std::array<size_t, 3> con;
     for (size_t i = 0; i < pos.size(); i++) {
-      auto pos_location_iterator = std::find(_pos.begin(), _pos.end(), pos[i]);
-      if (pos_location_iterator != _pos.end()) {
-        con[i] = pos_location_iterator - _pos.begin();
+      auto pos_location_iterator = std::find(_pts.begin(), _pts.end(), pos[i]);
+      if (pos_location_iterator != _pts.end()) {
+        con[i] = std::distance(pos_location_iterator, _pts.begin());
       } else {
-        _pos.push_back(p[i]);
-        con[i] = _pos[_pos.size() - 1];
+        _pts.push_back(pos[i]);
+        con[i] = _pts.size() - 1;
       }
     }
     _con.push_back(con);

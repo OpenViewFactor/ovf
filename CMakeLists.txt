@@ -14,7 +14,6 @@ add_subdirectory(${THIRD_PARTY_INCLUDE_DIR}/boost-cmake)
 # -------------------- ADD COMPILE OPTIONS -------------------- #
 
 option(OVF_BUILD_OMP "Build OpenMP solver implementations (Default: ON)" ON)
-option(OVF_BUILD_CLI "Build CLI (Default: ON)" ON)
 option(OVF_BUILD_CUDA "Build CUDA solver implementations (Default: OFF)")
 option(OVF_BUILD_GTEST "Build unit tests (Default: OFF)")
 option(OVF_BUILD_BENCHMARK "Build benchmarking tests (Default: OFF)")

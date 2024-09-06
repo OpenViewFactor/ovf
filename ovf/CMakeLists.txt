@@ -31,11 +31,10 @@ include_directories(${THIRD_PARTY_INCLUDE_DIR}) # this variable gets defined in 
 # -------------------- BUILD GEOMETRY LIBRARY -------------------- #
 
 add_library(ovfgeometry STATIC ${_ovf_geometry_sources})  # add a static library target from the geometry source files
+add_compile_definitions(OVF_VERSION=${OVF_VERSION})
 include_directories(${PROJECT_BINARY_DIR}/include)
 
 # -------------------- BUILD COMMAND-LINE EXECUTABLE -------------------- #
-if(OVF_BUILD_CLI)
-  add_executable(openviewfactor ${_ovf_cli_sources})
-  set_target_properties(openviewfactor PROPERTIES LINKER_LANGUAGE CXX)
-  target_link_libraries(openviewfactor ovfgeometry)
-endif()
+add_executable(openviewfactor ${_ovf_cli_sources})
+set_target_properties(openviewfactor PROPERTIES LINKER_LANGUAGE CXX)
+target_link_libraries(openviewfactor ovfgeometry Boost::boost)

@@ -1,9 +1,10 @@
 #ifndef OVF_BVH_H_
 #define OVF_BVH_H_
 
-#include "geometry/include/Vector3.hpp"
-#include "geometry/include/Triangulation.hpp"
-#include "geometry/include/BVHNode.hpp"
+#include "../../config.hpp"
+#include "Vector3.hpp"
+#include "Triangulation.hpp"
+#include "BVHNode.hpp"
 #include <memory>
 
 namespace openviewfactor {

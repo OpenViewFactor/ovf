@@ -1,5 +1,6 @@
 include(./geometry/CMakeLists.txt)
 include(./cli/CMakeLists.txt)
+include(./tests/CMakeLists.txt)
 
 add_subdirectory(tests)
 

@@ -1,4 +1,4 @@
-#include "geometry/include/Vector3.hpp"
+#include "geometry/headers/Vector3.hpp"
 #include "gtest/gtest.h"
 
 using namespace openviewfactor;

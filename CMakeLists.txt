@@ -9,6 +9,13 @@ message("Beginning OVF Build")
 
 message("Adding Subdirectories to root CMakeLists file")
 
+message("Checking whether Google Test is enabled in root directory CMakeLists")
+if(OVF_BUILD_GTEST)
+  message("Google Test is enabled in root directory CMakeLists")
+  set(GTEST_LIBS gtest gtest_main)
+  set(GTEST_INCLUDE_DIR ${THIRD_PARTY_INCLUDE_DIR}/google-test/googletest/include)
+endif()
+
 add_subdirectory(ovf)
 
 set(THIRD_PARTY_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
@@ -40,12 +47,4 @@ if (OVF_BUILD_CUDA)
   message("OVF CUDA Enabled")
   set(CMAKE_CUDA_FLAGS_DEBUG ${CMAKE_CUDA_FLAGS_DEBUG} " -g -G ") # this enables the cuda-gdb
   set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} --ptxas-options=-v")
-endif()
-
-message("Checking whether Google Test is enabled in root directory CMakeLists")
-
-if(OVF_BUILD_GTEST)
-  message("Google Test is enabled in root directory CMakeLists")
-  set(GTEST_LIBS gtest gtest_main)
-  set(GTEST_INCLUDE_DIR ${THIRD_PARTY_INCLUDE_DIR}/google-test/googletest/include)
 endif()

@@ -20,15 +20,25 @@ namespace openviewfactor {
 
   template<typename FLOAT_TYPE>
   OVF_HOST_DEVICE const FLOAT_TYPE Vector3<FLOAT_TYPE>::operator[](size_t index) const {
-    return (*this)[index];
+    if (index==0) {
+      return _x;
+    } else if (index == 1) {
+      return _y;
+    } else if (index == 2) {
+      return _z;
+    }
+    if (index != 0 && index != 1 && index != 2) {
+      throw std::runtime_error("Cannot access index");
+    }
+    return 0;
   }
   template<typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE Vector3<FLOAT_TYPE>::operator[](size_t index) {
-    if (index==1) {
+    if (index==0) {
       return _x;
-    } else if (index == 2) {
+    } else if (index == 1) {
       return _y;
-    } else if (index == 3) {
+    } else if (index == 2) {
       return _z;
     }
     if (index != 0 && index != 1 && index != 2) {
@@ -51,7 +61,7 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Vector3<FLOAT_TYPE> Vector3<FLOAT_TYPE>::normalize() const {
-    return this->scale(1/this->getMagnitude());
+    return this->scale(1/(this->getMagnitude()));
   }
 
   //* ----- MUTATOR METHODS ----- *//

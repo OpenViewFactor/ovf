@@ -1,5 +1,5 @@
-#include "geometry/headers/Vector3.hpp"
-#include "gtest/gtest.h"
+#include "../../geometry/headers/Vector3.hpp"
+#include "../../../third_party/google-test/googletest/include/gtest/gtest.h"
 
 using namespace openviewfactor;
 

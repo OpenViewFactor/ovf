@@ -1,4 +1,4 @@
-#include "../headers/Triangulation.hpp"
+#include "Triangulation.hpp"
 
 namespace openviewfactor {
   //* ----- CLASS CONSTRUCTORS ----- *//

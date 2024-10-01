@@ -1,13 +1,13 @@
 #ifndef OVF_CLI_H_
 #define OVF_CLI_H
 
-#include "../geometry/headers/STLReader.hpp"
-#include "../geometry/headers/Vector3.hpp"
-#include "../geometry/headers/Ray.hpp"
-#include "../geometry/headers/Triangle.hpp"
-#include "../geometry/headers/Triangulation.hpp"
-#include "../geometry/headers/BVHNode.hpp"
-#include "../geometry/headers/BVH.hpp"
+#include "STLReader.hpp"
+#include "Vector3.hpp"
+#include "Ray.hpp"
+#include "Triangle.hpp"
+#include "Triangulation.hpp"
+#include "BVHNode.hpp"
+#include "BVH.hpp"
 
 #include <boost/assign.hpp>
 #include <boost/program_options.hpp>

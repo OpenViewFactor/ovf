@@ -4,14 +4,12 @@ set(ovf_gtest_executable_name ovfAllTests)
 
 message("Configuring OpenViewFactor Unit Tests")
 
+include_directories(${GTEST_INCLUDE_DIR} ${THIRD_PARTY_INCLUDE_DIR} ${_ovf_geometry_headers_dir})
+
 set(_test_sources
   test_Vector3.cpp
+  test_Triangle.cpp
   main.cpp
-)
-
-include_directories(
-  ${GTEST_INCLUDE_DIR}
-  ${THIRD_PARTY_INCLUDE_DIR}
 )
 
 # -------------------- BUILD TEST EXECUTABLE -------------------- #

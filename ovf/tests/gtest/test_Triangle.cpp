@@ -1,5 +1,5 @@
-#include "geometry/include/Triangle.hpp"
-#include "gtest/gtest.h"
+#include "Triangle.hpp"
+#include "gtest.h"
 #include <random>
 #include <string>
 #include <vector>

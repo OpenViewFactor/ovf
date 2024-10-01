@@ -3,19 +3,19 @@
 
 #include "../../config.hpp"
 #include <stdexcept>
+#include <array>
 #include <cmath>
 
 namespace openviewfactor {
   template <typename FLOAT_TYPE> class Vector3 {
 
     private:  //* Private Class Attributes (x,y,z)
-      FLOAT_TYPE _x;
-      FLOAT_TYPE _y;
-      FLOAT_TYPE _z;
+      std::array<FLOAT_TYPE, 3> _xyz;
       
     public:
       //* ----- CLASS CONSTRUCTORS ----- *//
       OVF_HOST_DEVICE Vector3();  // default constructor
+      OVF_HOST_DEVICE Vector3(std::array<FLOAT_TYPE,3> xyz);
       OVF_HOST_DEVICE Vector3(FLOAT_TYPE x, FLOAT_TYPE y, FLOAT_TYPE z);  // (x,y,z) constructor
 
       //* ----- ACCESSOR METHODS ----- *//

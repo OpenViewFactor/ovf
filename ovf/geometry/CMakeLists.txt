@@ -1,5 +1,11 @@
 message("Creating list of geometry headers")
 
+# -------------------- ADD DIRECTORIES FOR COMPILER TO SEARCH FOR INCLUDE FILES -------------------- #
+
+message("Include geometry headers directory and third-party directory")
+include_directories(${_ovf_geometry_headers_dir})
+include_directories(${THIRD_PARTY_INCLUDE_DIR}) # this variable gets defined in the CMakeLists file one level up
+
 set(_geometry_headers
     headers/Vector3.hpp
     headers/Ray.hpp
@@ -33,20 +39,12 @@ endforeach()
 
 set(_ovf_geometry_headers_dir ${CMAKE_CURRENT_SOURCE_DIR}/headers) # create a variable to store the directory for all geometry-related code
 
-
 message("Add geometry sources to list")
 
 set(_ovf_geometry_sources)
 foreach(_source ${_geometry_sources})
   list(APPEND _ovf_geometry_sources ${CMAKE_CURRENT_SOURCE_DIR}/${_source})
 endforeach()
-
-# -------------------- ADD DIRECTORIES FOR COMPILER TO SEARCH FOR INCLUDE FILES -------------------- #
-
-message("Include geometry headers directory and third-party directory")
-
-include_directories(${_ovf_geometry_headers_dir})
-include_directories(${THIRD_PARTY_INCLUDE_DIR}) # this variable gets defined in the CMakeLists file one level up
 
 # -------------------- BUILD GEOMETRY LIBRARY -------------------- #
 

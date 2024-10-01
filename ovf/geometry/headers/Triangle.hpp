@@ -10,9 +10,7 @@ namespace openviewfactor {
 template <typename FLOAT_TYPE> class Triangle {
 
   private:
-    Vector3<FLOAT_TYPE> _OA;          // vertex OA
-    Vector3<FLOAT_TYPE> _OB;          // vertex OB
-    Vector3<FLOAT_TYPE> _OC;          // vertex OC
+    std::array<Vector3<FLOAT_TYPE>,3> _pts;
     Vector3<FLOAT_TYPE> _normal;      // triangle normal vector
     FLOAT_TYPE _area;                 // triangle area
     Vector3<FLOAT_TYPE> _centroid;    // triangle centroid
@@ -20,6 +18,7 @@ template <typename FLOAT_TYPE> class Triangle {
   public:
     //* ----- CLASS CONSTRUCTORS ----- *//
     OVF_HOST_DEVICE Triangle();
+    OVF_HOST_DEVICE Triangle(std::array<Vector3<FLOAT_TYPE>,3> pts);
     OVF_HOST_DEVICE Triangle(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC);    
 
     //* ----- ACCESSOR METHODS ----- *//

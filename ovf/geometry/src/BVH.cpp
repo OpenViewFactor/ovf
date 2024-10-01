@@ -1,4 +1,4 @@
-#include "../headers/BVH.hpp"
+#include "BVH.hpp"
 
 namespace openviewfactor {
 

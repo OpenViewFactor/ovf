@@ -1,5 +1,5 @@
-#include "../../geometry/headers/Vector3.hpp"
-#include "../../../third_party/google-test/googletest/include/gtest/gtest.h"
+#include "Vector3.hpp"
+#include "gtest.h"
 
 using namespace openviewfactor;
 
@@ -72,8 +72,7 @@ TEST(Vector3_Tests, test_vector_operations) {
   EXPECT_FLOAT_EQ(i.dot(i),1.0);
 
   EXPECT_FLOAT_EQ(dot(i,j),0.0);
-  EXPECT_FLOAT_EQ(dot(i,i),0.0);
-
+  EXPECT_FLOAT_EQ(dot(i,i),1.0);
 
   EXPECT_FLOAT_EQ((i.scale(2)).dot(i.scale(3)),6.0);
 

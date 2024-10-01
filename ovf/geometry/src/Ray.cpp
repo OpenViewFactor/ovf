@@ -1,4 +1,4 @@
-#include "../headers/Ray.hpp"
+#include "Ray.hpp"
 
 namespace openviewfactor {
   template <typename FLOAT_TYPE>

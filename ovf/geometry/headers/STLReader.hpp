@@ -1,7 +1,7 @@
 #ifndef OVF_STLREADER_H_
 #define OVF_STLREADER_H_
 
-#include "../../../third_party/stl_reader.h"
+#include "stl_reader.h"
 #include "Triangulation.hpp"
 #include "FileReader.hpp"
 #include <exception>

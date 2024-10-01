@@ -1,4 +1,4 @@
-#include "../headers/STLReader.hpp"
+#include "STLReader.hpp"
 #include <vector>
 
 namespace openviewfactor {

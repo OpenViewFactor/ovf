@@ -1,4 +1,4 @@
-#include "../headers/BVHNode.hpp"
+#include "BVHNode.hpp"
 
 namespace openviewfactor {
   template <typename FLOAT_TYPE>

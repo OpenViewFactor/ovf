@@ -40,7 +40,7 @@ namespace openviewfactor {
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& BVHNode<FLOAT_TYPE>::growToIncludeTriangulation(const Triangulation<FLOAT_TYPE> &triangulation) {
-    for (unsigned int i = 0; i < (*triangulation ).getNumElements(); i++) {
+    for (unsigned int i = 0; i < triangulation.getNumElements(); i++) {
       this->growToIncludeTriangle(triangulation[i]);
     }
     return *this;
@@ -129,7 +129,7 @@ namespace openviewfactor {
     unsigned int best_cost_index = std::distance(evaluation_point_costs.begin(), best_cost_iterator);
 
     std::pair<FLOAT_TYPE, FLOAT_TYPE> split_location_and_cost;
-    split_location_and_cost.first = evaluation_point_positions(best_cost_index);
+    split_location_and_cost.first = evaluation_point_positions[best_cost_index];
     split_location_and_cost.second = best_cost;
     return split_location_and_cost;
   }
@@ -140,5 +140,7 @@ namespace openviewfactor {
     std::generate(subindices.begin(), subindices.end(), [this, n=0] () mutable { return (this->getFirstTriangleIndex() + n++); });
     return subindices;
   }
-  
+
+template class BVHNode<float>;
+template class BVHNode<double>;
 }

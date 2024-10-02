@@ -36,7 +36,7 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getBC() const { return _pts[2] - _pts[1]; }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getCA() const { return _pts[1] - _pts[2]; }
+  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getCA() const { return _pts[0] - _pts[2]; }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getNormal() const { return _normal; };

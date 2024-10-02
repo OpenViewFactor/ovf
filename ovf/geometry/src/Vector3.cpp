@@ -135,14 +135,14 @@ namespace openviewfactor {
 
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> vectorMinima(const Vector3<FLOAT_TYPE> v1, const Vector3<FLOAT_TYPE> v2) {
+  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> vectorMinima(const Vector3<FLOAT_TYPE> &v1, const Vector3<FLOAT_TYPE> &v2) {
     FLOAT_TYPE min_x = std::min(v1.getX(), v2.getX());
     FLOAT_TYPE min_y = std::min(v1.getY(), v2.getY());
     FLOAT_TYPE min_z = std::min(v1.getZ(), v2.getZ());
     return Vector3<FLOAT_TYPE>(min_x, min_y, min_z);
   }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> vectorMaxima(const Vector3<FLOAT_TYPE> v1, const Vector3<FLOAT_TYPE> v2) {
+  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> vectorMaxima(const Vector3<FLOAT_TYPE> &v1, const Vector3<FLOAT_TYPE> &v2) {
     FLOAT_TYPE max_x = std::max(v1.getX(), v2.getX());
     FLOAT_TYPE max_y = std::max(v1.getY(), v2.getY());
     FLOAT_TYPE max_z = std::max(v1.getZ(), v2.getZ());
@@ -213,6 +213,12 @@ namespace openviewfactor {
 
 template class Vector3<float>;
 template class Vector3<double>;
+
+template Vector3<float> vectorMinima(const Vector3<float> &, const Vector3<float> &);
+template Vector3<double> vectorMinima(const Vector3<double> &, const Vector3<double> &);
+
+template Vector3<float> vectorMaxima(const Vector3<float> &, const Vector3<float> &);
+template Vector3<double> vectorMaxima(const Vector3<double> &, const Vector3<double> &);
 
 template bool operator==(const Vector3<float> &, const Vector3<float> &);
 template bool operator==(const Vector3<double> &, const Vector3<double> &);

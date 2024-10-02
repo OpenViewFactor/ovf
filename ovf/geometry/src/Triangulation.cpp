@@ -18,7 +18,7 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE size_t Triangulation<FLOAT_TYPE>::getNumPoints() const { return _pts.size(); }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE size_t Triangulation<FLOAT_TYPE>::getNumBytes() const { return (_con.size() * sizeof(size_t) * 3) + (_pts.size() * sizeof(FLOAT_TYPE) * 9); }
+  OVF_HOST_DEVICE size_t Triangulation<FLOAT_TYPE>::getNumBytes() const { return (_con.size() * sizeof(size_t) * 3) + (_pts.size() * sizeof(Vector3<FLOAT_TYPE>)); }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE const std::array<size_t,3>* Triangulation<FLOAT_TYPE>::getConPtr() const { return _con.data(); }
@@ -28,7 +28,8 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE const Triangle<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::operator[](size_t index) const {
-    return (*this)[index];
+    Triangle<FLOAT_TYPE> T(_pts[_con[index][0]], _pts[_con[index][1]], _pts[_con[index][2]]);
+    return T;
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangle<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::operator[](size_t index) {
@@ -39,8 +40,8 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE Triangulation<FLOAT_TYPE>::getMeshArea() const {
     FLOAT_TYPE total_area = 0;
-    for (int i = 0; i < getNumElements(); i++) {
-      total_area += (*this)[i].getArea();
+    for (int i = 0; i < this->getNumElements(); i++) {
+      total_area += ((*this)[i]).getArea();
     }
     return total_area;
   }
@@ -127,6 +128,17 @@ namespace openviewfactor {
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::setPoints(std::vector<Vector3<FLOAT_TYPE>> pts) {
     _pts = pts;
     return *this;
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE bool Triangulation<FLOAT_TYPE>::operator==(const Triangulation<FLOAT_TYPE>& rhs) const {
+    if (this->getNumElements() != rhs.getNumElements()) { return false; }
+    if (this->getNumPoints() != rhs.getNumPoints()) { return false; }
+    if (this->getMeshArea() != rhs.getMeshArea()) { return false; }
+    for (size_t i = 0; i < this->getNumElements(); i++) {
+      if ((*this)[i] != rhs[i]) { return false; }
+    }
+    return true;
   }
 
 template class Triangulation<float>;

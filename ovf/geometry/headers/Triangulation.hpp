@@ -53,6 +53,8 @@ template <typename FLOAT_TYPE> class Triangulation {
 
     OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& setConnectivity(std::vector<std::array<size_t, 3>> con);
     OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& setPoints(std::vector<Vector3<FLOAT_TYPE>> pts);
+
+    OVF_HOST_DEVICE bool operator==(const Triangulation<FLOAT_TYPE>& rhs) const;
 };
 }
 

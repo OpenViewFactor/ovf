@@ -51,9 +51,9 @@ namespace openviewfactor {
   };
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> vectorMinima(const Vector3<FLOAT_TYPE> v1, const Vector3<FLOAT_TYPE> v2);
+  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> vectorMinima(const Vector3<FLOAT_TYPE> &v1, const Vector3<FLOAT_TYPE> &v2);
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> vectorMaxima(const Vector3<FLOAT_TYPE> v1, const Vector3<FLOAT_TYPE> v2);
+  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> vectorMaxima(const Vector3<FLOAT_TYPE> &v1, const Vector3<FLOAT_TYPE> &v2);
 
   //TODO [] SHANE AND I HAVE NO IDEA WHY THESE EXPLICIT INSTANTIATIONS ARE NECESSARY, BUT THE COMPILER THROWS A TANTRUM IF THEY'RE NOT HERE
   template <typename FLOAT_TYPE>

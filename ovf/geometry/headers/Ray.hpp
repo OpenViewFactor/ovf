@@ -19,7 +19,7 @@ template <typename FLOAT_TYPE> class Ray {
 
     OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getOrigin() const;
     OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getDirection() const;
-    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getIntersectionDistance() const;
+    OVF_HOST_DEVICE FLOAT_TYPE getIntersectionDistance() const;
 
     OVF_HOST_DEVICE Ray<FLOAT_TYPE>& setOrigin(Vector3<FLOAT_TYPE> origin);
     OVF_HOST_DEVICE Ray<FLOAT_TYPE>& setDirection(Vector3<FLOAT_TYPE> direction);

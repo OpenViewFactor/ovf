@@ -9,6 +9,8 @@ include_directories(${GTEST_INCLUDE_DIR} ${THIRD_PARTY_INCLUDE_DIR} ${_ovf_geome
 set(_test_sources
   test_Vector3.cpp
   test_Triangle.cpp
+  test_Triangulation.cpp
+  test_BVHNode.cpp
   main.cpp
 )
 

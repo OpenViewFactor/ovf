@@ -10,7 +10,7 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Vector3<FLOAT_TYPE> Ray<FLOAT_TYPE>::getDirection() const { return _direction; }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> Ray<FLOAT_TYPE>::getIntersectionDistance() const { return _intersection_distance; }
+  OVF_HOST_DEVICE FLOAT_TYPE Ray<FLOAT_TYPE>::getIntersectionDistance() const { return _intersection_distance; }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Ray<FLOAT_TYPE>& Ray<FLOAT_TYPE>::setOrigin(Vector3<FLOAT_TYPE> origin) {
@@ -59,4 +59,7 @@ namespace openviewfactor {
 
     return *this;
   }
+
+template class Ray<float>;
+template class Ray<double>;
 }

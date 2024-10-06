@@ -1,4 +1,6 @@
 #include "Triangulation.hpp"
+#include "STLReader.hpp"
+#include "TestGlobals.h"
 #include "gtest.h"
 
 using namespace openviewfactor;
@@ -34,4 +36,26 @@ TEST(Triangulation_Tests, test_operators) {
 
   EXPECT_EQ(tgln[0], Triangle<float>(p1,p2,p3));
   EXPECT_EQ(tgln[1], Triangle<float>(p1,p3,p4));
+}
+
+TEST(Triangulation_Tests, test_stlread_binary) {
+  STLReader<float> stl_reader = STLReader<float>();
+  Triangulation<float> mesh = stl_reader.getMesh(OVF_INPUT("xy_plane_unit_square_binary.stl"));
+
+  Triangle<float> t1( { {0.0 , 0.0 , 0.0} , {1.0 , 0.0 , 0.0} , {1.0 , 1.0 , 0.0} } );
+  Triangle<float> t2( { {0.0 , 0.0 , 0.0} , {1.0 , 1.0 , 0.0} , {0.0 , 1.0 , 0.0} } );
+
+  EXPECT_EQ(mesh[0], t1);
+  EXPECT_EQ(mesh[1], t2);
+}
+
+TEST(Triangulation_Tests, test_stlread_ascii) {
+  STLReader<float> stl_reader = STLReader<float>();
+  Triangulation<float> mesh = stl_reader.getMesh(OVF_INPUT("xy_plane_unit_square_text.stl"));
+
+  Triangle<float> t1( { {0.0 , 0.0 , 0.0} , {1.0 , 0.0 , 0.0} , {1.0 , 1.0 , 0.0} } );
+  Triangle<float> t2( { {0.0 , 0.0 , 0.0} , {1.0 , 1.0 , 0.0} , {0.0 , 1.0 , 0.0} } );
+
+  EXPECT_EQ(mesh[0], t1);
+  EXPECT_EQ(mesh[1], t2);
 }

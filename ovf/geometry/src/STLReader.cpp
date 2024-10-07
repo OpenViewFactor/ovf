@@ -1,3 +1,7 @@
+#include "Vector3.hpp"
+#include "Triangle.hpp"
+#include "Triangulation.hpp"
+
 #include "STLReader.hpp"
 #include <vector>
 

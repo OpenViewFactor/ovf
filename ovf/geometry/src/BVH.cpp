@@ -1,4 +1,10 @@
+#include "Vector3.hpp"
+#include "Triangle.hpp"
+#include "Triangulation.hpp"
+#include "BVHNode.hpp"
 #include "BVH.hpp"
+#include "STLReader.hpp"
+#include "Ray.hpp"
 
 namespace openviewfactor {
 

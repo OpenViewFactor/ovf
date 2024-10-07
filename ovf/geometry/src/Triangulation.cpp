@@ -1,3 +1,5 @@
+#include "Vector3.hpp"
+#include "Triangle.hpp"
 #include "Triangulation.hpp"
 
 namespace openviewfactor {
@@ -28,19 +30,19 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE const Triangle<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::operator[](size_t index) const {
-    Triangle<FLOAT_TYPE> T(_pts[_con[index][0]], _pts[_con[index][1]], _pts[_con[index][2]]);
+    Triangle<FLOAT_TYPE> T(_pts[ (_con[index])[0] ], _pts[ (_con[index])[1] ], _pts[ (_con[index])[2] ]);
     return T;
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangle<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::operator[](size_t index) {
-    Triangle<FLOAT_TYPE> T(_pts[_con[index][0]], _pts[_con[index][1]], _pts[_con[index][2]]);
+    Triangle<FLOAT_TYPE> T(_pts[ (_con[index])[0] ], _pts[ (_con[index])[1] ], _pts[ (_con[index])[2] ]);
     return T;
   }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE Triangulation<FLOAT_TYPE>::getMeshArea() const {
     FLOAT_TYPE total_area = 0;
-    for (int i = 0; i < this->getNumElements(); i++) {
+    for (size_t i = 0; i < this->getNumElements(); i++) {
       total_area += ((*this)[i]).getArea();
     }
     return total_area;
@@ -99,18 +101,18 @@ namespace openviewfactor {
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::addElement(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC) {
-    std::vector<Vector3<FLOAT_TYPE>> pos = {OA, OB, OC};
-    std::array<size_t, 3> con;
-    for (size_t i = 0; i < pos.size(); i++) {
-      auto pos_location_iterator = std::find(_pts.begin(), _pts.end(), pos[i]);
-      if (pos_location_iterator != _pts.end()) {
-        con[i] = std::distance(pos_location_iterator, _pts.begin());
+    std::array<Vector3<FLOAT_TYPE>, 3> new_points = {OA, OB, OC};
+    std::array<size_t, 3> new_connectivity;
+    for (size_t i = 0; i < 3; i++) {
+      auto point_location_iterator = std::find(_pts.begin(), _pts.end(), new_points[i]);
+      if (point_location_iterator != _pts.end()) {
+        new_connectivity[i] = std::distance(_pts.begin(), point_location_iterator);
       } else {
-        _pts.push_back(pos[i]);
-        con[i] = _pts.size() - 1;
+        _pts.push_back(new_points[i]);
+        new_connectivity[i] = _pts.size() - 1;
       }
     }
-    _con.push_back(con);
+    _con.push_back(new_connectivity);
     return *this;
   }
   template <typename FLOAT_TYPE>

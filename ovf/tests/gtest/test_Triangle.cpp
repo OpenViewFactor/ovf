@@ -1,8 +1,12 @@
+#include "Vector3.hpp"
 #include "Triangle.hpp"
+#include "Triangulation.hpp"
+#include "BVHNode.hpp"
+#include "BVH.hpp"
+#include "STLReader.hpp"
+#include "Ray.hpp"
+#include "TestGlobals.h"
 #include "gtest.h"
-#include <random>
-#include <string>
-#include <vector>
 
 using namespace openviewfactor;
 

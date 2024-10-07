@@ -1,3 +1,5 @@
+#include "Vector3.hpp"
+#include "Triangle.hpp"
 #include "Ray.hpp"
 
 namespace openviewfactor {

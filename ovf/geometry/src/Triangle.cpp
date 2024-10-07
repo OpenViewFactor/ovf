@@ -1,3 +1,4 @@
+#include "Vector3.hpp"
 #include "Triangle.hpp"
 
 namespace openviewfactor {

@@ -1,3 +1,7 @@
+#include "Vector3.hpp"
+#include "Triangle.hpp"
+#include "Triangulation.hpp"
+#include "Ray.hpp"
 #include "BVHNode.hpp"
 
 namespace openviewfactor {
@@ -36,6 +40,7 @@ namespace openviewfactor {
     _bounding_box_max = vectorMaxima(_bounding_box_max, triangle.getOA());
     _bounding_box_max = vectorMaxima(_bounding_box_max, triangle.getOB());
     _bounding_box_max = vectorMaxima(_bounding_box_max, triangle.getOC());
+    _num_triangles++;
     return *this;
   }
   template <typename FLOAT_TYPE>

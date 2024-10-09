@@ -35,6 +35,8 @@ template <typename FLOAT_TYPE> class BVH {
     
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& linkToTriangulation(const Triangulation<FLOAT_TYPE> &triangulation);
 
+    OVF_HOST_DEVICE bool isLinked() const;
+
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& setMinimumNumTriangles(unsigned int min_triangles);
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& setNumCostEvaluationPoints(unsigned int num_cost_evaluation_points);
 

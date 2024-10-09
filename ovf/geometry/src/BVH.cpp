@@ -6,6 +6,8 @@
 #include "STLReader.hpp"
 #include "Ray.hpp"
 
+#include <exception>
+
 namespace openviewfactor {
 
   //* ------------------------------ PUBLIC METHODS ------------------------------ *//
@@ -21,12 +23,24 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::setMinimumNumTriangles(unsigned int min_triangles) { _minimum_triangle_threshold = min_triangles; return *this; }
+  OVF_HOST_DEVICE bool BVH<FLOAT_TYPE>::isLinked() const { return !(_triangulation == nullptr); }
+
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::setNumCostEvaluationPoints(unsigned int num_cost_evaluation_points) { _num_cost_evaluation_points = num_cost_evaluation_points; return *this; }
+  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::setMinimumNumTriangles(unsigned int min_triangles) {
+    _minimum_triangle_threshold = min_triangles;
+    return *this;
+  }
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::setNumCostEvaluationPoints(unsigned int num_cost_evaluation_points) {
+    _num_cost_evaluation_points = num_cost_evaluation_points;
+    return *this;
+  }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::constructBVH() {
+    if !(this->isLinked()) {
+      throw std::exception("BVH is not linked to a triangulation. Cannot construct the BVH");
+    }
     unsigned int root_node_index = 0;
     _nodes_used = 1;
     BVHNode<FLOAT_TYPE> root_node = _nodes[root_node_index];
@@ -39,7 +53,12 @@ namespace openviewfactor {
   //* ------------------------------ PRIVATE METHODS ------------------------------ *//
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE unsigned int BVH<FLOAT_TYPE>::getMaxNumNodes() const { return (this->_triangulation.getNumElements()); }
+  OVF_HOST_DEVICE unsigned int BVH<FLOAT_TYPE>::getMaxNumNodes() const {
+    if !(this->isLinked()) {
+      throw std::exception("BVH is not linked to a triangulation. Cannot evaluate the maximum number of elements");
+    }
+    return (this->_triangulation.getNumElements());
+  }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::subdivideNode(unsigned int node_index) {
@@ -134,7 +153,7 @@ namespace openviewfactor {
     BVHNode<FLOAT_TYPE> current_node = _nodes[node_index];
     if (!(current_node.intersectRayWithNodeBoundingBox(ray))) { return *this; }
     if (current_node.isLeaf()) {
-      for (unsigned int i = current_node.getFirstTriangleIndex(); i < current_node.getFirstTriangleIndex + current_node.getNumTriangles(); i++) {
+      for (unsigned int i = current_node.getFirstTriangleIndex(); i < current_node.getFirstTriangleIndex() + current_node.getNumTriangles(); i++) {
         ray.triangleIntersection((*_triangulation)[_mesh_element_indices[i]]);
       }
     } else {
@@ -143,4 +162,6 @@ namespace openviewfactor {
     return *this;
   }
 
+template class BVH<float>;
+template class BVH<double>;
 }

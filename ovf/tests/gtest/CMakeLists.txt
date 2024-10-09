@@ -11,6 +11,7 @@ set(_test_sources
   test_Triangle.cpp
   test_Triangulation.cpp
   test_BVHNode.cpp
+  test_BVH.cpp
   main.cpp
 )
 

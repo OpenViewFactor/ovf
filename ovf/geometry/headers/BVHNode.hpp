@@ -30,6 +30,8 @@ template <typename FLOAT_TYPE> class BVHNode {
     OVF_HOST_DEVICE unsigned int getFirstTriangleIndex() const;
     OVF_HOST_DEVICE unsigned int getNumTriangles() const;
 
+    OVF_HOST_DEVICE bool isLeaf() const;
+
     OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& setChildOneIndex(unsigned int const index);
     OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& setFirstTriangleIndex(unsigned int const index);
     OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& setNumTriangles(unsigned int const n);

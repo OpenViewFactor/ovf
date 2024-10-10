@@ -6,7 +6,8 @@
 #include "STLReader.hpp"
 #include "Ray.hpp"
 
-#include <exception>
+#include <iostream>
+#include <stdexcept>
 
 namespace openviewfactor {
 
@@ -18,11 +19,12 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::linkToTriangulation(const Triangulation<FLOAT_TYPE> &triangulation) {
-    if this->isLinked() {
-      _triangulation = Triangulation<FLOAT_TYPE>();
+    if (this->isLinked()) {
+      _triangulation.clear();
     }
-    _triangulation.setConnectivity(*(triangulation.getConPtr()));
-    _triangulation.setPoints(*(triangulation.getPtsPtr()));
+    for (Triangle<FLOAT_TYPE> tri : triangulation.getTriangles()) {
+      _triangulation.addElement(tri);
+    }
     return *this;
   }
 
@@ -42,29 +44,32 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::constructBVH() {
-    if !(this->isLinked()) {
-      throw std::exception("BVH is not linked to a triangulation. Cannot construct the BVH");
+    if (!(this->isLinked())) {
+      throw std::runtime_error("BVH is not linked to a triangulation. Cannot construct the BVH");
     }
     unsigned int root_node_index = 0;
     _nodes_used = 1;
     BVHNode<FLOAT_TYPE> root_node = _nodes[root_node_index];
     root_node.growToIncludeTriangulation(_triangulation);
-    root_node.setNumTriangles((*_triangulation).getNumElements());
+    root_node.setNumTriangles(_triangulation.getNumElements());
     this->subdivideNode(root_node_index);
     return *this;
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE void BVH<FLOAT_TYPE>::intersectRayWithBVH(Ray<FLOAT_TYPE> ray) const {
-    this->intersectRayWithBVHNode(1);
+  OVF_HOST_DEVICE void BVH<FLOAT_TYPE>::intersectRayWithBVH(Ray<FLOAT_TYPE> ray) {
+    this->intersectRayWithBVHNode(ray, 1);
   }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE unsigned int BVH<FLOAT_TYPE>::getNumNodesUsed() const { return _nodes_used; }
 
   //* ------------------------------ PRIVATE METHODS ------------------------------ *//
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE unsigned int BVH<FLOAT_TYPE>::getMaxNumNodes() const {
     if (!(this->isLinked())) {
-      throw std::exception("BVH is not linked to a triangulation. Cannot evaluate the maximum number of elements");
+      throw std::runtime_error("BVH is not linked to a triangulation. Cannot evaluate the maximum number of elements");
     }
     return (this->_triangulation.getNumElements());
   }
@@ -158,17 +163,24 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::intersectRayWithBVHNode(Ray<FLOAT_TYPE> ray, unsigned int node_index) const {
+  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::intersectRayWithBVHNode(Ray<FLOAT_TYPE> ray, unsigned int node_index) {
     BVHNode<FLOAT_TYPE> current_node = _nodes[node_index];
     if (!(current_node.intersectRayWithNodeBoundingBox(ray))) { return *this; }
     if (current_node.isLeaf()) {
       for (unsigned int i = current_node.getFirstTriangleIndex(); i < current_node.getFirstTriangleIndex() + current_node.getNumTriangles(); i++) {
-        ray.triangleIntersection((*_triangulation)[_mesh_element_indices[i]]);
+        ray.triangleIntersection(_triangulation[_mesh_element_indices[i]]);
       }
     } else {
       (this->intersectRayWithBVHNode(ray, current_node.getChildOneIndex())).intersectRayWithBVHNode(ray, current_node.getChildTwoIndex());
     }
     return *this;
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE std::vector<unsigned int> BVH<FLOAT_TYPE>::getSubMeshIndices(unsigned int node_index) const {
+    BVHNode<FLOAT_TYPE> current_node = _nodes[node_index];
+    std::vector<unsigned int> submesh_indices = current_node.getElementArraySubindices();
+    return submesh_indices;
   }
 
 template class BVH<float>;

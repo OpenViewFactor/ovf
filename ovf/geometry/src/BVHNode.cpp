@@ -26,6 +26,9 @@ namespace openviewfactor {
   OVF_HOST_DEVICE unsigned int BVHNode<FLOAT_TYPE>::getNumTriangles() const { return _num_triangles; }
 
   template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE bool BVHNode<FLOAT_TYPE>::isLeaf() const { return !(_num_triangles == 0); }
+
+  template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& BVHNode<FLOAT_TYPE>::setChildOneIndex(unsigned int const index) { _child_one_index = index; return *this; }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& BVHNode<FLOAT_TYPE>::setFirstTriangleIndex(unsigned int const index) { _first_triangle_index = index; return *this; }
@@ -81,7 +84,7 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE BVHNode<FLOAT_TYPE>::getSurfaceArea() const {
     Vector3<FLOAT_TYPE> span = this->getBoundingBoxSpan();
-    return ((span.getX() * span.getY()) + (span.getX() * span.getZ()) + (span.getY() * span.getZ()));
+    return (2*((span.getX() * span.getY()) + (span.getX() * span.getZ()) + (span.getY() * span.getZ())));
   }
 
   template <typename FLOAT_TYPE>
@@ -89,7 +92,7 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE BVHNode<FLOAT_TYPE>::evaluateNodeChildrenSurfaceAreaHeuristic(const Triangulation<FLOAT_TYPE> &submesh, unsigned int axis_index, FLOAT_TYPE candidate_position) const {
-    BVHNode left_box, right_box;
+    BVHNode<FLOAT_TYPE> left_box, right_box;
 
     std::vector<unsigned int> left_side_indices, right_side_indices;
     std::vector<Triangle<FLOAT_TYPE>> triangles = submesh.getTriangles();

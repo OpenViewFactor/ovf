@@ -6,6 +6,7 @@
 #include "Triangulation.hpp"
 #include "BVHNode.hpp"
 #include <memory>
+#include <vector>
 
 namespace openviewfactor {
 
@@ -27,7 +28,8 @@ template <typename FLOAT_TYPE> class BVH {
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& swapElements(unsigned int index_one, unsigned int index_two);
     OVF_HOST_DEVICE unsigned int createChildNodes(unsigned int node_index, unsigned int split_index, unsigned int num_triangles_on_left);
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& constructNewNode(unsigned int node_index);
-    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& intersectRayWithBVHNode(Ray<FLOAT_TYPE> ray, unsigned int node_index) const;
+    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& intersectRayWithBVHNode(Ray<FLOAT_TYPE> ray, unsigned int node_index);
+    OVF_HOST_DEVICE std::vector<unsigned int> getSubMeshIndices(unsigned int node_index) const;
 
   public:
     //* ----- PUBLIC METHODS ----- *//
@@ -42,7 +44,9 @@ template <typename FLOAT_TYPE> class BVH {
 
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& constructBVH();
 
-    OVF_HOST_DEVICE void intersectRayWithBVH(Ray<FLOAT_TYPE> ray) const;
+    OVF_HOST_DEVICE void intersectRayWithBVH(Ray<FLOAT_TYPE> ray);
+
+    OVF_HOST_DEVICE unsigned int getNumNodesUsed() const;
 };
 
 }

@@ -13,7 +13,7 @@ template <typename FLOAT_TYPE> class BVH {
   private:
     //* ----- CLASS ATTRIBUTES ----- *//
     std::vector<BVHNode<FLOAT_TYPE>> _nodes;
-    std::unique_ptr<Triangulation<FLOAT_TYPE>> _triangulation;  //* store the pointer
+    Triangulation<FLOAT_TYPE> _triangulation;
     std::vector<unsigned int> _mesh_element_indices;
     unsigned int _nodes_used;
     //TODO could be interesting to study how these affect speed
@@ -23,9 +23,9 @@ template <typename FLOAT_TYPE> class BVH {
     //* ----- PRIVATE METHODS ----- *//
     OVF_HOST_DEVICE unsigned int getMaxNumNodes() const;
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& subdivideNode(unsigned int node_index);
-    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& splitPrimitives(unsigned int node_index, unsigned int axis_index, unsigned int split_location);
+    OVF_HOST_DEVICE unsigned int splitPrimitives(unsigned int node_index, unsigned int axis_index, unsigned int split_location);
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& swapElements(unsigned int index_one, unsigned int index_two);
-    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& createChildNodes(unsigned int node_index, unsigned int split_index, unsigned int num_triangles_on_left);
+    OVF_HOST_DEVICE unsigned int createChildNodes(unsigned int node_index, unsigned int split_index, unsigned int num_triangles_on_left);
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& constructNewNode(unsigned int node_index);
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& intersectRayWithBVHNode(Ray<FLOAT_TYPE> ray, unsigned int node_index) const;
 

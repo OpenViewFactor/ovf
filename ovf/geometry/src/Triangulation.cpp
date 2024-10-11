@@ -32,7 +32,10 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE const Triangle<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::operator[](size_t index) const {
-    Triangle<FLOAT_TYPE> T(_pts[ (_con[index])[0] ], _pts[ (_con[index])[1] ], _pts[ (_con[index])[2] ]);
+    Triangle<FLOAT_TYPE> T;
+    T.setOA(_pts[ (_con[index])[0] ]);
+    T.setOB(_pts[ (_con[index])[1] ]);
+    T.setOC(_pts[ (_con[index])[2] ]);
     return T;
   }
   template <typename FLOAT_TYPE>
@@ -52,14 +55,11 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::getSubMesh(std::vector<unsigned int> indices) const {
-    Triangulation sub_mesh;
+    Triangulation<FLOAT_TYPE> sub_mesh;
     std::vector<std::array<size_t, 3>> sub_connectivity(indices.size());
     for (unsigned int i = 0; i < indices.size(); i++) {
-      unsigned int index = indices[i];
-      sub_connectivity[i] = {_con[index][0], _con[index][1], _con[index][2]};
+      sub_mesh.addElement((*this)[indices[i]]);
     }
-    sub_mesh.setConnectivity(sub_connectivity);
-    sub_mesh.setPoints(_pts);
     return sub_mesh;
   }
 
@@ -106,6 +106,13 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::addElement(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC) {
     std::array<Vector3<FLOAT_TYPE>, 3> new_points = {OA, OB, OC};
+    std::cout << "adding element: {" << new_points[0][0] << "," << new_points[0][1] << "," << new_points[0][2] << "} ";
+
+    std::cout << " {" << new_points[1][0] << "," << new_points[1][1] << "," << new_points[1][2] << "} ";
+
+    std::cout << " {" << new_points[2][0] << "," << new_points[2][1] << "," << new_points[2][2] << "}" << std::endl;;
+
+
     std::array<size_t, 3> new_connectivity;
     for (size_t i = 0; i < 3; i++) {
       auto point_location_iterator = std::find(_pts.begin(), _pts.end(), new_points[i]);
@@ -121,7 +128,7 @@ namespace openviewfactor {
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::addElement(Triangle<FLOAT_TYPE> tri) {
-    addElement(tri.getOA(), tri.getOB(), tri.getOC());
+    this->addElement(tri.getOA(), tri.getOB(), tri.getOC());
     return *this;
   }
 

@@ -22,12 +22,23 @@ namespace openviewfactor {
     if (this->isLinked()) {
       _triangulation.clear();
     }
+
+    // for (unsigned int j = 0; j < triangulation.getNumElements(); j+=100) {
+    //   std::cout << "linked mesh triangle centroid: " << (triangulation[j].getCentroid())[1] << std::endl;
+    // }
+
     unsigned int index = 0;
     for (Triangle<FLOAT_TYPE> tri : triangulation.getTriangles()) {
       _triangulation.addElement(tri);
       _mesh_element_indices.push_back(index);
       index++;
     }
+
+    // for (unsigned int j = 0; j < _triangulation.getNumElements(); j+=100) {
+    //   std::cout << "mesh after copying triangle centroid: " << (_triangulation[j].getCentroid())[1] << std::endl;
+    // }
+
+
     std::cout << "triangulation contains " << triangulation.getNumElements() << " triangles ... _triangulation contains " << _triangulation.getNumElements() << std::endl;
     _nodes = std::vector<BVHNode<FLOAT_TYPE>>(getMaxNumNodes());
     return *this;

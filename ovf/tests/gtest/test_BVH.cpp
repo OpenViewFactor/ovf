@@ -37,6 +37,10 @@ TEST(BVH_Test, test_linked_construction) {
   EXPECT_EQ(simple_bvh.getNumNodesUsed(), 1);
 
   Triangulation<float> skull = stl_reader.getMesh(OVF_INPUT("skull.stl"));
+
+  for (unsigned int i = 0; i < skull.getNumElements(); i+=100) {
+    std::cout << "triangle centroid: {" << skull[i].getCentroid()[0] << "," << skull[i].getCentroid()[1] << "," <<  skull[i].getCentroid()[2] << "}" << std::endl;
+  }
   
   BVH<float> skull_bvh;
   skull_bvh.linkToTriangulation(skull);

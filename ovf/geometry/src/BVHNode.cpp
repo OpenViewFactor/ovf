@@ -97,14 +97,14 @@ namespace openviewfactor {
   OVF_HOST_DEVICE FLOAT_TYPE BVHNode<FLOAT_TYPE>::evaluateNodeChildrenSurfaceAreaHeuristic(const Triangulation<FLOAT_TYPE> &submesh, unsigned int axis_index, FLOAT_TYPE candidate_position) const {
     BVHNode<FLOAT_TYPE> left_box, right_box;
 
-    std::cout << "axis index: " << axis_index << std::endl;
+    // std::cout << "axis index: " << axis_index << std::endl;
 
     std::vector<unsigned int> left_side_indices, right_side_indices;
     std::vector<Triangle<FLOAT_TYPE>> triangles = submesh.getTriangles();
     for (unsigned int i = 0; i < this->getNumTriangles(); i++) {
-      if (i % 100 == 0) {
-        std::cout << "triangle centroid: " << (triangles[i].getCentroid())[axis_index] << " ... candidate pos: " << candidate_position << std::endl;
-      }
+      // if (i % 100 == 0) {
+      //   std::cout << "triangle centroid: " << (triangles[i].getCentroid())[axis_index] << " ... candidate pos: " << candidate_position << std::endl;
+      // }
       if ((triangles[i].getCentroid())[axis_index] < candidate_position) {
         left_side_indices.push_back(i);
       } else {
@@ -128,10 +128,9 @@ namespace openviewfactor {
   
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE std::pair<FLOAT_TYPE, FLOAT_TYPE> BVHNode<FLOAT_TYPE>::getBestSplitLocationAndCost(const Triangulation<FLOAT_TYPE> &triangulation, unsigned int num_evaluation_points) const {
-    unsigned int axis_index = this->getSplitLocationAxis();
-
     Triangulation<FLOAT_TYPE> submesh = triangulation.getSubMesh(this->getElementArraySubindices());
 
+    unsigned int axis_index = this->getSplitLocationAxis();
     FLOAT_TYPE axis_length = (this->getBoundingBoxSpan())[axis_index];
     FLOAT_TYPE axis_min = (this->getBoundingBoxMin())[axis_index];
 
@@ -141,6 +140,12 @@ namespace openviewfactor {
       FLOAT_TYPE position = axis_min + (axis_length * (double(i) / (double(num_evaluation_points) + 1)));
       std::cout << "position: " << position << std::endl;
       evaluation_point_positions.push_back(position);
+      
+      // for (unsigned int j = 0; j < this->getNumTriangles(); j+=100) {
+      //   std::cout << "triangle centroid: " << (submesh[j].getCentroid())[axis_index] << std::endl;
+      // }
+
+
       FLOAT_TYPE cost = this->evaluateNodeChildrenSurfaceAreaHeuristic(submesh, axis_index, position);
       std::cout << cost << std::endl;
       evaluation_point_costs.push_back(cost);

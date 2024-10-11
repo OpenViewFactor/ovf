@@ -40,11 +40,13 @@ namespace openviewfactor {
   OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getCA() const { return _pts[0] - _pts[2]; }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getNormal() const { return _normal; };
+  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getNormal() const {
+    return (cross(_pts[1]-_pts[0], _pts[2]-_pts[0])).scale(1/(cross(_pts[1]-_pts[0], _pts[2]-_pts[0])).getMagnitude());
+  }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getCentroid() const { return _centroid; }
+  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getCentroid() const { return (_pts[0]+_pts[1]+_pts[2]).scale(1/3); }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const FLOAT_TYPE Triangle<FLOAT_TYPE>::getArea() const { return _area; }
+  OVF_HOST_DEVICE const FLOAT_TYPE Triangle<FLOAT_TYPE>::getArea() const { return ((cross(_pts[1]-_pts[0], _pts[2]-_pts[0])).getMagnitude() / 2); }
 
   //* ----- MUTATOR METHODS ----- *//
   template <typename FLOAT_TYPE>

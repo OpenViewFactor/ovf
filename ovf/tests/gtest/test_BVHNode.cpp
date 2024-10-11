@@ -103,3 +103,16 @@ TEST(BVHNode_Tests, test_split_axis) {
   box_node.growToIncludeTriangulation(box_mesh);
   EXPECT_EQ(box_node.getSplitLocationAxis(), 2);
 }
+
+TEST(BVHNode_Tests, test_split_location_and_cost) {
+  STLReader<float> stl_reader = STLReader<float>();
+  Triangulation<float> mesh = stl_reader.getMesh(OVF_INPUT("3_tall_box.stl"));
+
+  BVHNode<float> node;
+  node.growToIncludeTriangulation(mesh);
+  std::pair<float, float> location_and_cost = node.getBestSplitLocationAndCost(mesh, 1);
+  EXPECT_EQ(location_and_cost.first, 1.5);
+
+  location_and_cost = node.getBestSplitLocationAndCost(mesh, 2);
+  EXPECT_EQ(location_and_cost.first, 1);
+}

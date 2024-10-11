@@ -4,6 +4,8 @@
 #include "Ray.hpp"
 #include "BVHNode.hpp"
 
+#include <iostream>
+
 namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>::BVHNode()
@@ -51,6 +53,7 @@ namespace openviewfactor {
     for (unsigned int i = 0; i < triangulation.getNumElements(); i++) {
       this->growToIncludeTriangle(triangulation[i]);
     }
+    this->setNumTriangles(triangulation.getNumElements());
     return *this;
   }
   
@@ -94,15 +97,22 @@ namespace openviewfactor {
   OVF_HOST_DEVICE FLOAT_TYPE BVHNode<FLOAT_TYPE>::evaluateNodeChildrenSurfaceAreaHeuristic(const Triangulation<FLOAT_TYPE> &submesh, unsigned int axis_index, FLOAT_TYPE candidate_position) const {
     BVHNode<FLOAT_TYPE> left_box, right_box;
 
+    std::cout << "axis index: " << axis_index << std::endl;
+
     std::vector<unsigned int> left_side_indices, right_side_indices;
     std::vector<Triangle<FLOAT_TYPE>> triangles = submesh.getTriangles();
     for (unsigned int i = 0; i < this->getNumTriangles(); i++) {
-      if ((triangles[i].getCentroid())[i] < candidate_position) {
+      if (i % 100 == 0) {
+        std::cout << "triangle centroid: " << (triangles[i].getCentroid())[axis_index] << " ... candidate pos: " << candidate_position << std::endl;
+      }
+      if ((triangles[i].getCentroid())[axis_index] < candidate_position) {
         left_side_indices.push_back(i);
       } else {
         right_side_indices.push_back(i);
       }
     }
+
+    std::cout << "left box size: " << left_side_indices.size() << " ... right side size: " << right_side_indices.size() << std::endl;
 
     left_box.growToIncludeTriangulation(submesh.getSubMesh(left_side_indices));
     right_box.growToIncludeTriangulation(submesh.getSubMesh(right_side_indices));
@@ -128,8 +138,12 @@ namespace openviewfactor {
     std::vector<FLOAT_TYPE> evaluation_point_costs;
     std::vector<FLOAT_TYPE> evaluation_point_positions;
     for (unsigned int i = 1; i <= num_evaluation_points; i++) {
-      evaluation_point_positions.push_back(axis_min + (axis_length * (double(i) / (double(num_evaluation_points) + 1))));
-      evaluation_point_costs.push_back(this->evaluateNodeChildrenSurfaceAreaHeuristic(submesh, axis_index, evaluation_point_positions[i]));
+      FLOAT_TYPE position = axis_min + (axis_length * (double(i) / (double(num_evaluation_points) + 1)));
+      std::cout << "position: " << position << std::endl;
+      evaluation_point_positions.push_back(position);
+      FLOAT_TYPE cost = this->evaluateNodeChildrenSurfaceAreaHeuristic(submesh, axis_index, position);
+      std::cout << cost << std::endl;
+      evaluation_point_costs.push_back(cost);
     }
 
     typename std::vector<FLOAT_TYPE>::iterator best_cost_iterator = std::min_element(evaluation_point_costs.begin(), evaluation_point_costs.end());

@@ -2,6 +2,8 @@ clear all
 close all
 clc
 
+warning('off','all')
+
 % delete(gcp('nocreate'))
 % parpool
 % poolObj = gcp;
@@ -10,10 +12,12 @@ filename = input("Enter the mesh filepath: ", "s");
 mesh = readMesh(filename);
 bvh = BVH;
 bvh.linkToMesh(mesh);
-bvh.setMinimumNumTriangles(16);
+bvh.setMinimumNumTriangles(2);
 construction_start = tic;
 bvh.constructBVH;
 total_construction_time = toc(construction_start);
+
+fprintf("nodes used: %d", bvh.nodes_used);
 
 figure
 hold on

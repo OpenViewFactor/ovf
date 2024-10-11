@@ -2,6 +2,8 @@
 #include "Triangle.hpp"
 #include "Triangulation.hpp"
 
+#include <iostream>
+
 namespace openviewfactor {
   //* ----- CLASS CONSTRUCTORS ----- *//
   template <typename FLOAT_TYPE>
@@ -51,9 +53,10 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::getSubMesh(std::vector<unsigned int> indices) const {
     Triangulation sub_mesh;
-    std::vector<std::array<size_t, 3>> sub_connectivity;
-    for (unsigned int index : indices) {
-      sub_connectivity.push_back(_con[index]);
+    std::vector<std::array<size_t, 3>> sub_connectivity(indices.size());
+    for (unsigned int i = 0; i < indices.size(); i++) {
+      unsigned int index = indices[i];
+      sub_connectivity[i] = {_con[index][0], _con[index][1], _con[index][2]};
     }
     sub_mesh.setConnectivity(sub_connectivity);
     sub_mesh.setPoints(_pts);
@@ -80,9 +83,10 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE std::vector<Triangle<FLOAT_TYPE>> Triangulation<FLOAT_TYPE>::getTriangles() const {
-    std::vector<Triangle<FLOAT_TYPE>> mesh_triangles;
-    for (std::array<size_t, 3> connections : _con) {
-      mesh_triangles.push_back(Triangle<FLOAT_TYPE>(_pts[connections[0]], _pts[connections[1]], _pts[connections[2]]));
+    std::vector<Triangle<FLOAT_TYPE>> mesh_triangles(this->getNumElements());
+    for (unsigned int i = 0; i < this->getNumElements(); i++) {
+      std::array<size_t, 3> connections = _con[i];
+      mesh_triangles[i].setOA(_pts[connections[0]]).setOB(_pts[connections[1]]).setOC(_pts[connections[2]]);
     }
     return mesh_triangles;
   }
@@ -123,12 +127,18 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::setConnectivity(std::vector<std::array<size_t, 3>> con) {
-    _con = con;
+    _con.clear();
+    for (std::array<size_t, 3> c : con) {
+      _con.push_back(c);
+    }
     return *this;
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::setPoints(std::vector<Vector3<FLOAT_TYPE>> pts) {
-    _pts = pts;
+    _pts.clear();
+    for (Vector3<FLOAT_TYPE> pt : pts) {
+      _pts.push_back(pt);
+    }
     return *this;
   }
 

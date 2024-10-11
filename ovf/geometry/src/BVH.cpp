@@ -22,9 +22,14 @@ namespace openviewfactor {
     if (this->isLinked()) {
       _triangulation.clear();
     }
+    unsigned int index = 0;
     for (Triangle<FLOAT_TYPE> tri : triangulation.getTriangles()) {
       _triangulation.addElement(tri);
+      _mesh_element_indices.push_back(index);
+      index++;
     }
+    std::cout << "triangulation contains " << triangulation.getNumElements() << " triangles ... _triangulation contains " << _triangulation.getNumElements() << std::endl;
+    _nodes = std::vector<BVHNode<FLOAT_TYPE>>(getMaxNumNodes());
     return *this;
   }
 
@@ -48,10 +53,10 @@ namespace openviewfactor {
       throw std::runtime_error("BVH is not linked to a triangulation. Cannot construct the BVH");
     }
     unsigned int root_node_index = 0;
-    _nodes_used = 1;
-    BVHNode<FLOAT_TYPE> root_node = _nodes[root_node_index];
-    root_node.growToIncludeTriangulation(_triangulation);
-    root_node.setNumTriangles(_triangulation.getNumElements());
+    std::cout << "growing root node" << std::endl;
+    _nodes[root_node_index].growToIncludeTriangulation(_triangulation);
+    this->setNumNodesUsed(1);
+    std::cout << "subdividing root node" << std::endl;
     this->subdivideNode(root_node_index);
     return *this;
   }
@@ -62,9 +67,15 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE unsigned int BVH<FLOAT_TYPE>::getNumNodesUsed() const { return _nodes_used; }
+  OVF_HOST_DEVICE unsigned int BVH<FLOAT_TYPE>::getNumNodesUsed() { return _nodes_used; }
 
   //* ------------------------------ PRIVATE METHODS ------------------------------ *//
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::setNumNodesUsed(unsigned int n) {
+    _nodes_used = n;
+    return *this;
+  }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE unsigned int BVH<FLOAT_TYPE>::getMaxNumNodes() const {
@@ -87,22 +98,28 @@ namespace openviewfactor {
 
     //* --------------- [1] --------------- *//
     BVHNode<FLOAT_TYPE> current_node = _nodes[node_index];
+    std::cout << "check if node contains too few triangles" << std::endl;
     if (current_node.getNumTriangles() <= _minimum_triangle_threshold) { return *this; }
+    std::cout << "node does contain enough triangles" << std::endl;
     //* --------------- [2] --------------- *//
     unsigned int axis_index = current_node.getSplitLocationAxis();
     std::pair<FLOAT_TYPE, FLOAT_TYPE> location_and_cost = current_node.getBestSplitLocationAndCost(_triangulation, _num_cost_evaluation_points);
     FLOAT_TYPE best_location = location_and_cost.first;
     FLOAT_TYPE best_cost = location_and_cost.second;
     //* --------------- [3] --------------- *//
+    std::cout << "evaluate if current node cost is lower than potential split" << std::endl;
+    std::cout << "current cost: " << current_node.getNodeCost() << " ... split cost: " << best_cost << std::endl;
     if (current_node.getNodeCost() <= best_cost) { return *this; }
     //* --------------- [4] --------------- *//
     unsigned int split_index = this->splitPrimitives(node_index, axis_index, best_location);
     //* --------------- [5] --------------- *//
     unsigned int num_triangles_on_left = split_index - current_node.getFirstTriangleIndex();
-    if (num_triangles_on_left == 0 || num_triangles_on_left == current_node.getFirstTriangleIndex()) { return *this; }
+    std::cout << "evaluate if split location was chosen at either end of the node" << std::endl;
+    if (num_triangles_on_left == 0 || num_triangles_on_left == current_node.getNumTriangles()) { return *this; }
     //* --------------- [6] --------------- *//
     unsigned int left_child_index = this->createChildNodes(node_index, split_index, num_triangles_on_left);
     //* --------------- [7] --------------- *//
+    std::cout << "subdivide the node" << std::endl;
     (this->subdivideNode(left_child_index)).subdivideNode(left_child_index + 1);
 
     return *this;
@@ -113,7 +130,7 @@ namespace openviewfactor {
     BVHNode<FLOAT_TYPE> current_node = _nodes[node_index];
     
     unsigned int index_at_which_to_split = current_node.getFirstTriangleIndex();
-    unsigned int index_of_last_unsorted_element = index_at_which_to_split + current_node.getNumTriangles();
+    unsigned int index_of_last_unsorted_element = index_at_which_to_split + current_node.getNumTriangles() - 1;
 
     while (index_at_which_to_split <= index_of_last_unsorted_element) {
       Triangle<FLOAT_TYPE> current_element = _triangulation[_mesh_element_indices[index_at_which_to_split]];
@@ -137,9 +154,15 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE unsigned int BVH<FLOAT_TYPE>::createChildNodes(unsigned int node_index, unsigned int split_index, unsigned int num_triangles_on_left) {
     BVHNode<FLOAT_TYPE> current_node = _nodes[node_index];
+
+    unsigned int left_child_index = this->getNumNodesUsed() + 1;
     
-    unsigned int left_child_index = _nodes_used + 1;
-    _nodes_used = left_child_index + 1;
+    BVHNode<FLOAT_TYPE> left_child_node;
+    BVHNode<FLOAT_TYPE> right_child_node;
+    _nodes.push_back(left_child_node);
+    _nodes.push_back(right_child_node);
+    _nodes_used++;
+    _nodes_used++;
 
     current_node.setChildOneIndex(left_child_index);
 

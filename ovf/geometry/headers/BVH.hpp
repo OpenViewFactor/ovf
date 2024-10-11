@@ -22,6 +22,7 @@ template <typename FLOAT_TYPE> class BVH {
     unsigned int _num_cost_evaluation_points; //? do i really care about this
 
     //* ----- PRIVATE METHODS ----- *//
+    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& setNumNodesUsed(unsigned int n);
     OVF_HOST_DEVICE unsigned int getMaxNumNodes() const;
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& subdivideNode(unsigned int node_index);
     OVF_HOST_DEVICE unsigned int splitPrimitives(unsigned int node_index, unsigned int axis_index, unsigned int split_location);
@@ -46,7 +47,7 @@ template <typename FLOAT_TYPE> class BVH {
 
     OVF_HOST_DEVICE void intersectRayWithBVH(Ray<FLOAT_TYPE> ray);
 
-    OVF_HOST_DEVICE unsigned int getNumNodesUsed() const;
+    OVF_HOST_DEVICE unsigned int getNumNodesUsed();
 };
 
 }

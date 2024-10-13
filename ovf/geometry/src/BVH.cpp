@@ -23,10 +23,6 @@ namespace openviewfactor {
       _triangulation.clear();
     }
 
-    // for (unsigned int j = 0; j < triangulation.getNumElements(); j+=100) {
-    //   std::cout << "linked mesh triangle centroid: " << (triangulation[j].getCentroid())[1] << std::endl;
-    // }
-
     unsigned int index = 0;
     for (Triangle<FLOAT_TYPE> tri : triangulation.getTriangles()) {
       _triangulation.addElement(tri);
@@ -34,12 +30,6 @@ namespace openviewfactor {
       index++;
     }
 
-    // for (unsigned int j = 0; j < _triangulation.getNumElements(); j+=100) {
-    //   std::cout << "mesh after copying triangle centroid: " << (_triangulation[j].getCentroid())[1] << std::endl;
-    // }
-
-
-    std::cout << "triangulation contains " << triangulation.getNumElements() << " triangles ... _triangulation contains " << _triangulation.getNumElements() << std::endl;
     _nodes = std::vector<BVHNode<FLOAT_TYPE>>(getMaxNumNodes());
     return *this;
   }
@@ -64,10 +54,8 @@ namespace openviewfactor {
       throw std::runtime_error("BVH is not linked to a triangulation. Cannot construct the BVH");
     }
     unsigned int root_node_index = 0;
-    std::cout << "growing root node" << std::endl;
     _nodes[root_node_index].growToIncludeTriangulation(_triangulation);
     this->setNumNodesUsed(1);
-    std::cout << "subdividing root node" << std::endl;
     this->subdivideNode(root_node_index);
     return *this;
   }
@@ -109,28 +97,22 @@ namespace openviewfactor {
 
     //* --------------- [1] --------------- *//
     BVHNode<FLOAT_TYPE> current_node = _nodes[node_index];
-    std::cout << "check if node contains too few triangles" << std::endl;
     if (current_node.getNumTriangles() <= _minimum_triangle_threshold) { return *this; }
-    std::cout << "node does contain enough triangles" << std::endl;
     //* --------------- [2] --------------- *//
     unsigned int axis_index = current_node.getSplitLocationAxis();
     std::pair<FLOAT_TYPE, FLOAT_TYPE> location_and_cost = current_node.getBestSplitLocationAndCost(_triangulation, _num_cost_evaluation_points);
     FLOAT_TYPE best_location = location_and_cost.first;
     FLOAT_TYPE best_cost = location_and_cost.second;
     //* --------------- [3] --------------- *//
-    std::cout << "evaluate if current node cost is lower than potential split" << std::endl;
-    std::cout << "current cost: " << current_node.getNodeCost() << " ... split cost: " << best_cost << std::endl;
     if (current_node.getNodeCost() <= best_cost) { return *this; }
     //* --------------- [4] --------------- *//
     unsigned int split_index = this->splitPrimitives(node_index, axis_index, best_location);
     //* --------------- [5] --------------- *//
     unsigned int num_triangles_on_left = split_index - current_node.getFirstTriangleIndex();
-    std::cout << "evaluate if split location was chosen at either end of the node" << std::endl;
     if (num_triangles_on_left == 0 || num_triangles_on_left == current_node.getNumTriangles()) { return *this; }
     //* --------------- [6] --------------- *//
     unsigned int left_child_index = this->createChildNodes(node_index, split_index, num_triangles_on_left);
     //* --------------- [7] --------------- *//
-    std::cout << "subdivide the node" << std::endl;
     (this->subdivideNode(left_child_index)).subdivideNode(left_child_index + 1);
 
     return *this;

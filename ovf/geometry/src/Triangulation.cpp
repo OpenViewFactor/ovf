@@ -106,13 +106,6 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::addElement(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC) {
     std::array<Vector3<FLOAT_TYPE>, 3> new_points = {OA, OB, OC};
-    std::cout << "adding element: {" << new_points[0][0] << "," << new_points[0][1] << "," << new_points[0][2] << "} ";
-
-    std::cout << " {" << new_points[1][0] << "," << new_points[1][1] << "," << new_points[1][2] << "} ";
-
-    std::cout << " {" << new_points[2][0] << "," << new_points[2][1] << "," << new_points[2][2] << "}" << std::endl;;
-
-
     std::array<size_t, 3> new_connectivity;
     for (size_t i = 0; i < 3; i++) {
       auto point_location_iterator = std::find(_pts.begin(), _pts.end(), new_points[i]);

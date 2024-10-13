@@ -86,7 +86,8 @@ namespace openviewfactor {
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Vector3<FLOAT_TYPE> Vector3<FLOAT_TYPE>::scale(FLOAT_TYPE s) const {
-    Vector3<FLOAT_TYPE> scaled_vector(_xyz[0] * s, _xyz[1] * s, _xyz[2] * s);
+    Vector3<FLOAT_TYPE> scaled_vector;
+    scaled_vector.setX(_xyz[0] * s).setY(_xyz[1] * s).setZ(_xyz[2] * s);
     return scaled_vector;
   }
   template <typename FLOAT_TYPE>

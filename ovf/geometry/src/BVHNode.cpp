@@ -97,22 +97,15 @@ namespace openviewfactor {
   OVF_HOST_DEVICE FLOAT_TYPE BVHNode<FLOAT_TYPE>::evaluateNodeChildrenSurfaceAreaHeuristic(const Triangulation<FLOAT_TYPE> &submesh, unsigned int axis_index, FLOAT_TYPE candidate_position) const {
     BVHNode<FLOAT_TYPE> left_box, right_box;
 
-    // std::cout << "axis index: " << axis_index << std::endl;
-
     std::vector<unsigned int> left_side_indices, right_side_indices;
     std::vector<Triangle<FLOAT_TYPE>> triangles = submesh.getTriangles();
     for (unsigned int i = 0; i < this->getNumTriangles(); i++) {
-      // if (i % 100 == 0) {
-      //   std::cout << "triangle centroid: " << (triangles[i].getCentroid())[axis_index] << " ... candidate pos: " << candidate_position << std::endl;
-      // }
       if ((triangles[i].getCentroid())[axis_index] < candidate_position) {
         left_side_indices.push_back(i);
       } else {
         right_side_indices.push_back(i);
       }
     }
-
-    std::cout << "left box size: " << left_side_indices.size() << " ... right side size: " << right_side_indices.size() << std::endl;
 
     left_box.growToIncludeTriangulation(submesh.getSubMesh(left_side_indices));
     right_box.growToIncludeTriangulation(submesh.getSubMesh(right_side_indices));
@@ -138,16 +131,9 @@ namespace openviewfactor {
     std::vector<FLOAT_TYPE> evaluation_point_positions;
     for (unsigned int i = 1; i <= num_evaluation_points; i++) {
       FLOAT_TYPE position = axis_min + (axis_length * (double(i) / (double(num_evaluation_points) + 1)));
-      std::cout << "position: " << position << std::endl;
       evaluation_point_positions.push_back(position);
-      
-      // for (unsigned int j = 0; j < this->getNumTriangles(); j+=100) {
-      //   std::cout << "triangle centroid: " << (submesh[j].getCentroid())[axis_index] << std::endl;
-      // }
-
 
       FLOAT_TYPE cost = this->evaluateNodeChildrenSurfaceAreaHeuristic(submesh, axis_index, position);
-      std::cout << cost << std::endl;
       evaluation_point_costs.push_back(cost);
     }
 

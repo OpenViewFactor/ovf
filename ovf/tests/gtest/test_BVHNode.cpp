@@ -29,7 +29,7 @@ TEST(BVHNode_Tests, test_add_triangle) {
   EXPECT_EQ(node.getBoundingBoxMin(), Vector3<float>(0.0,0.0,0.0));
   EXPECT_EQ(node.getBoundingBoxMax(), Vector3<float>(0.0,0.0,0.0));
   
-  Triangle<float> t(Vector3<float>(0,0,0), Vector3<float>(1,0,0), Vector3<float>(0,1,0));
+  Triangle<float> t(Vector3<float>(0.0,0.0,0.0), Vector3<float>(1.0,0.0,0.0), Vector3<float>(0.0,1.0,0.0));
 
   node.growToIncludeTriangle(t);
 
@@ -68,12 +68,12 @@ TEST(BVHNode_Tests, test_surface_area) {
 
   BVHNode<float> simple_node;
   simple_node.growToIncludeTriangulation(simple_mesh);
-  EXPECT_EQ(simple_node.getSurfaceArea(), 2);
+  EXPECT_EQ(simple_node.getSurfaceArea(), 2.0);
 
   Triangulation<float> box_mesh = stl_reader.getMesh(OVF_INPUT("3_tall_box.stl"));
   BVHNode<float> box_node;
   box_node.growToIncludeTriangulation(box_mesh);
-  EXPECT_EQ(box_node.getSurfaceArea(), 14);
+  EXPECT_EQ(box_node.getSurfaceArea(), 14.0);
 }
 
 TEST(BVHNode_Tests, test_cost) {
@@ -82,12 +82,12 @@ TEST(BVHNode_Tests, test_cost) {
 
   BVHNode<float> simple_node;
   simple_node.growToIncludeTriangulation(simple_mesh);
-  EXPECT_EQ(simple_node.getNodeCost(), 4);
+  EXPECT_EQ(simple_node.getNodeCost(), 4.0);
 
   Triangulation<float> box_mesh = stl_reader.getMesh(OVF_INPUT("3_tall_box.stl"));
   BVHNode<float> box_node;
   box_node.growToIncludeTriangulation(box_mesh);
-  EXPECT_EQ(box_node.getNodeCost(), 392);
+  EXPECT_EQ(box_node.getNodeCost(), 392.0);
 }
 
 TEST(BVHNode_Tests, test_split_axis) {
@@ -114,5 +114,5 @@ TEST(BVHNode_Tests, test_split_location_and_cost) {
   EXPECT_EQ(location_and_cost.first, 1.5);
 
   location_and_cost = node.getBestSplitLocationAndCost(mesh, 2);
-  EXPECT_EQ(location_and_cost.first, 1);
+  EXPECT_EQ(location_and_cost.first, 1.0);
 }

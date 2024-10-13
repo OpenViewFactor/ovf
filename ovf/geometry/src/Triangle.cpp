@@ -1,28 +1,21 @@
 #include "Vector3.hpp"
 #include "Triangle.hpp"
 
+#include <iostream>
+
 namespace openviewfactor {
   //* ----- CLASS CONSTRUCTORS ----- *//
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangle<FLOAT_TYPE>::Triangle()
-    : _pts(std::array<Vector3<FLOAT_TYPE>,3>({Vector3<FLOAT_TYPE>(), Vector3<FLOAT_TYPE>(), Vector3<FLOAT_TYPE>()})),
-      _normal(Vector3<FLOAT_TYPE>()),
-      _area(0),
-      _centroid(Vector3<FLOAT_TYPE>()) {}
+    : _pts(std::array<Vector3<FLOAT_TYPE>,3>({Vector3<FLOAT_TYPE>(), Vector3<FLOAT_TYPE>(), Vector3<FLOAT_TYPE>()})) {}
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangle<FLOAT_TYPE>::Triangle(std::array<Vector3<FLOAT_TYPE>,3> pts)
-    : _pts(pts),
-      _normal(cross(_pts[1]-_pts[0], _pts[2]-_pts[0])),
-      _area(_normal.getMagnitude() / 2),
-      _centroid((_pts[0]+_pts[1]+_pts[2]).scale(1/3)) {}
+    : _pts(pts) {}
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangle<FLOAT_TYPE>::Triangle(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC)
-    : _pts(std::array<Vector3<FLOAT_TYPE>,3>({OA,OB,OC})),
-      _normal(cross(OB - OA, OC - OA)),
-      _area(_normal.getMagnitude() / 2),
-      _centroid((OA+OB+OC).scale(1/3)) {}
+    : _pts(std::array<Vector3<FLOAT_TYPE>,3>({OA,OB,OC})) {}
   
   //* ----- ACCESSOR METHODS ----- *//
   template <typename FLOAT_TYPE>
@@ -41,12 +34,19 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getNormal() const {
-    return (cross(_pts[1]-_pts[0], _pts[2]-_pts[0])).scale(1/(cross(_pts[1]-_pts[0], _pts[2]-_pts[0])).getMagnitude());
+    Vector3<FLOAT_TYPE> unnormalized_normal = cross(_pts[1]-_pts[0], _pts[2]-_pts[0]);
+    return unnormalized_normal.scale(1/unnormalized_normal.getMagnitude());
   }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getCentroid() const { return (_pts[0]+_pts[1]+_pts[2]).scale(1/3); }
+  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> Triangle<FLOAT_TYPE>::getCentroid() const {
+    Vector3<FLOAT_TYPE> centroid = (_pts[0]+_pts[1]+_pts[2]).scale(1.0/3.0);
+    return centroid;
+  }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const FLOAT_TYPE Triangle<FLOAT_TYPE>::getArea() const { return ((cross(_pts[1]-_pts[0], _pts[2]-_pts[0])).getMagnitude() / 2); }
+  OVF_HOST_DEVICE const FLOAT_TYPE Triangle<FLOAT_TYPE>::getArea() const {
+    Vector3<FLOAT_TYPE> unnormalized_normal = cross(_pts[1]-_pts[0], _pts[2]-_pts[0]);
+    return (unnormalized_normal.getMagnitude() / 2);
+  }
 
   //* ----- MUTATOR METHODS ----- *//
   template <typename FLOAT_TYPE>
@@ -56,7 +56,7 @@ namespace openviewfactor {
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangle<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::setOA(Vector3<FLOAT_TYPE> v) {
-    _pts[0].setX(v.getX()).setY(v.getY()).setZ(v.getZ());
+    _pts[0] = v;
     return *this;
   }
   template <typename FLOAT_TYPE>
@@ -66,7 +66,7 @@ namespace openviewfactor {
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangle<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::setOB(Vector3<FLOAT_TYPE> v) {
-    _pts[1].setX(v.getX()).setY(v.getY()).setZ(v.getZ());
+    _pts[1] = v;
     return *this;
   }
   template <typename FLOAT_TYPE>
@@ -76,7 +76,7 @@ namespace openviewfactor {
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangle<FLOAT_TYPE>& Triangle<FLOAT_TYPE>::setOC(Vector3<FLOAT_TYPE> v) {
-    _pts[2].setX(v.getX()).setY(v.getY()).setZ(v.getZ());
+    _pts[2] = v;
     return *this;
   }
 

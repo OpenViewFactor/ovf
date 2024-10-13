@@ -11,10 +11,10 @@
 using namespace openviewfactor;
 
 TEST(Triangulation_Tests, test_operators) {
-  Vector3<float> p1(0,0,0);
-  Vector3<float> p2(1,0,0);
-  Vector3<float> p3(1,1,0);
-  Vector3<float> p4(0,1,0);
+  Vector3<float> p1(0.0,0.0,0.0);
+  Vector3<float> p2(1.0,0.0,0.0);
+  Vector3<float> p3(1.0,1.0,0.0);
+  Vector3<float> p4(0.0,1.0,0.0);
   
   Triangulation<float> tgln;
   tgln.setPoints({p1,p2,p3,p4}).setConnectivity({{0,1,2},{0,2,3}});
@@ -46,25 +46,26 @@ TEST(Triangulation_Tests, test_stlread_ascii) {
 }
 
 TEST(Triangulation_Tests, test_getters) {
-  Vector3<float> p1(0,0,0);
-  Vector3<float> p2(1,0,0);
-  Vector3<float> p3(1,1,0);
-  Vector3<float> p4(0,1,0);
+  Vector3<float> p1(0.0,0.0,0.0);
+  Vector3<float> p2(1.0,0.0,0.0);
+  Vector3<float> p3(1.0,1.0,0.0);
+  Vector3<float> p4(0.0,1.0,0.0);
 
   Triangulation<float> tgln;
   tgln.setPoints({p1,p2,p3,p4}).setConnectivity({{0,1,2},{0,2,3}});
 
   Triangulation<float> sub_mesh;
-  sub_mesh.setPoints({p1,p2,p3,p4}).setConnectivity({{0,1,2}});
+  sub_mesh.setPoints({p1,p2,p3}).setConnectivity({{0,1,2}});
 
   EXPECT_EQ(tgln.getNumElements(), 2);
   EXPECT_EQ(tgln.getNumPoints(), 4);
   EXPECT_EQ(tgln.getNumBytes(), 48 + 48);
 
   EXPECT_EQ(tgln.getMeshArea(), 1.0);
-  EXPECT_EQ(tgln.getSubMesh({0}), sub_mesh);
+  std::vector<unsigned int> indices = {0};
+  EXPECT_EQ(tgln.getSubMesh(indices), sub_mesh);
 
-  std::vector<Vector3<float>> centroids = {Vector3<float>(2/3, 1/3, 0.0), Vector3<float>(1/3, 2/3, 0.0)};
+  std::vector<Vector3<float>> centroids = {Vector3<float>(2.0/3.0, 1.0/3.0, 0.0), Vector3<float>(1.0/3.0, 2.0/3.0, 0.0)};
   std::vector<Vector3<float>> normals = {Vector3<float>(0.0, 0.0, 1.0), Vector3<float>(0.0, 0.0, 1.0)};
 
   EXPECT_EQ((tgln.getCentroids())[0], centroids[0]);
@@ -80,10 +81,10 @@ TEST(Triangulation_Tests, test_getters) {
 }
 
 TEST(Triangulation_Tests, test_adders) {
-  Vector3<float> p1(0,0,0);
-  Vector3<float> p2(1,0,0);
-  Vector3<float> p3(1,1,0);
-  Vector3<float> p4(0,1,0);
+  Vector3<float> p1(0.0,0.0,0.0);
+  Vector3<float> p2(1.0,0.0,0.0);
+  Vector3<float> p3(1.0,1.0,0.0);
+  Vector3<float> p4(0.0,1.0,0.0);
 
   Triangulation<float> tgln;
   tgln.setPoints({p1,p2,p3,p4}).setConnectivity({{0,1,2},{0,2,3}});
@@ -92,7 +93,7 @@ TEST(Triangulation_Tests, test_adders) {
   EXPECT_EQ(tgln.getNumPoints(), 4);
   EXPECT_EQ(tgln.getMeshArea(), 1.0);
 
-  Triangle<float> new_element(p2, Vector3<float>(2,0,0), p3);
+  Triangle<float> new_element(p2, Vector3<float>(2.0,0.0,0.0), p3);
   tgln.addElement(new_element);
 
   EXPECT_EQ(tgln.getNumElements(), 3);

@@ -11,9 +11,6 @@ template <typename FLOAT_TYPE> class Triangle {
 
   private:
     std::array<Vector3<FLOAT_TYPE>,3> _pts;
-    Vector3<FLOAT_TYPE> _normal;      // triangle normal vector
-    FLOAT_TYPE _area;                 // triangle area
-    Vector3<FLOAT_TYPE> _centroid;    // triangle centroid
 
   public:
     //* ----- CLASS CONSTRUCTORS ----- *//

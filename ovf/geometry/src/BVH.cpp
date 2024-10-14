@@ -21,6 +21,9 @@ namespace openviewfactor {
   OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::linkToTriangulation(const Triangulation<FLOAT_TYPE> &triangulation) {
     if (this->isLinked()) {
       _triangulation.clear();
+      _mesh_element_indices.clear();
+      _nodes.clear();
+      _nodes_used = 0;
     }
 
     unsigned int index = 0;

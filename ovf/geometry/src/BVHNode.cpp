@@ -87,7 +87,7 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE BVHNode<FLOAT_TYPE>::getSurfaceArea() const {
     Vector3<FLOAT_TYPE> span = this->getBoundingBoxSpan();
-    return (2*((span.getX() * span.getY()) + (span.getX() * span.getZ()) + (span.getY() * span.getZ())));
+    return (((span.getX() * span.getY()) + (span.getX() * span.getZ()) + (span.getY() * span.getZ())));
   }
 
   template <typename FLOAT_TYPE>
@@ -127,14 +127,14 @@ namespace openviewfactor {
     FLOAT_TYPE axis_length = (this->getBoundingBoxSpan())[axis_index];
     FLOAT_TYPE axis_min = (this->getBoundingBoxMin())[axis_index];
 
-    std::vector<FLOAT_TYPE> evaluation_point_costs;
-    std::vector<FLOAT_TYPE> evaluation_point_positions;
+    std::vector<FLOAT_TYPE> evaluation_point_costs(num_evaluation_points);
+    std::vector<FLOAT_TYPE> evaluation_point_positions(num_evaluation_points);
     for (unsigned int i = 1; i <= num_evaluation_points; i++) {
       FLOAT_TYPE position = axis_min + (axis_length * (double(i) / (double(num_evaluation_points) + 1)));
-      evaluation_point_positions.push_back(position);
+      evaluation_point_positions[i-1] = position;
 
       FLOAT_TYPE cost = this->evaluateNodeChildrenSurfaceAreaHeuristic(submesh, axis_index, position);
-      evaluation_point_costs.push_back(cost);
+      evaluation_point_costs[i-1] = cost;
     }
 
     typename std::vector<FLOAT_TYPE>::iterator best_cost_iterator = std::min_element(evaluation_point_costs.begin(), evaluation_point_costs.end());

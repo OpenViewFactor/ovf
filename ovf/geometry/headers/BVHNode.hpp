@@ -7,6 +7,7 @@
 #include "Triangulation.hpp"
 #include "Ray.hpp"
 #include <algorithm>
+#include <utility>
 
 namespace openviewfactor {
 

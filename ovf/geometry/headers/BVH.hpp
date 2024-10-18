@@ -14,7 +14,7 @@ template <typename FLOAT_TYPE> class BVH {
   private:
     //* ----- CLASS ATTRIBUTES ----- *//
     std::vector<BVHNode<FLOAT_TYPE>> _nodes;
-    Triangulation<FLOAT_TYPE> _triangulation;
+    std::shared_ptr<Triangulation<FLOAT_TYPE>> _triangulation;
     std::vector<unsigned int> _mesh_element_indices;
     unsigned int _nodes_used;
     //TODO could be interesting to study how these affect speed
@@ -36,7 +36,7 @@ template <typename FLOAT_TYPE> class BVH {
     //* ----- PUBLIC METHODS ----- *//
     OVF_HOST_DEVICE BVH();
     
-    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& linkToTriangulation(const Triangulation<FLOAT_TYPE> &triangulation);
+    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& linkToTriangulation(std::shared_ptr<Triangulation<FLOAT_TYPE>> triangulation);
 
     OVF_HOST_DEVICE bool isLinked() const;
 

@@ -3,7 +3,7 @@ message("Creating list of geometry headers")
 # -------------------- ADD DIRECTORIES FOR COMPILER TO SEARCH FOR INCLUDE FILES -------------------- #
 
 message("Include geometry headers directory and third-party directory")
-include_directories(${THIRD_PARTY_INCLUDE_DIR} ${_ovf_geometry_headers_dir}) # this variable gets defined in the CMakeLists file one level up
+include_directories(${THIRD_PARTY_INCLUDE_DIR} ${_ovf_geometry_headers_dir})
 
 set(_geometry_headers
     headers/Vector3.hpp

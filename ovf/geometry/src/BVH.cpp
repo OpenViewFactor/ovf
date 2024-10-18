@@ -15,20 +15,20 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVH<FLOAT_TYPE>::BVH()
-    : _nodes(std::vector<BVHNode<FLOAT_TYPE>>()), _triangulation(Triangulation<FLOAT_TYPE>()), _mesh_element_indices(std::vector<unsigned int>()), _nodes_used(0), _minimum_triangle_threshold(2), _num_cost_evaluation_points(4) {}
+    : _nodes(std::vector<BVHNode<FLOAT_TYPE>>()), _triangulation(std::make_shared<Triangulation<FLOAT_TYPE>>()), _mesh_element_indices(std::vector<unsigned int>()), _nodes_used(0), _minimum_triangle_threshold(2), _num_cost_evaluation_points(4) {}
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::linkToTriangulation(const Triangulation<FLOAT_TYPE> &triangulation) {
+  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::linkToTriangulation(std::shared_ptr<Triangulation<FLOAT_TYPE>> triangulation) {
     if (this->isLinked()) {
-      _triangulation.clear();
+      _triangulation->clear();
       _mesh_element_indices.clear();
       _nodes.clear();
       _nodes_used = 0;
     }
 
     unsigned int index = 0;
-    for (Triangle<FLOAT_TYPE> tri : triangulation.getTriangles()) {
-      _triangulation.addElement(tri);
+    for (Triangle<FLOAT_TYPE> tri : triangulation->getTriangles()) {
+      _triangulation->addElement(tri);
       _mesh_element_indices.push_back(index);
       index++;
     }

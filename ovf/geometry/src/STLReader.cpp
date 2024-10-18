@@ -9,9 +9,10 @@
 
 namespace openviewfactor {
   template <typename FLOAT_TYPE>
-  Triangulation<FLOAT_TYPE> STLReader<FLOAT_TYPE>::getMesh(const std::string &filename) {
+  std::shared_ptr<Triangulation<FLOAT_TYPE>> STLReader<FLOAT_TYPE>::getMesh(const std::string &filename) {
     //! set up inputs for the third-party library
-    Triangulation<FLOAT_TYPE> mesh;
+    auto mesh = std::make_shared<Triangulation<FLOAT_TYPE>>();
+    // Triangulation<FLOAT_TYPE> mesh;
     std::vector<FLOAT_TYPE> coordinates, normals;
     std::vector<size_t> triangulations, solids;
     stl_reader::ReadStlFile(filename.c_str(), coordinates, normals, triangulations, solids);  //! make use of third-party function
@@ -32,7 +33,7 @@ namespace openviewfactor {
                                                    reformatted_coordinates[(triangulations.data())[3 * triangle_index + 1]],
                                                    reformatted_coordinates[(triangulations.data())[3 * triangle_index + 2]]};
       Triangle<FLOAT_TYPE> t(points);
-      mesh.addElement(t);
+      mesh->addElement(t);
     }
     return mesh;
   }

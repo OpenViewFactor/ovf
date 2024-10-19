@@ -5,6 +5,7 @@
 #include <array>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 #include "../../config.hpp"
 #include "Triangle.hpp"
@@ -39,7 +40,7 @@ template <typename FLOAT_TYPE> class Triangulation {
     
     OVF_HOST_DEVICE FLOAT_TYPE getMeshArea() const;
 
-    OVF_HOST_DEVICE Triangulation getSubMesh(std::vector<unsigned int> indices) const;
+    OVF_HOST_DEVICE std::shared_ptr<Triangulation<FLOAT_TYPE>> getSubMesh(std::vector<unsigned int> indices) const;
 
     OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>> getCentroids() const;
     OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>> getNormals() const;

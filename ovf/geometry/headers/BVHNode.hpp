@@ -8,6 +8,7 @@
 #include "Ray.hpp"
 #include <algorithm>
 #include <utility>
+#include <memory>
 
 namespace openviewfactor {
 
@@ -38,7 +39,7 @@ template <typename FLOAT_TYPE> class BVHNode {
     OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& setNumTriangles(unsigned int const n);
 
     OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& growToIncludeTriangle(Triangle<FLOAT_TYPE> triangle);
-    OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& growToIncludeTriangulation(const Triangulation<FLOAT_TYPE> &triangulation);
+    OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& growToIncludeTriangulation(std::shared_ptr<Triangulation<FLOAT_TYPE>> triangulation);
 
     OVF_HOST_DEVICE bool intersectRayWithNodeBoundingBox(Ray<FLOAT_TYPE> ray) const;
 
@@ -46,8 +47,8 @@ template <typename FLOAT_TYPE> class BVHNode {
     OVF_HOST_DEVICE FLOAT_TYPE getSurfaceArea() const;
 
     OVF_HOST_DEVICE unsigned int getSplitLocationAxis() const;
-    OVF_HOST_DEVICE FLOAT_TYPE evaluateNodeChildrenSurfaceAreaHeuristic(const Triangulation<FLOAT_TYPE> &submesh, unsigned int axis_index, FLOAT_TYPE candidate_position) const;
-    OVF_HOST_DEVICE std::pair<FLOAT_TYPE, FLOAT_TYPE> getBestSplitLocationAndCost(const Triangulation<FLOAT_TYPE> &triangulation, unsigned int num_evaluation_points) const;
+    OVF_HOST_DEVICE FLOAT_TYPE evaluateNodeChildrenSurfaceAreaHeuristic(std::shared_ptr<Triangulation<FLOAT_TYPE>> submesh, unsigned int axis_index, FLOAT_TYPE candidate_position) const;
+    OVF_HOST_DEVICE std::pair<FLOAT_TYPE, FLOAT_TYPE> getBestSplitLocationAndCost(std::shared_ptr<Triangulation<FLOAT_TYPE>> triangulation, unsigned int num_evaluation_points) const;
 
     OVF_HOST_DEVICE std::vector<unsigned int> getElementArraySubindices() const;
 };

@@ -3,7 +3,7 @@ message("Creating list of view factor headers")
 # -------------------- ADD DIRECTORIES FOR COMPILER TO SEARCH FOR INCLUDE FILES -------------------- #
 
 message("Include view factor headers directory and third-party directory")
-include_directories(${THIRD_PARTY_INCLUDE_DIR} ${_ovf_viewfactor_headers_dir})
+include_directories(${THIRD_PARTY_INCLUDE_DIR} ${_ovf_geometry_headers_dir} ${_ovf_viewfactor_headers_dir})
 
 set(_viewfactor_headers
     headers/IndexValuePair.hpp

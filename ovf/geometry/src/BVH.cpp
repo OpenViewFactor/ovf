@@ -38,7 +38,7 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE bool BVH<FLOAT_TYPE>::isLinked() const { return !(_triangulation == Triangulation<FLOAT_TYPE>()); }
+  OVF_HOST_DEVICE bool BVH<FLOAT_TYPE>::isLinked() const { return !(*_triangulation == Triangulation<FLOAT_TYPE>()); }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::setMinimumNumTriangles(unsigned int min_triangles) {
@@ -84,7 +84,7 @@ namespace openviewfactor {
     if (!(this->isLinked())) {
       throw std::runtime_error("BVH is not linked to a triangulation. Cannot evaluate the maximum number of elements");
     }
-    return (this->_triangulation.getNumElements());
+    return (this->_triangulation->getNumElements());
   }
 
   template <typename FLOAT_TYPE>
@@ -129,7 +129,7 @@ namespace openviewfactor {
     unsigned int index_of_last_unsorted_element = index_at_which_to_split + current_node.getNumTriangles() - 1;
 
     while (index_at_which_to_split <= index_of_last_unsorted_element) {
-      Triangle<FLOAT_TYPE> current_element = _triangulation[_mesh_element_indices[index_at_which_to_split]];
+      Triangle<FLOAT_TYPE> current_element = (*_triangulation)[_mesh_element_indices[index_at_which_to_split]];
       if ((current_element.getCentroid())[axis_index] < split_location) {
         index_at_which_to_split++;
       } else {
@@ -177,7 +177,7 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::constructNewNode(unsigned int node_index) {
-    (_nodes[node_index]).growToIncludeTriangulation( _triangulation.getSubMesh( this->getSubMeshIndices(node_index) ) );
+    (_nodes[node_index]).growToIncludeTriangulation( _triangulation->getSubMesh( this->getSubMeshIndices(node_index) ) );
     return *this;
   }
 
@@ -187,7 +187,7 @@ namespace openviewfactor {
     if (!(current_node.intersectRayWithNodeBoundingBox(ray))) { return *this; }
     if (current_node.isLeaf()) {
       for (unsigned int i = current_node.getFirstTriangleIndex(); i < current_node.getFirstTriangleIndex() + current_node.getNumTriangles(); i++) {
-        ray.triangleIntersection(_triangulation[_mesh_element_indices[i]]);
+        ray.triangleIntersection((*_triangulation)[_mesh_element_indices[i]]);
       }
     } else {
       (this->intersectRayWithBVHNode(ray, current_node.getChildOneIndex())).intersectRayWithBVHNode(ray, current_node.getChildTwoIndex());

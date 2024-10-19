@@ -16,7 +16,7 @@ TEST(BVH_Test, test_linking) {
   EXPECT_EQ(bvh.isLinked(), false);
 
   STLReader<float> stl_reader;
-  Triangulation<float> mesh = stl_reader.getMesh(OVF_INPUT("3_tall_box.stl"));
+  auto mesh = stl_reader.getMesh(OVF_INPUT("3_tall_box.stl"));
 
   bvh.linkToTriangulation(mesh);
   EXPECT_EQ(bvh.isLinked(), true);
@@ -29,14 +29,14 @@ TEST(BVH_Test, test_unlinked_construction) {
 
 TEST(BVH_Test, test_linked_construction) {
   STLReader<float> stl_reader;
-  Triangulation<float> simple_mesh = stl_reader.getMesh(OVF_INPUT("xy_plane_unit_square_binary.stl"));
+  auto simple_mesh = stl_reader.getMesh(OVF_INPUT("xy_plane_unit_square_binary.stl"));
 
   BVH<float> simple_bvh;
   simple_bvh.linkToTriangulation(simple_mesh);
   simple_bvh.constructBVH();
   EXPECT_EQ(simple_bvh.getNumNodesUsed(), 1);
 
-  Triangulation<float> skull = stl_reader.getMesh(OVF_INPUT("skull.stl"));
+  auto skull = stl_reader.getMesh(OVF_INPUT("skull.stl"));
   
   BVH<float> skull_bvh;
   skull_bvh.linkToTriangulation(skull);

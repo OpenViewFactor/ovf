@@ -25,24 +25,24 @@ TEST(Triangulation_Tests, test_operators) {
 
 TEST(Triangulation_Tests, test_stlread_binary) {
   STLReader<float> stl_reader = STLReader<float>();
-  Triangulation<float> mesh = stl_reader.getMesh(OVF_INPUT("xy_plane_unit_square_binary.stl"));
+  auto mesh = stl_reader.getMesh(OVF_INPUT("xy_plane_unit_square_binary.stl"));
 
   Triangle<float> t1( { {0.0 , 0.0 , 0.0} , {1.0 , 0.0 , 0.0} , {1.0 , 1.0 , 0.0} } );
   Triangle<float> t2( { {0.0 , 0.0 , 0.0} , {1.0 , 1.0 , 0.0} , {0.0 , 1.0 , 0.0} } );
 
-  EXPECT_EQ(mesh[0], t1);
-  EXPECT_EQ(mesh[1], t2);
+  EXPECT_EQ((*mesh)[0], t1);
+  EXPECT_EQ((*mesh)[1], t2);
 }
 
 TEST(Triangulation_Tests, test_stlread_ascii) {
   STLReader<float> stl_reader = STLReader<float>();
-  Triangulation<float> mesh = stl_reader.getMesh(OVF_INPUT("xy_plane_unit_square_text.stl"));
+  auto mesh = stl_reader.getMesh(OVF_INPUT("xy_plane_unit_square_text.stl"));
 
   Triangle<float> t1( { {0.0 , 0.0 , 0.0} , {1.0 , 0.0 , 0.0} , {1.0 , 1.0 , 0.0} } );
   Triangle<float> t2( { {0.0 , 0.0 , 0.0} , {1.0 , 1.0 , 0.0} , {0.0 , 1.0 , 0.0} } );
 
-  EXPECT_EQ(mesh[0], t1);
-  EXPECT_EQ(mesh[1], t2);
+  EXPECT_EQ((*mesh)[0], t1);
+  EXPECT_EQ((*mesh)[1], t2);
 }
 
 TEST(Triangulation_Tests, test_getters) {
@@ -103,17 +103,17 @@ TEST(Triangulation_Tests, test_adders) {
 
 TEST(Triangulation_Tests, test_clear) {
   STLReader<float> stl_reader = STLReader<float>();
-  Triangulation<float> mesh = stl_reader.getMesh(OVF_INPUT("xy_plane_unit_square_text.stl"));
+  auto mesh = stl_reader.getMesh(OVF_INPUT("xy_plane_unit_square_text.stl"));
 
-  EXPECT_EQ(mesh.getNumElements(), 2);
-  EXPECT_EQ(mesh.getNumPoints(), 4);
-  EXPECT_EQ(mesh.getMeshArea(), 1.0);
-  EXPECT_EQ(mesh.getNumBytes(), 96);
+  EXPECT_EQ(mesh->getNumElements(), 2);
+  EXPECT_EQ(mesh->getNumPoints(), 4);
+  EXPECT_EQ(mesh->getMeshArea(), 1.0);
+  EXPECT_EQ(mesh->getNumBytes(), 96);
 
-  mesh.clear();
+  mesh->clear();
 
-  EXPECT_EQ(mesh.getNumElements(), 0);
-  EXPECT_EQ(mesh.getNumPoints(), 0);
-  EXPECT_EQ(mesh.getMeshArea(), 0.0);
-  EXPECT_EQ(mesh.getNumBytes(), 0.0);
+  EXPECT_EQ(mesh->getNumElements(), 0);
+  EXPECT_EQ(mesh->getNumPoints(), 0);
+  EXPECT_EQ(mesh->getMeshArea(), 0.0);
+  EXPECT_EQ(mesh->getNumBytes(), 0.0);
 }

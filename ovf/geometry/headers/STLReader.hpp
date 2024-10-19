@@ -5,6 +5,7 @@
 #include "Triangulation.hpp"
 #include "FileReader.hpp"
 #include <exception>
+#include <memory>
 
 namespace openviewfactor {
 

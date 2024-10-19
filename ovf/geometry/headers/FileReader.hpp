@@ -3,6 +3,7 @@
 
 #include "Triangulation.hpp"
 #include <string>
+#include <memory>
 
 namespace openviewfactor {
 
@@ -11,7 +12,7 @@ template <typename FLOAT_TYPE> class FileReader {
   public:
     virtual ~FileReader() {} //! declare this to be subclassable
 
-    virtual Triangulation<FLOAT_TYPE> getMesh(const std::string &filename) = 0;  //! pure virtual function will be defined in the subclass
+    virtual std::shared_ptr<Triangulation<FLOAT_TYPE>> getMesh(const std::string &filename) = 0;  //! pure virtual function will be defined in the subclass
 };
 }
 

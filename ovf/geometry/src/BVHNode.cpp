@@ -49,11 +49,11 @@ namespace openviewfactor {
     return *this;
   }
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& BVHNode<FLOAT_TYPE>::growToIncludeTriangulation(const Triangulation<FLOAT_TYPE> &triangulation) {
-    for (unsigned int i = 0; i < triangulation.getNumElements(); i++) {
-      this->growToIncludeTriangle(triangulation[i]);
+  OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& BVHNode<FLOAT_TYPE>::growToIncludeTriangulation(std::shared_ptr<Triangulation<FLOAT_TYPE>> triangulation) {
+    for (unsigned int i = 0; i < triangulation->getNumElements(); i++) {
+      this->growToIncludeTriangle((*triangulation)[i]);
     }
-    this->setNumTriangles(triangulation.getNumElements());
+    this->setNumTriangles(triangulation->getNumElements());
     return *this;
   }
   
@@ -94,11 +94,11 @@ namespace openviewfactor {
   OVF_HOST_DEVICE unsigned int BVHNode<FLOAT_TYPE>::getSplitLocationAxis() const { return this->getBoundingBoxSpan().getLongestDirection(); }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE FLOAT_TYPE BVHNode<FLOAT_TYPE>::evaluateNodeChildrenSurfaceAreaHeuristic(const Triangulation<FLOAT_TYPE> &submesh, unsigned int axis_index, FLOAT_TYPE candidate_position) const {
+  OVF_HOST_DEVICE FLOAT_TYPE BVHNode<FLOAT_TYPE>::evaluateNodeChildrenSurfaceAreaHeuristic(std::shared_ptr<Triangulation<FLOAT_TYPE>> submesh, unsigned int axis_index, FLOAT_TYPE candidate_position) const {
     BVHNode<FLOAT_TYPE> left_box, right_box;
 
     std::vector<unsigned int> left_side_indices, right_side_indices;
-    std::vector<Triangle<FLOAT_TYPE>> triangles = submesh.getTriangles();
+    std::vector<Triangle<FLOAT_TYPE>> triangles = submesh->getTriangles();
     for (unsigned int i = 0; i < this->getNumTriangles(); i++) {
       if ((triangles[i].getCentroid())[axis_index] < candidate_position) {
         left_side_indices.push_back(i);
@@ -107,8 +107,8 @@ namespace openviewfactor {
       }
     }
 
-    left_box.growToIncludeTriangulation(submesh.getSubMesh(left_side_indices));
-    right_box.growToIncludeTriangulation(submesh.getSubMesh(right_side_indices));
+    left_box.growToIncludeTriangulation(submesh->getSubMesh(left_side_indices));
+    right_box.growToIncludeTriangulation(submesh->getSubMesh(right_side_indices));
 
     FLOAT_TYPE left_cost = left_box.getSurfaceArea() * left_side_indices.size();
     FLOAT_TYPE right_cost = right_box.getSurfaceArea() * right_side_indices.size();
@@ -120,8 +120,8 @@ namespace openviewfactor {
   }
   
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::pair<FLOAT_TYPE, FLOAT_TYPE> BVHNode<FLOAT_TYPE>::getBestSplitLocationAndCost(const Triangulation<FLOAT_TYPE> &triangulation, unsigned int num_evaluation_points) const {
-    Triangulation<FLOAT_TYPE> submesh = triangulation.getSubMesh(this->getElementArraySubindices());
+  OVF_HOST_DEVICE std::pair<FLOAT_TYPE, FLOAT_TYPE> BVHNode<FLOAT_TYPE>::getBestSplitLocationAndCost(std::shared_ptr<Triangulation<FLOAT_TYPE>> triangulation, unsigned int num_evaluation_points) const {
+    auto submesh = triangulation->getSubMesh(this->getElementArraySubindices());
 
     unsigned int axis_index = this->getSplitLocationAxis();
     FLOAT_TYPE axis_length = (this->getBoundingBoxSpan())[axis_index];

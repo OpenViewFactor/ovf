@@ -54,11 +54,11 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Triangulation<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::getSubMesh(std::vector<unsigned int> indices) const {
-    Triangulation<FLOAT_TYPE> sub_mesh;
+  OVF_HOST_DEVICE std::shared_ptr<Triangulation<FLOAT_TYPE>> Triangulation<FLOAT_TYPE>::getSubMesh(std::vector<unsigned int> indices) const {
+    auto sub_mesh = std::make_shared<Triangulation<FLOAT_TYPE>>();
     std::vector<std::array<size_t, 3>> sub_connectivity(indices.size());
     for (unsigned int i = 0; i < indices.size(); i++) {
-      sub_mesh.addElement((*this)[indices[i]]);
+      sub_mesh->addElement((*this)[indices[i]]);
     }
     return sub_mesh;
   }

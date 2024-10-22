@@ -4,7 +4,7 @@ set(ovf_gtest_executable_name ovfAllTests)
 
 message("Configuring OpenViewFactor Unit Tests")
 
-include_directories(${GTEST_INCLUDE_DIR} ${THIRD_PARTY_INCLUDE_DIR} ${_ovf_geometry_headers_dir} ${PROJECT_BINARY_DIR}/include)
+include_directories(${GTEST_INCLUDE_DIR} ${THIRD_PARTY_INCLUDE_DIR} ${_ovf_geometry_headers_dir} ${_ovf_viewfactor_headers_dir} ${PROJECT_BINARY_DIR}/include)
 
 set(_test_sources
   test_Vector3.cpp
@@ -12,11 +12,13 @@ set(_test_sources
   test_Triangulation.cpp
   test_BVHNode.cpp
   test_BVH.cpp
+  test_IndexValuePair.cpp
+  test_ViewFactor.cpp
   main.cpp
 )
 
 # -------------------- BUILD TEST EXECUTABLE -------------------- #
 add_executable(ovfAllTests ${_test_sources})
-target_link_libraries(ovfAllTests ${GTEST_LIBS} ovfgeometry)
+target_link_libraries(ovfAllTests ${GTEST_LIBS} ovfgeometry ovfviewfactor)
 
 add_test(NAME ovfAllTests COMMAND ovfAllTests WORKING_DIRECTORY ${TESTS_SRC_DIR})

@@ -63,7 +63,7 @@ TEST(Triangulation_Tests, test_getters) {
 
   EXPECT_EQ(tgln.getMeshArea(), 1.0);
   std::vector<unsigned int> indices = {0};
-  EXPECT_EQ(tgln.getSubMesh(indices), sub_mesh);
+  EXPECT_EQ(*(tgln.getSubMesh(indices)), sub_mesh);
 
   std::vector<Vector3<float>> centroids = {Vector3<float>(2.0/3.0, 1.0/3.0, 0.0), Vector3<float>(1.0/3.0, 2.0/3.0, 0.0)};
   std::vector<Vector3<float>> normals = {Vector3<float>(0.0, 0.0, 1.0), Vector3<float>(0.0, 0.0, 1.0)};

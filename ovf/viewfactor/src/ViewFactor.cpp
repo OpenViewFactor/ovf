@@ -11,6 +11,7 @@ namespace openviewfactor {
   
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& ViewFactor<FLOAT_TYPE>::linkTriangulations(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver) {
+    _nonzero_vf.clear();
     bool same_triangulation = (emitter == receiver);
     if (same_triangulation) { _state = LINKED_ONE_MESH; } else { _state = LINKED_TWO_MESH; }
     _emitter = emitter;
@@ -49,6 +50,8 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getMatrixElementVF(unsigned int full_matrix_index) const {
+    unsigned int maximum_index = _emitter->getNumElements() * _receiver->getNumElements() - 1;
+    if (full_matrix_index > maximum_index) { throw std::runtime_error("Cannot access a value for this index, it exceeds the matrix size"); }
     for (auto pair : _nonzero_vf) {
       if (pair.getFullMatrixIndex() == full_matrix_index) { return pair.getValue(); }
     }
@@ -56,12 +59,19 @@ namespace openviewfactor {
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getMatrixElementVF(unsigned int emitter_index, unsigned int receiver_index) const {
+    if (emitter_index > (_emitter->getNumElements() - 1)) { throw std::runtime_error("Cannot evaluate the VF for an emitting element index which exceeds the number of elements in the emitting surface"); }
+    if (receiver_index > (num_receiver_elements - 1)) { throw std::runtime_error("Cannot evaluate the VF for a receiving element index which exceeds the number of elements in the receiving surface"); }
+
     unsigned int full_matrix_index = (emitter_index * _emitter->getNumElements()) + receiver_index;
+    unsigned int maximum_index = _emitter->getNumElements() * _receiver->getNumElements() - 1;
+    if (full_matrix_index > maximum_index) { throw std::runtime_error("Cannot access a value for this index, it exceeds the matrix size"); }
+
     return (this->getMatrixElementVF(full_matrix_index));
   }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getEmitterElementToReceiverSurfaceVF(unsigned int emitter_index) const {
+    if (emitter_index > (_emitter->getNumElements() - 1)) { throw std::runtime_error("Cannot evaluate the VF for an emitting element index which exceeds the number of elements in the emitting surface"); }
     unsigned int num_receiver_elements = _receiver->getNumElements();
 
     std::vector<unsigned int> indices(num_receiver_elements);
@@ -80,8 +90,9 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getReceiverElementToEmitterSurfaceVF(unsigned int receiver_index) const {
-    unsigned int num_emitter_elements = _emitter->getNumElements();
     unsigned int num_receiver_elements = _receiver->getNumElements();
+    if (receiver_index > (num_receiver_elements - 1)) { throw std::runtime_error("Cannot evaluate the VF for a receiving element index which exceeds the number of elements in the receiving surface"); }
+    unsigned int num_emitter_elements = _emitter->getNumElements();
 
     FLOAT_TYPE receiver_element_area = (*_receiver)[receiver_index].getArea();
 
@@ -107,6 +118,8 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& ViewFactor<FLOAT_TYPE>::setElement(unsigned int full_matrix_index, FLOAT_TYPE value) {
+    unsigned int maximum_index = _emitter->getNumElements() * _receiver->getNumElements() - 1;
+    if (full_matrix_index > maximum_index) { throw std::runtime_error("Cannot allocate a value for this index, it exceeds the matrix size"); }
     for (auto pair : _nonzero_vf) {
       if (pair.getFullMatrixIndex() == full_matrix_index) {
         pair.setValue(value);

@@ -16,7 +16,8 @@ namespace openviewfactor {
     public:
       OVF_HOST_DEVICE Blockers();
 
-      
+      OVF_HOST_DEVICE Blockers<FLOAT_TYPE>& setBlockers(std::vector<std::string> blockers);
+      OVF_HOST_DEVICE std::shared_ptr<BVH<FLOAT_TYPE>> getBVH(unsigned int index) const;
   };
 }
 

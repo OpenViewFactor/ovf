@@ -3,7 +3,7 @@
 namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE IndexValuePair<FLOAT_TYPE>::IndexValuePair()
-    : _pair(std::pair<unsigned int, FLOAT_TYPE>({0, 0.0})) {}
+    : _pair(std::pair<unsigned int, FLOAT_TYPE>({(unsigned int)0, (FLOAT_TYPE)0.0})) {}
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE IndexValuePair<FLOAT_TYPE>::IndexValuePair(unsigned int index, FLOAT_TYPE value)

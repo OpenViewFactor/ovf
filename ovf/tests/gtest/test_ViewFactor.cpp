@@ -19,7 +19,7 @@ TEST(ViewFactor_Test, test_constructor) {
   EXPECT_EQ(vf.getState(), UNLINKED);
   EXPECT_EQ(vf.getEmitterMesh(), nullptr);
   EXPECT_EQ(vf.getReceiverMesh(), nullptr);
-  EXPECT_EQ(vf.getMatrixElementVF(0), 0.0);
+  EXPECT_THROW(vf.getMatrixElementVF(0), std::runtime_error);
 }
 
 TEST(ViewFactor_Test, test_linking) {
@@ -66,4 +66,43 @@ TEST(ViewFactor_Test, test_number_of_triangulations) {
 
   vf.linkTriangulations(e,r);
   EXPECT_EQ(vf.getNumTriangulations(), 2);
+}
+
+TEST(ViewFactor_Test, test_matrix_elements) {
+  ViewFactor<float> vf;
+  STLReader<float> reader;
+  auto e = reader.getMesh(OVF_INPUT("xy_plane_unit_square_binary.stl"));
+  auto r = reader.getMesh(OVF_INPUT("xy_plane_offset_unit_square_binary.stl"));
+
+  EXPECT_THROW(vf.getMatrixElementVF(0), std::runtime_error);
+  EXPECT_THROW(vf.getEmitterElementToReceiverSurfaceVF(0), std::runtime_error);
+  EXPECT_THROW(vf.getReceiverElementToEmitterSurfaceVF(0), std::runtime_error);
+  EXPECT_THROW(vf.getSurfaceToSurfaceAverageVF(), std::runtime_error);
+
+  vf.linkTriangulations(e,r);
+
+  EXPECT_THROW(vf.setElement(4,0.5), std::runtime_error);
+
+  //* THE FOLLOWING VALUES ARE NOT PHYSICALLY ACCURATE, BUT THEY FULFILL THE PURPOSES OF THIS TEST
+  EXPECT_NO_THROW(vf.setElement(0,0.2));
+  EXPECT_NO_THROW(vf.setElement(1,0.3));
+  EXPECT_NO_THROW(vf.setElement(2,0.3));
+  EXPECT_NO_THROW(vf.setElement(3,0.2));
+  
+  vf.setElement(0,0.2);
+  vf.setElement(1,0.3);
+  vf.setElement(2,0.3);
+  vf.setElement(3,0.2);
+
+  EXPECT_FLOAT_EQ(vf.getMatrixElementVF(0), 0.2);
+  EXPECT_FLOAT_EQ(vf.getMatrixElementVF(1), 0.3);
+  EXPECT_FLOAT_EQ(vf.getMatrixElementVF(2), 0.3);
+  EXPECT_FLOAT_EQ(vf.getMatrixElementVF(3), 0.2);
+
+  EXPECT_FLOAT_EQ(vf.getEmitterElementToReceiverSurfaceVF(0), 0.5);
+  EXPECT_FLOAT_EQ(vf.getEmitterElementToReceiverSurfaceVF(1), 0.5);
+  EXPECT_FLOAT_EQ(vf.getReceiverElementToEmitterSurfaceVF(0), 0.5);
+  EXPECT_FLOAT_EQ(vf.getReceiverElementToEmitterSurfaceVF(1), 0.5);
+
+  EXPECT_FLOAT_EQ(vf.getSurfaceToSurfaceAverageVF(), 0.5);
 }

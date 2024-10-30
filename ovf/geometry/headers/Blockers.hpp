@@ -1,0 +1,23 @@
+#ifndef _OVF_BLOCKERS_H_
+#define _OVF_BLOCKERS_H_
+
+#include "../../config.hpp"
+#include "Vector3.hpp"
+#include "Triangulation.hpp"
+#include "BVHNode.hpp"
+#include "BVH.hpp"
+#include <memory>
+#include <vector>
+
+namespace openviewfactor {
+  template <typename FLOAT_TYPE> class Blockers {
+    private:
+      std::vector<std::shared_ptr<BVH<FLOAT_TYPE>>> _blocking_bvhs;
+    public:
+      OVF_HOST_DEVICE Blockers();
+
+      
+  };
+}
+
+#endif

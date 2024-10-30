@@ -21,8 +21,9 @@ message("Adding Subdirectories to root CMakeLists file")
 set(THIRD_PARTY_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
 set(GTEST_INCLUDE_DIR ${THIRD_PARTY_INCLUDE_DIR}/google-test/googletest/include/gtest)
 set(GTEST_LIBS gtest gtest_main CACHE STRING "gtest libraries")
-set(_ovf_geometry_headers_dir ${CMAKE_CURRENT_SOURCE_DIR}/ovf/geometry/headers) # create a variable to store the directory for all geometry-related code
+set(_ovf_geometry_headers_dir ${CMAKE_CURRENT_SOURCE_DIR}/ovf/geometry/headers)
 set(_ovf_viewfactor_headers_dir ${CMAKE_CURRENT_SOURCE_DIR}/ovf/viewfactor/headers)
+set(_ovf_solvers_headers_dir ${CMAKE_CURRENT_SOURCE_DIR}/ovf/solvers/headers)
 
 add_subdirectory(${THIRD_PARTY_INCLUDE_DIR}/lean-vtk)
 add_subdirectory(${THIRD_PARTY_INCLUDE_DIR}/boost-cmake)

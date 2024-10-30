@@ -136,13 +136,16 @@ po::options_description getOptions() {
     ("help,h", "\tOpenViewFactor command-line interface\n")
     ("version,v", "\tOpenViewFactor version\n")
     ("inputs,i", po::value<std::vector<std::string>>()->required(), "-i <EMITTER FILEPATH> <RECEIVER FILEPATH> \n    Filepaths to input meshes (Minimum of 1, Maximum of 2)\n")
-    ("blocking,b", po::value<std::vector<std::string>>(), "-b <BLOCKER1 FILEPATH> -b <BLOCKER2 FILEPATH> -b <etc.> \n    Filepath(s) to blocking mesh(es) (Minimum of 0, No Maximum)\n")
-    ("plaintextout,o", po::value<std::string>(), "-o <PLAINTEXT OUTPUT FILEPATH> \n    Filepath for nonzero element-wise view factor map output (defaults to 'ovf.out', write 'NONE' to skip)\n")
-    ("graphicout,g", po::value<std::string>(), "-g <GRAPHIC OUTPUT FILEPATH> \n    Filepath for Paraview unstructured grid (.vtu) output (defaults to 'emitter.vtu' & 'receiver.vtu', write 'NONE' to skip)\n")
+    ("blocking,b", po::value<std::vector<std::string>>()->multitoken(), "-b <BLOCKER1 FILEPATH> -b <BLOCKER2 FILEPATH> -b <etc.> \n    Filepath(s) to blocking mesh(es) (Minimum of 0, No Maximum)\n")
+    ("plaintextout,o", po::value<std::string>()->default_value("ovf.out"), "-o <PLAINTEXT OUTPUT FILEPATH> \n    Filepath for nonzero element-wise view factor map output (defaults to 'ovf.out', write 'NONE' to skip)\n")
+    ("graphicout,g", po::value<std::vector<std::string>>()->default_value({std::string("unified_graphic_out")}, "unified_graphic_out")->multitoken(), "-g <GRAPHIC OUTPUT FILEPATH> \n    Filename for Paraview unstructured grid (.vtu) output (defaults to 'unified_graphic_out', write 'NONE' to skip)\n")
     ("selfint,s", po::value<std::string>()->default_value("BOTH")->notifier(&checkSelfIntersectionType), "-s <NONE/EMITTER/RECEIVER/BOTH> \n    Determines which input mesh(es) are included in evaluating obstruction (defaults to BOTH)\n")
     ("numerics,n", po::value<std::string>()->default_value("DAI")->notifier(&checkNumerics), "-n <DAI/SAI> \n    Numeric integration method (defaults to DAI)\n")
     ("compute,c", po::value<std::string>()->default_value("CPU_N")->notifier(&checkCompute), "-c <CPU/CPU_N/GPU/GPU_N \n    Compute backend (defaults to CPU_N)\n")
     ("precision,p", po::value<std::string>()->default_value("SINGLE")->notifier(&checkPrecision), "-p <SINGLE/DOUBLE> \n    Floating point precision (defaults to SINGLE)\n");
+
+  // options.add_options()
+  //   ("graphicout,g", po::value<std::vector<std::string>>()->default_value({std::string("unified_graphic_out")}, "unified_graphic_out")->multitoken(), "-g <GRAPHIC OUTPUT FILEPATH> \n    Filename for Paraview unstructured grid (.vtu) output (defaults to 'unified_graphic_out', write 'NONE' to skip)\n");
   return options;
 }
 
@@ -150,6 +153,7 @@ po::options_description getOptions() {
 po::positional_options_description getPositionalOptions() {
   po::positional_options_description positional_options;
   positional_options.add("inputs", 2);
+  positional_options.add("graphicout", 3);
   return positional_options;
 }
 
@@ -187,17 +191,58 @@ void ovfWorkflow(po::variables_map variables_map) {
   std::cout << "[LOG] Plain Text Matrix Output Path : " << matrix_outfile << '\n';
   bool write_matrix = (matrix_outfile == "NONE") ? false : true;
 
-  std::string graphic_outfile = variables_map["graphicout"].as<std::string>();
-  std::cout << "[LOG] Graphic File Output Path : " << graphic_outfile << '\n';
-  bool write_graphic = (graphic_outfile == "NONE") ? false : true;
+  //* ----- process graphical output files ----- *//
+
+  std::vector<std::string> graphic_outfiles = variables_map["graphicout"].as<std::vector<std::string>>();
+  std::string emitter_output_filename, receiver_output_filename, unified_output_filename;
+  bool one_output_file = true;
+  bool write_graphic;
+  switch (graphic_outfiles.size()) {
+    case 1:
+      write_graphic = (graphic_outfiles[0] == "NONE") ? false : true;
+      if (write_graphic) {
+        unified_output_filename = graphic_outfiles[0] + ".vtu";
+        std::cout << "[LOG] Unified Graphic File Output Path : " << unified_output_filename << '\n';
+      } else {
+        std::cout << "[LOG] NO Graphic File Output Path" << '\n';
+      }
+      break;
+    case 2:
+      write_graphic = true;
+      emitter_output_filename = graphic_outfiles[0] + ".vtu";
+      receiver_output_filename = graphic_outfiles[1] + ".vtu";
+      std::cout << "[LOG] Emitter Graphic File Output Path : " << emitter_output_filename << '\n';
+      std::cout << "[LOG] Receiver Graphic File Output Path : " << receiver_output_filename << '\n';
+      break;
+    case 3:
+      write_graphic = true;
+      emitter_output_filename = graphic_outfiles[0] + ".vtu";
+      receiver_output_filename = graphic_outfiles[1] + ".vtu";
+      unified_output_filename = graphic_outfiles[2] + ".vtu";
+      std::cout << "[LOG] Emitter Graphic File Output Path : " << emitter_output_filename << '\n';
+      std::cout << "[LOG] Receiver Graphic File Output Path : " << receiver_output_filename << '\n';
+      std::cout << "[LOG] Unified Graphic File Output Path : " << unified_output_filename << '\n';
+      break;
+  }
+  
 
   //* ----- load input meshes ----- *//
 
   std::vector<std::string> input_filenames = variables_map["inputs"].as<std::vector<std::string>>();
   bool two_mesh_problem = (input_filenames.size() > 1) ? true : false;
   if (input_filenames.size() > 2) { std::cout << "<-----> [NOTIFIER] More than 2 input meshes were provided! Only the first two will be loaded" << '\n'; }
-  std::cout << "[LOG] Input Emitter Mesh Loaded : " << input_filenames[0] << '\n';
-  if (two_mesh_problem) { std::cout << "[LOG] Input Receiver Mesh Loaded : " << input_filenames[1] << '\n'; }
+  std::cout << "[LOG] Loading Input Emitter Mesh : " << input_filenames[0] << '\n';
+  if (self_int_type == "BOTH" || self_int_type == "EMITTER") {
+    std::cout << "[LOG] Constructing BVH for Emitter Mesh : " << input_filenames[0] << '\n';
+    std::cout << "[LOG] Construction Finished" << '\n';
+  }
+  if (two_mesh_problem) {
+    std::cout << "[LOG] Loading Input Receiver Mesh : " << input_filenames[1] << '\n';
+    if (self_int_type == "BOTH" || self_int_type == "RECEIVER") {
+      std::cout << "[LOG] Constructing BVH for Receiver Mesh : " << input_filenames[1] << '\n';
+      std::cout << "[LOG] Construction Finished" << '\n';
+  }
+  }
 
   //* ----- load blocking meshes ----- *//
 
@@ -205,7 +250,9 @@ void ovfWorkflow(po::variables_map variables_map) {
   if (blocking_enabled) {
     std::vector<std::string> blocker_filenames = variables_map["blocking"].as<std::vector<std::string>>();
     for (auto blocker : blocker_filenames) {
-      std::cout << "[LOG] Blocking Mesh Loaded : " << blocker << '\n';
+      std::cout << "[LOG] Loading Blocking Mesh : " << blocker << '\n';
+      std::cout << "[LOG] Constructing BVH for Blocker : " << blocker << '\n';
+      std::cout << "[LOG] Construction Finished" << '\n';
     }
   } else {
     std::cout << "[LOG] No Blocking Meshes Loaded" << '\n';

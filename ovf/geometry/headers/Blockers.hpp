@@ -6,6 +6,7 @@
 #include "Triangulation.hpp"
 #include "BVHNode.hpp"
 #include "BVH.hpp"
+#include "STLReader.hpp"
 #include <memory>
 #include <vector>
 
@@ -13,10 +14,11 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE> class Blockers {
     private:
       std::vector<std::shared_ptr<BVH<FLOAT_TYPE>>> _blocking_bvhs;
+    protected:
     public:
       OVF_HOST_DEVICE Blockers();
 
-      OVF_HOST_DEVICE Blockers<FLOAT_TYPE>& setBlockers(std::vector<std::string> blockers);
+      OVF_HOST_DEVICE Blockers<FLOAT_TYPE>& setBlockers(std::vector<std::string> blocking_filenames);
       OVF_HOST_DEVICE std::shared_ptr<BVH<FLOAT_TYPE>> getBVH(unsigned int index) const;
   };
 }

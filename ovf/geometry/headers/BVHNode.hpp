@@ -19,7 +19,7 @@ template <typename FLOAT_TYPE> class BVHNode {
     unsigned int _child_one_index;
     unsigned int _first_triangle_index;
     unsigned int _num_triangles;
-
+  protected:
   public:
     OVF_HOST_DEVICE BVHNode();
 

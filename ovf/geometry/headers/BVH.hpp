@@ -31,7 +31,7 @@ template <typename FLOAT_TYPE> class BVH {
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& constructNewNode(unsigned int node_index);
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& intersectRayWithBVHNode(Ray<FLOAT_TYPE> ray, unsigned int node_index);
     OVF_HOST_DEVICE std::vector<unsigned int> getSubMeshIndices(unsigned int node_index) const;
-
+  protected:
   public:
     //* ----- PUBLIC METHODS ----- *//
     OVF_HOST_DEVICE BVH();

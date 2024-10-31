@@ -11,7 +11,7 @@ namespace openviewfactor {
 
     private:  //* Private Class Attributes (x,y,z)
       std::array<FLOAT_TYPE, 3> _xyz;
-      
+    protected:
     public:
       //* ----- CLASS CONSTRUCTORS ----- *//
       OVF_HOST_DEVICE Vector3();  // default constructor

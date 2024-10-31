@@ -13,7 +13,7 @@ template <typename FLOAT_TYPE> class Ray {
     Vector3<FLOAT_TYPE> _origin;
     Vector3<FLOAT_TYPE> _direction;
     FLOAT_TYPE _intersection_distance;
-
+  protected:
   public:
     OVF_HOST_DEVICE Ray();
 

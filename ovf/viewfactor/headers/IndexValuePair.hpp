@@ -9,6 +9,7 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE> class IndexValuePair {
     private:
       std::pair<unsigned int, FLOAT_TYPE> _pair;
+    protected:
     public:
       OVF_HOST_DEVICE IndexValuePair();
       OVF_HOST_DEVICE IndexValuePair(unsigned int index, FLOAT_TYPE value);

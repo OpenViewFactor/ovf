@@ -17,7 +17,7 @@ namespace openviewfactor {
       std::vector<IndexValuePair<FLOAT_TYPE>> _nonzero_vf;
       std::shared_ptr<Triangulation<FLOAT_TYPE>> _emitter;
       std::shared_ptr<Triangulation<FLOAT_TYPE>> _receiver;
-    
+    protected:
     public:
       OVF_HOST_DEVICE ViewFactor();
 

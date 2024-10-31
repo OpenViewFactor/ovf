@@ -20,7 +20,7 @@ template <typename FLOAT_TYPE> class Triangulation {
     std::vector<Vector3<FLOAT_TYPE>> _pts;  // points list in the triangulation
     std::vector<std::array<size_t, 3>> _con; // connectivity list in the triangulation
     MeshType _name;  // enumeration: EMITTER, RECEIVER, BLOCKER)
-
+  protected:
   public:
     //* ----- CLASS CONSTRUCTORS ----- *//
     OVF_HOST_DEVICE Triangulation();  // default constructor

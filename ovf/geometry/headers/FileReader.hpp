@@ -8,7 +8,8 @@
 namespace openviewfactor {
 
 template <typename FLOAT_TYPE> class FileReader {
-  
+  private:
+  protected:
   public:
     virtual ~FileReader() {} //! declare this to be subclassable
 

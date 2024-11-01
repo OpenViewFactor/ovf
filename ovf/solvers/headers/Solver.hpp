@@ -5,7 +5,9 @@
 #include "Ray.hpp"
 #include "Triangulation.hpp"
 #include "BVH.hpp"
+#include "Blockers.hpp"
 #include "SolverOptions.hpp"
+#include "ViewFactor.hpp"
 
 namespace openviewfactor {
   template <typename FLOAT_TYPE> class Solver {
@@ -22,11 +24,11 @@ namespace openviewfactor {
 
       virtual ~Solver() {}
 
-      virtual std::vector<unsigned int> backFaceCull(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh) const = 0;
+      virtual OVF_HOST_DEVICE std::vector<unsigned int> backFaceCull(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh) const = 0;
 
-      virtual std::vector<unsigned int> evaluateBlocking(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, Blockers<FLOAT_TYPE> blockers) = 0;
+      virtual OVF_HOST_DEVICE std::vector<unsigned int> evaluateBlocking(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, Blockers<FLOAT_TYPE> blockers) const = 0;
 
-      virtual std::unique_ptr<ViewFactor<FLOAT_TYPE>> solveViewFactor(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh) = 0;
+      virtual OVF_HOST_DEVICE std::unique_ptr<ViewFactor<FLOAT_TYPE>> solveViewFactor(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh) const = 0;
   };
 }
 

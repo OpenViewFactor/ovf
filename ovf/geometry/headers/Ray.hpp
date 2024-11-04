@@ -5,6 +5,7 @@
 #include "Vector3.hpp"
 #include "Triangle.hpp"
 #include <cmath>
+#include <memory>
 
 namespace openviewfactor {
 

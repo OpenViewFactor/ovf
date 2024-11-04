@@ -12,7 +12,7 @@
 
 namespace openviewfactor {
 
-enum MeshType { EMITTER, RECEIVER, BLOCKER, UNKNOWN };
+enum MeshType { EMIT, RECEIVE, BLOCKER, UNKNOWN };
 
 template <typename FLOAT_TYPE> class Triangulation {
 

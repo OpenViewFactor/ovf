@@ -10,10 +10,11 @@ set(_geometry_headers
     headers/Ray.hpp
     headers/Triangle.hpp
     headers/Triangulation.hpp
-    headers/BVHNode.hpp
-    headers/BVH.hpp
     headers/FileReader.hpp
     headers/STLReader.hpp
+    headers/BVHNode.hpp
+    headers/BVH.hpp
+    headers/Blockers.hpp
 )
 
 message("Creating list of geometry sources")
@@ -23,9 +24,10 @@ set(_geometry_sources
     src/Ray.cpp
     src/Triangle.cpp
     src/Triangulation.cpp
+    src/STLReader.cpp
     src/BVHNode.cpp
     src/BVH.cpp
-    src/STLReader.cpp
+    src/Blockers.cpp
 )
 
 message("Add geometry headers to list")

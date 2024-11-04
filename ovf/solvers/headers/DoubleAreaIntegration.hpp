@@ -16,7 +16,7 @@
 #include "Solver.hpp"
 
 namespace openviewfactor {
-  template <typename FLOAT_TYPE> class DoubleAreaIntegration : public Solver {
+  template <typename FLOAT_TYPE> class DoubleAreaIntegration : public Solver<FLOAT_TYPE> {
     private:
     protected:
     public:

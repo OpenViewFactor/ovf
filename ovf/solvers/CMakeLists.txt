@@ -6,13 +6,16 @@ message("Include DAI headers directory and third-party directory")
 include_directories(${THIRD_PARTY_INCLUDE_DIR} ${_ovf_geometry_headers_dir} ${_ovf_viewfactor_headers_dir} ${_ovf_solvers_headers_dir})
 
 set(_solvers_headers
-    headers/DoubleAreaIntegration.hpp
+  headers/SolverOptions.hpp
+  headers/Solver.hpp
+  headers/DoubleAreaIntegration.hpp
 )
 
 message("Creating list of DAI sources")
 
 set(_solvers_sources
-    src/DoubleAreaIntegration.cpp
+  src/SolverOptions.cpp
+  src/DoubleAreaIntegration.cpp
 )
 
 message("Add DAI headers to list")

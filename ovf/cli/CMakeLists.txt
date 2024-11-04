@@ -1,4 +1,6 @@
 include_directories(${_ovf_geometry_headers_dir})
+include_directories(${_ovf_viewfactor_headers_dir})
+include_directories(${_ovf_solvers_headers_dir})
 include_directories(${THIRD_PARTY_INCLUDE_DIR})
 
 set(_cli_sources

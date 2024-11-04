@@ -1,13 +1,20 @@
 #ifndef OVF_CLI_H_
 #define OVF_CLI_H
 
-#include "STLReader.hpp"
 #include "Vector3.hpp"
 #include "Ray.hpp"
 #include "Triangle.hpp"
 #include "Triangulation.hpp"
+#include "STLReader.hpp"
 #include "BVHNode.hpp"
 #include "BVH.hpp"
+#include "Blockers.hpp"
+
+#include "IndexValuePair.hpp"
+#include "ViewFactor.hpp"
+
+#include "SolverOptions.hpp"
+#include "DoubleAreaIntegration.hpp"
 
 #include <boost/assign.hpp>
 #include <boost/program_options.hpp>
@@ -33,7 +40,7 @@ namespace po = boost::program_options;
 const std::string OVF_VERSION_STRING = "0.2";
 
 //* -------------------- MAP SELF-INT INPUTS AND OUTPUTS -------------------- *//
-enum SelfIntersectionMode { NONE, BOTH, EMITTER, RECEIVER };
+// enum SelfIntersectionMode { NONE, BOTH, EMITTER, RECEIVER };
 //* map self-intersection type input string to enum
 static std::map<std::string, SelfIntersectionMode> SELFINT_TYPE_INPUT_TO_ENUM =
   boost::assign::map_list_of(
@@ -51,7 +58,7 @@ static std::map<SelfIntersectionMode, std::string> SELFINT_TYPE_ENUM_TO_OUTPUT =
     SelfIntersectionMode::RECEIVER, "RECEIVER");
 
 //* -------------------- MAP NUMERICS INPUTS AND OUTPUTS -------------------- *//
-enum NumericMode { DAI, SAI };
+// enum NumericMode { DAI, SAI };
 //* map numerics input string to enum
 static std::map<std::string, NumericMode> NUMERICS_INPUT_TO_ENUM =
   boost::assign::map_list_of(
@@ -65,7 +72,7 @@ static std::map<NumericMode, std::string> NUMERICS_ENUM_TO_OUTPUT =
     NumericMode::SAI, "SAI");
 
 //* -------------------- MAP COMPUTE INPUTS AND OUTPUTS -------------------- *//
-enum ComputeMode { CPU, CPU_N, GPU, GPU_N };
+// enum ComputeMode { CPU, CPU_N, GPU, GPU_N };
 //* map compute input string to enum
 static std::map<std::string, ComputeMode> COMPUTE_INPUT_TO_ENUM =
   boost::assign::map_list_of(
@@ -83,7 +90,7 @@ static std::map<ComputeMode, std::string> COMPUTE_ENUM_TO_OUTPUT =
     ComputeMode::GPU_N, "GPU_N");
 
 //* -------------------- MAP PRECISION INPUTS AND OUTPUTS -------------------- *//
-enum PrecisionMode { SINGLE, DOUBLE };
+// enum PrecisionMode { SINGLE, DOUBLE };
 //* map precision input string to enum
 static std::map<std::string, PrecisionMode> PRECISION_INPUT_TO_ENUM =
   boost::assign::map_list_of(

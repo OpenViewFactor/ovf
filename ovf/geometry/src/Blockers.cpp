@@ -24,6 +24,16 @@ namespace openviewfactor {
     return _blocking_bvhs[index];
   }
 
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE typename std::vector<std::shared_ptr<BVH<FLOAT_TYPE>>>::iterator Blockers<FLOAT_TYPE>::begin() {
+    return _blocking_bvhs.begin();
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE typename std::vector<std::shared_ptr<BVH<FLOAT_TYPE>>>::iterator Blockers<FLOAT_TYPE>::end() {
+    return _blocking_bvhs.end();
+  }
+
   template class Blockers<float>;
   template class Blockers<double>;
 }

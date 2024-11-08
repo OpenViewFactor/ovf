@@ -9,6 +9,7 @@
 #include "STLReader.hpp"
 #include <memory>
 #include <vector>
+#include <iostream>
 
 namespace openviewfactor {
   template <typename FLOAT_TYPE> class Blockers {
@@ -19,6 +20,7 @@ namespace openviewfactor {
       OVF_HOST_DEVICE Blockers();
 
       OVF_HOST_DEVICE Blockers<FLOAT_TYPE>& setBlockers(std::vector<std::string> blocking_filenames);
+      OVF_HOST_DEVICE Blockers<FLOAT_TYPE>& addBlocker(std::shared_ptr<BVH<FLOAT_TYPE>> blocker);
       OVF_HOST_DEVICE std::shared_ptr<BVH<FLOAT_TYPE>> getBVH(unsigned int index) const;
 
       OVF_HOST_DEVICE typename std::vector<std::shared_ptr<BVH<FLOAT_TYPE>>>::iterator begin();

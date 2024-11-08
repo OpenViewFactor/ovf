@@ -109,7 +109,7 @@ void checkSelfIntersectionType(const std::string &self_int_type) {
   if (!SELFINT_TYPE_INPUT_TO_ENUM.count(self_int_type)) {
     throw po::error("[ERROR] Selfint type not recognized: " + self_int_type);
   }
-  std::cout << "<-----> [VALID] Valid Self-Intersection Argument" << '\n';
+  std::cout << "<-------> [VALID] Valid Self-Intersection Argument" << '\n';
 }
 
 void checkNumerics(const std::string &numerics) {
@@ -117,7 +117,7 @@ void checkNumerics(const std::string &numerics) {
   if (!NUMERICS_INPUT_TO_ENUM.count(numerics)) {
     throw po::error("[ERROR] Numeric method not recognized: " + numerics);
   }
-  std::cout << "<-----> [VALID] Valid Numeric Method Argument" << '\n';
+  std::cout << "<-------> [VALID] Valid Numeric Method Argument" << '\n';
 }
 
 void checkCompute(const std::string &compute) {
@@ -125,7 +125,7 @@ void checkCompute(const std::string &compute) {
   if (!COMPUTE_INPUT_TO_ENUM.count(compute)) {
     throw po::error("[ERROR] Compute type not recognized: " + compute);
   }
-  std::cout << "<-----> [VALID] Valid Compute Backend Argument" << '\n';
+  std::cout << "<-------> [VALID] Valid Compute Backend Argument" << '\n';
 }
 
 void checkPrecision(const std::string &precision) {
@@ -133,7 +133,7 @@ void checkPrecision(const std::string &precision) {
   if (!PRECISION_INPUT_TO_ENUM.count(precision)) {
     throw po::error("[ERROR] Precision type not recognized: " + precision);
   }
-  std::cout << "<-----> [VALID] Valid Precision Argument" << '\n';
+  std::cout << "<-------> [VALID] Valid Precision Argument" << '\n';
 }
 
 //* -------------------- DEFINE PROGRAM OPTIONS -------------------- *//
@@ -210,6 +210,12 @@ void ovfWorkflow(po::variables_map variables_map) {
   std::string precision = variables_map["precision"].as<std::string>();
   std::cout << "[LOG] Solver Setting Loaded: Floating Point Precision - " << precision << '\n';
 
+  if (precision == "SINGLE") {
+#define FLOAT_TYPE float
+  } else if (precision == "DOUBLE") {
+#define FLOAT_TYPE double
+  }
+
   std::string matrix_outfile = variables_map["plaintextout"].as<std::string>();
   std::cout << "[LOG] Plain Text Matrix Output Path : " << matrix_outfile << '\n';
   bool write_matrix = (matrix_outfile == "NONE") ? false : true;
@@ -250,19 +256,35 @@ void ovfWorkflow(po::variables_map variables_map) {
   
 
   //* ----- load input meshes ----- *//
+  STLReader<FLOAT_TYPE> reader;
 
   std::vector<std::string> input_filenames = variables_map["inputs"].as<std::vector<std::string>>();
   bool two_mesh_problem = (input_filenames.size() > 1) ? true : false;
   if (input_filenames.size() > 2) { std::cout << "<-----> [NOTIFIER] More than 2 input meshes were provided! Only the first two will be loaded" << '\n'; }
+  
   std::cout << "[LOG] Loading Input Emitter Mesh : " << input_filenames[0] << '\n';
+  std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter = reader.getMesh(input_filenames[0]);
+  std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver = nullptr;
+
+  Blockers<FLOAT_TYPE> blockers;
+  auto emitter_bvh = std::make_shared<BVH<FLOAT_TYPE>>();
+  auto receiver_bvh = std::make_shared<BVH<FLOAT_TYPE>>();
+
   if (self_int_type == "BOTH" || self_int_type == "EMITTER") {
     std::cout << "[LOG] Constructing BVH for Emitter Mesh : " << input_filenames[0] << '\n';
+    emitter_bvh->linkToTriangulation(emitter);
+    emitter_bvh->constructBVH();
+    blockers.addBlocker(emitter_bvh);
     std::cout << "[LOG] Construction Finished" << '\n';
   }
   if (two_mesh_problem) {
     std::cout << "[LOG] Loading Input Receiver Mesh : " << input_filenames[1] << '\n';
+    receiver = reader.getMesh(input_filenames[1]);
     if (self_int_type == "BOTH" || self_int_type == "RECEIVER") {
       std::cout << "[LOG] Constructing BVH for Receiver Mesh : " << input_filenames[1] << '\n';
+      receiver_bvh->linkToTriangulation(receiver);
+      receiver_bvh->constructBVH();
+      blockers.addBlocker(receiver_bvh);
       std::cout << "[LOG] Construction Finished" << '\n';
   }
   }
@@ -272,11 +294,7 @@ void ovfWorkflow(po::variables_map variables_map) {
   bool blocking_enabled = variables_map.count("blocking");
   if (blocking_enabled) {
     std::vector<std::string> blocker_filenames = variables_map["blocking"].as<std::vector<std::string>>();
-    for (auto blocker : blocker_filenames) {
-      std::cout << "[LOG] Loading Blocking Mesh : " << blocker << '\n';
-      std::cout << "[LOG] Constructing BVH for Blocker : " << blocker << '\n';
-      std::cout << "[LOG] Construction Finished" << '\n';
-    }
+    blockers.setBlockers(blocker_filenames);
   } else {
     std::cout << "[LOG] No Blocking Meshes Loaded" << '\n';
   }

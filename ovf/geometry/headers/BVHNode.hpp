@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <utility>
 #include <memory>
+#include <fstream>
 
 namespace openviewfactor {
 
@@ -51,6 +52,8 @@ template <typename FLOAT_TYPE> class BVHNode {
     OVF_HOST_DEVICE std::pair<FLOAT_TYPE, FLOAT_TYPE> getBestSplitLocationAndCost(std::shared_ptr<Triangulation<FLOAT_TYPE>> triangulation, unsigned int num_evaluation_points) const;
 
     OVF_HOST_DEVICE std::vector<unsigned int> getElementArraySubindices() const;
+
+    OVF_HOST_DEVICE void writeToFile(const std::string& filename) const;
 };
 
 }

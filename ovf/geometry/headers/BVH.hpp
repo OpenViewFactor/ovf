@@ -7,6 +7,7 @@
 #include "BVHNode.hpp"
 #include <memory>
 #include <vector>
+#include <fstream>
 
 namespace openviewfactor {
 
@@ -48,6 +49,8 @@ template <typename FLOAT_TYPE> class BVH {
     OVF_HOST_DEVICE void intersectRayWithBVH(Ray<FLOAT_TYPE> ray);
 
     OVF_HOST_DEVICE unsigned int getNumNodesUsed();
+
+    OVF_HOST_DEVICE void writeToFile(const std::string& filename) const;
 };
 
 }

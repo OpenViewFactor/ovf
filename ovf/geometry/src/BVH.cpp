@@ -202,6 +202,11 @@ namespace openviewfactor {
     return submesh_indices;
   }
 
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE void BVH<FLOAT_TYPE>::writeToFile(const std::string& filename) const {
+    
+  }
+
 template class BVH<float>;
 template class BVH<double>;
 }

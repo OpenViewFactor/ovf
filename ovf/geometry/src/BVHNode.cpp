@@ -154,6 +154,41 @@ namespace openviewfactor {
     return subindices;
   }
 
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE void BVHNode<FLOAT_TYPE>::writeToFile(const std::string& filename) const {
+    std::ofstream outfile(filename);
+
+    Vector3<FLOAT_TYPE> min_min_min = this->getBoundingBoxMin();
+    Vector3<FLOAT_TYPE> max_min_min = (this->getBoundingBoxMin()).setX((this->getBoundingBoxMax())[0]);
+    Vector3<FLOAT_TYPE> min_max_min = (this->getBoundingBoxMin()).setY((this->getBoundingBoxMax())[1]);
+    Vector3<FLOAT_TYPE> min_min_max = (this->getBoundingBoxMin()).setZ((this->getBoundingBoxMax())[2]);
+    Vector3<FLOAT_TYPE> min_max_max = (this->getBoundingBoxMax()).setX((this->getBoundingBoxMin())[0]);
+    Vector3<FLOAT_TYPE> max_min_max = (this->getBoundingBoxMax()).setY((this->getBoundingBoxMin())[1]);
+    Vector3<FLOAT_TYPE> max_max_min = (this->getBoundingBoxMax()).setZ((this->getBoundingBoxMin())[2]);
+    Vector3<FLOAT_TYPE> max_max_max = this->getBoundingBoxMax();
+
+    std::vector<Vector3<FLOAT_TYPE>> points = {min_min_min, max_min_min, min_max_min, min_min_max, min_max_max, max_min_max, max_max_min, max_max_max};
+
+    outfile << "Points" << "\n";
+    for (auto p : points) {
+      outfile << p[0] << "," << p[1] << "," << p[2] << "\n";
+    }
+
+    std::vector<std::array<unsigned int, 3>> connections = {{1,2,6},{1,6,4},
+                                                            {1,3,7},{1,7,2},
+                                                            {1,4,5},{1,5,3},
+                                                            {8,7,3},{8,3,5},
+                                                            {8,5,4},{8,4,6},
+                                                            {8,6,2},{8,2,7}};
+
+    outfile << "Connections" << "\n";
+    for (auto c : connections) {
+      outfile << c[0] << "," << c[1] << "," << c[2] << "\n";
+    }
+
+    outfile.close();
+  }
+
 template class BVHNode<float>;
 template class BVHNode<double>;
 }

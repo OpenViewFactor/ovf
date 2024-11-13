@@ -87,6 +87,10 @@ TEST(BVHNode_Tests, test_cost) {
   auto box_mesh = stl_reader.getMesh(OVF_INPUT("3_tall_box.stl"));
   BVHNode<float> box_node;
   box_node.growToIncludeTriangulation(box_mesh);
+  EXPECT_EQ(box_node.getNumTriangles(), 28);
+  EXPECT_EQ(box_node.getBoundingBoxMin(), Vector3<float>(0.0,0.0,0.0));
+  EXPECT_EQ(box_node.getBoundingBoxMax(), Vector3<float>(1.0,1.0,3.0));
+  box_node.writeToFile(OVF_OUTPUT("3_tall_box_node.txt"));
   EXPECT_EQ(box_node.getNodeCost(), 392.0);
 }
 

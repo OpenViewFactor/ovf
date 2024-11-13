@@ -167,11 +167,18 @@ namespace openviewfactor {
     Vector3<FLOAT_TYPE> max_max_min = (this->getBoundingBoxMax()).setZ((this->getBoundingBoxMin())[2]);
     Vector3<FLOAT_TYPE> max_max_max = this->getBoundingBoxMax();
 
-    std::vector<Vector3<FLOAT_TYPE>> points = {min_min_min, max_min_min, min_max_min, min_min_max, min_max_max, max_min_max, max_max_min, max_max_max};
+    std::vector<Vector3<FLOAT_TYPE>> points = {min_min_min,
+                                               max_min_min,
+                                               min_max_min,
+                                               min_min_max,
+                                               min_max_max,
+                                               max_min_max,
+                                               max_max_min,
+                                               max_max_max};
 
-    outfile << "Points" << "\n";
+    outfile << "Encoding,X,Y,Z\n";
     for (auto p : points) {
-      outfile << p[0] << "," << p[1] << "," << p[2] << "\n";
+      outfile << "p," << p[0] << "," << p[1] << "," << p[2] << "\n";
     }
 
     std::vector<std::array<unsigned int, 3>> connections = {{1,2,6},{1,6,4},
@@ -181,9 +188,8 @@ namespace openviewfactor {
                                                             {8,5,4},{8,4,6},
                                                             {8,6,2},{8,2,7}};
 
-    outfile << "Connections" << "\n";
     for (auto c : connections) {
-      outfile << c[0] << "," << c[1] << "," << c[2] << "\n";
+      outfile << "c," << c[0] << "," << c[1] << "," << c[2] << "\n";
     }
 
     outfile.close();

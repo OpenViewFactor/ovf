@@ -41,6 +41,7 @@ TEST(BVH_Test, test_linked_construction) {
   BVH<float> skull_bvh;
   skull_bvh.linkToTriangulation(skull);
   skull_bvh.constructBVH();
+  skull_bvh.writeToFile(OVF_OUTPUT("skull_bvh.txt"));
 
   EXPECT_EQ(skull_bvh.getNumNodesUsed(), 6053);
 }

@@ -156,7 +156,7 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE void BVHNode<FLOAT_TYPE>::writeToFile(const std::string& filename) const {
-    std::ofstream outfile(filename);
+    std::ofstream outfile(filename, std::ios_base::app);
 
     Vector3<FLOAT_TYPE> min_min_min = this->getBoundingBoxMin();
     Vector3<FLOAT_TYPE> max_min_min = (this->getBoundingBoxMin()).setX((this->getBoundingBoxMax())[0]);

@@ -152,7 +152,9 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::swapElements(unsigned int index_one, unsigned int index_two) {
-    std::swap(_mesh_element_indices[index_one], _mesh_element_indices[index_two]);
+    auto temporary = _mesh_element_indices[index_one];
+    _mesh_element_indices[index_one] = _mesh_element_indices[index_two];
+    _mesh_element_indices[index_two] = temporary;
     return *this;
   }
 

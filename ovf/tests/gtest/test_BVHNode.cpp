@@ -90,7 +90,8 @@ TEST(BVHNode_Tests, test_cost) {
   EXPECT_EQ(box_node.getNumTriangles(), 28);
   EXPECT_EQ(box_node.getBoundingBoxMin(), Vector3<float>(0.0,0.0,0.0));
   EXPECT_EQ(box_node.getBoundingBoxMax(), Vector3<float>(1.0,1.0,3.0));
-  box_node.writeToFile(OVF_OUTPUT("3_tall_box_node.txt"));
+  std::ofstream outfile(OVF_OUTPUT("3_tall_box_node.txt"));
+  box_node.writeToFile(outfile);
   EXPECT_EQ(box_node.getNodeCost(), 392.0);
 }
 

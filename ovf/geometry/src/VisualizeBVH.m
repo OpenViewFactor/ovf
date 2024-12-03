@@ -5,7 +5,10 @@ close all
 clc
 
 file_path = input("Enter the full BVH filepath: ", "s");
-file_contents = readtable(file_path,"LineEnding",'\n',"EmptyLineRule","skip","ReadRowNames",true)
+stl_path = input("Enter the full STL filepath: ", "s");
+bvh_stl = stlread(stl_path);
+
+file_contents = readtable(file_path,"EmptyLineRule","skip","ReadRowNames",true)
 row_names = file_contents.Properties.RowNames;
 
 mesh_points = double.empty(0,3);
@@ -30,8 +33,10 @@ mesh_connections
 
 T = triangulation(mesh_connections, mesh_points);
 
-trisurf(T, 'EdgeColor', 'k', 'FaceColor', 'r')
-
+trisurf(T, 'EdgeColor', 'k', 'FaceColor', 'r', 'FaceAlpha', 0.3)
+hold on
+trisurf(bvh_stl)
+daspect([1,1,1])
 xlim([min(mesh_points(:,1)) - 1, max(mesh_points(:,1)) + 1])
 ylim([min(mesh_points(:,2)) - 1, max(mesh_points(:,2)) + 1])
 zlim([min(mesh_points(:,3)) - 1, max(mesh_points(:,3)) + 1])

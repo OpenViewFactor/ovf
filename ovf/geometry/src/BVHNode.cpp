@@ -155,9 +155,8 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE void BVHNode<FLOAT_TYPE>::writeToFile(const std::string& filename) const {
-    std::ofstream outfile(filename);
-
+  OVF_HOST_DEVICE void BVHNode<FLOAT_TYPE>::writeToFile(std::ofstream& outfile) const {
+    
     Vector3<FLOAT_TYPE> min_min_min = this->getBoundingBoxMin();
     Vector3<FLOAT_TYPE> max_min_min = (this->getBoundingBoxMin()).setX((this->getBoundingBoxMax())[0]);
     Vector3<FLOAT_TYPE> min_max_min = (this->getBoundingBoxMin()).setY((this->getBoundingBoxMax())[1]);
@@ -176,7 +175,6 @@ namespace openviewfactor {
                                                max_max_min,
                                                max_max_max};
 
-    outfile << "Encoding,X,Y,Z\n";
     for (auto p : points) {
       outfile << "p," << p[0] << "," << p[1] << "," << p[2] << "\n";
     }

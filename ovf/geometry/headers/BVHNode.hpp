@@ -53,7 +53,7 @@ template <typename FLOAT_TYPE> class BVHNode {
 
     OVF_HOST_DEVICE std::vector<unsigned int> getElementArraySubindices() const;
 
-    OVF_HOST_DEVICE void writeToFile(const std::string& filename) const;
+    OVF_HOST_DEVICE void writeToFile(std::ofstream& outfile) const;
 };
 
 }

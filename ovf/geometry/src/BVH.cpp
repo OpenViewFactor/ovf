@@ -71,6 +71,15 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE unsigned int BVH<FLOAT_TYPE>::getNumNodesUsed() { return _nodes_used; }
 
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE void BVH<FLOAT_TYPE>::writeToFile(const std::string& filename) const {
+    std::ofstream outfile(filename);
+    outfile << "Encoding,X,Y,Z\n";
+    for (auto node : _nodes) {
+      node.writeToFile(outfile);
+    }
+  }
+
   //* ------------------------------ PRIVATE METHODS ------------------------------ *//
 
   template <typename FLOAT_TYPE>
@@ -200,11 +209,6 @@ namespace openviewfactor {
     BVHNode<FLOAT_TYPE> current_node = _nodes[node_index];
     std::vector<unsigned int> submesh_indices = current_node.getElementArraySubindices();
     return submesh_indices;
-  }
-
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE void BVH<FLOAT_TYPE>::writeToFile(const std::string& filename) const {
-    
   }
 
 template class BVH<float>;

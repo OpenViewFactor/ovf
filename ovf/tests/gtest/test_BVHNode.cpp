@@ -16,8 +16,13 @@ TEST(BVHNode_Tests, test_default) {
   EXPECT_EQ(node.getChildOneIndex(), 0);
   EXPECT_EQ(node.getChildTwoIndex(), 1);
   EXPECT_EQ(node.getNumTriangles(), 0);
-  EXPECT_EQ(node.getBoundingBoxMin(), Vector3<float>(0.0,0.0,0.0));
-  EXPECT_EQ(node.getBoundingBoxMax(), Vector3<float>(0.0,0.0,0.0));
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMin())[0], INFINITY);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMin())[1], INFINITY);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMin())[2], INFINITY);
+
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMax())[0], -INFINITY);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMax())[1], -INFINITY);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMax())[2], -INFINITY);
 }
 
 TEST(BVHNode_Tests, test_add_triangle) {
@@ -26,8 +31,13 @@ TEST(BVHNode_Tests, test_add_triangle) {
   EXPECT_EQ(node.getChildOneIndex(), 0);
   EXPECT_EQ(node.getChildTwoIndex(), 1);
   EXPECT_EQ(node.getNumTriangles(), 0);
-  EXPECT_EQ(node.getBoundingBoxMin(), Vector3<float>(0.0,0.0,0.0));
-  EXPECT_EQ(node.getBoundingBoxMax(), Vector3<float>(0.0,0.0,0.0));
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMin())[0], INFINITY);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMin())[1], INFINITY);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMin())[2], INFINITY);
+
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMax())[0], -INFINITY);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMax())[1], -INFINITY);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMax())[2], -INFINITY);
   
   Triangle<float> t(Vector3<float>(0.0,0.0,0.0), Vector3<float>(1.0,0.0,0.0), Vector3<float>(0.0,1.0,0.0));
 
@@ -37,8 +47,13 @@ TEST(BVHNode_Tests, test_add_triangle) {
   EXPECT_EQ(node.getChildOneIndex(), 0);
   EXPECT_EQ(node.getChildTwoIndex(), 1);
   EXPECT_EQ(node.getNumTriangles(), 1);
-  EXPECT_EQ(node.getBoundingBoxMin(), Vector3<float>(0.0,0.0,0.0));
-  EXPECT_EQ(node.getBoundingBoxMax(), Vector3<float>(1.0,1.0,0.0));
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMin())[0], 0.0);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMin())[1], 0.0);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMin())[2], 0.0);
+
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMax())[0], 1.0);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMax())[1], 1.0);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMax())[2], 0.0);
 }
 
 TEST(BVHNode_Tests, test_add_triangulation) {
@@ -47,8 +62,13 @@ TEST(BVHNode_Tests, test_add_triangulation) {
   EXPECT_EQ(node.getChildOneIndex(), 0);
   EXPECT_EQ(node.getChildTwoIndex(), 1);
   EXPECT_EQ(node.getNumTriangles(), 0);
-  EXPECT_EQ(node.getBoundingBoxMin(), Vector3<float>(0.0,0.0,0.0));
-  EXPECT_EQ(node.getBoundingBoxMax(), Vector3<float>(0.0,0.0,0.0));
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMin())[0], INFINITY);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMin())[1], INFINITY);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMin())[2], INFINITY);
+
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMax())[0], -INFINITY);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMax())[1], -INFINITY);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMax())[2], -INFINITY);
 
   STLReader<float> stl_reader = STLReader<float>();
   auto mesh = stl_reader.getMesh(OVF_INPUT("xy_plane_unit_square_binary.stl"));
@@ -58,8 +78,28 @@ TEST(BVHNode_Tests, test_add_triangulation) {
   EXPECT_EQ(node.getChildOneIndex(), 0);
   EXPECT_EQ(node.getChildTwoIndex(), 1);
   EXPECT_EQ(node.getNumTriangles(), 2);
-  EXPECT_EQ(node.getBoundingBoxMin(), Vector3<float>(0.0,0.0,0.0));
-  EXPECT_EQ(node.getBoundingBoxMax(), Vector3<float>(1.0,1.0,0.0));
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMin())[0], 0.0);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMin())[1], 0.0);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMin())[2], 0.0);
+
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMax())[0], 1.0);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMax())[1], 1.0);
+  EXPECT_FLOAT_EQ((node.getBoundingBoxMax())[2], 0.0);
+  
+  BVHNode<float> skull_node;
+  auto skull = stl_reader.getMesh(OVF_INPUT("skull.stl"));
+  skull_node.growToIncludeTriangulation(skull);
+  EXPECT_FLOAT_EQ((skull_node.getBoundingBoxMin())[0], 71.2338);
+  EXPECT_FLOAT_EQ((skull_node.getBoundingBoxMin())[1], 18.660927);
+  EXPECT_FLOAT_EQ((skull_node.getBoundingBoxMin())[2], 0);
+
+  EXPECT_FLOAT_EQ((skull_node.getBoundingBoxMax())[0], 178.7740);
+  EXPECT_FLOAT_EQ((skull_node.getBoundingBoxMax())[1], 191.3309);
+  EXPECT_FLOAT_EQ((skull_node.getBoundingBoxMax())[2], 112.3366);
+
+  std::ofstream outfile(OVF_OUTPUT("skull_node.txt"));
+  outfile << "Encoding,X,Y,Z\n";
+  skull_node.writeToFile(outfile);
 }
 
 TEST(BVHNode_Tests, test_surface_area) {
@@ -88,8 +128,13 @@ TEST(BVHNode_Tests, test_cost) {
   BVHNode<float> box_node;
   box_node.growToIncludeTriangulation(box_mesh);
   EXPECT_EQ(box_node.getNumTriangles(), 28);
-  EXPECT_EQ(box_node.getBoundingBoxMin(), Vector3<float>(0.0,0.0,0.0));
-  EXPECT_EQ(box_node.getBoundingBoxMax(), Vector3<float>(1.0,1.0,3.0));
+  EXPECT_FLOAT_EQ((box_node.getBoundingBoxMin())[0], 0.0);
+  EXPECT_FLOAT_EQ((box_node.getBoundingBoxMin())[1], 0.0);
+  EXPECT_FLOAT_EQ((box_node.getBoundingBoxMin())[2], 0.0);
+
+  EXPECT_FLOAT_EQ((box_node.getBoundingBoxMax())[0], 1.0);
+  EXPECT_FLOAT_EQ((box_node.getBoundingBoxMax())[1], 1.0);
+  EXPECT_FLOAT_EQ((box_node.getBoundingBoxMax())[2], 3.0);
   std::ofstream outfile(OVF_OUTPUT("3_tall_box_node.txt"));
   box_node.writeToFile(outfile);
   EXPECT_EQ(box_node.getNodeCost(), 392.0);

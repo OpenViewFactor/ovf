@@ -6,10 +6,13 @@
 #include "Triangle.hpp"
 #include "Triangulation.hpp"
 #include "Ray.hpp"
+#include <cmath>
 #include <algorithm>
+#include <numeric>
 #include <utility>
 #include <memory>
 #include <fstream>
+#include <iostream>
 
 namespace openviewfactor {
 

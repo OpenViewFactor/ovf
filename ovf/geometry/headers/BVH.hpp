@@ -3,11 +3,17 @@
 
 #include "../../config.hpp"
 #include "Vector3.hpp"
+#include "Triangle.hpp"
 #include "Triangulation.hpp"
+#include "Ray.hpp"
 #include "BVHNode.hpp"
+#include "STLReader.hpp"
 #include <memory>
 #include <vector>
+#include <numeric>
 #include <fstream>
+#include <iostream>
+#include <stdexcept>
 
 namespace openviewfactor {
 

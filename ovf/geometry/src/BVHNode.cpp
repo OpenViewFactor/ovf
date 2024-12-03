@@ -4,12 +4,10 @@
 #include "Ray.hpp"
 #include "BVHNode.hpp"
 
-#include <iostream>
-
 namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>::BVHNode()
-    : _bounding_box_min(Vector3<FLOAT_TYPE>()), _bounding_box_max(Vector3<FLOAT_TYPE>()), _child_one_index(0), _first_triangle_index(0), _num_triangles(0) {}
+    : _bounding_box_min(Vector3<FLOAT_TYPE>(INFINITY,INFINITY,INFINITY)), _bounding_box_max(Vector3<FLOAT_TYPE>(-INFINITY,-INFINITY,-INFINITY)), _child_one_index(0), _first_triangle_index(0), _num_triangles(0) {}
   
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Vector3<FLOAT_TYPE> BVHNode<FLOAT_TYPE>::getBoundingBoxMin() const { return _bounding_box_min; }
@@ -87,7 +85,7 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE BVHNode<FLOAT_TYPE>::getSurfaceArea() const {
     Vector3<FLOAT_TYPE> span = this->getBoundingBoxSpan();
-    return (((span.getX() * span.getY()) + (span.getX() * span.getZ()) + (span.getY() * span.getZ())));
+    return (2 * ((span.getX() * span.getY()) + (span.getX() * span.getZ()) + (span.getY() * span.getZ())));
   }
 
   template <typename FLOAT_TYPE>
@@ -150,7 +148,7 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE std::vector<unsigned int> BVHNode<FLOAT_TYPE>::getElementArraySubindices() const {
     std::vector<unsigned int> subindices(this->getNumTriangles());
-    std::generate(subindices.begin(), subindices.end(), [this, n=0] () mutable { return (this->getFirstTriangleIndex() + n++); });
+    std::iota(subindices.begin(), subindices.end(), this->getFirstTriangleIndex());
     return subindices;
   }
 

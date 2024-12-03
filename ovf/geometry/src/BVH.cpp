@@ -1,13 +1,4 @@
-#include "Vector3.hpp"
-#include "Triangle.hpp"
-#include "Triangulation.hpp"
-#include "BVHNode.hpp"
 #include "BVH.hpp"
-#include "STLReader.hpp"
-#include "Ray.hpp"
-
-#include <iostream>
-#include <stdexcept>
 
 namespace openviewfactor {
 
@@ -26,14 +17,11 @@ namespace openviewfactor {
       _nodes_used = 0;
     }
 
-    unsigned int index = 0;
-    for (Triangle<FLOAT_TYPE> tri : triangulation->getTriangles()) {
-      _triangulation->addElement(tri);
-      _mesh_element_indices.push_back(index);
-      index++;
-    }
-
-    _nodes = std::vector<BVHNode<FLOAT_TYPE>>(getMaxNumNodes());
+    _triangulation = triangulation;
+    _mesh_element_indices = std::vector<unsigned int>((_triangulation)->getNumElements());
+    std::iota(_mesh_element_indices.begin(), _mesh_element_indices.end(), 0);
+    _nodes = std::vector<BVHNode<FLOAT_TYPE>>(this->getMaxNumNodes());
+    std::cout << "BVH _nodes vector size: " << _nodes.size() << std::endl;
     return *this;
   }
 
@@ -93,7 +81,7 @@ namespace openviewfactor {
     if (!(this->isLinked())) {
       throw std::runtime_error("BVH is not linked to a triangulation. Cannot evaluate the maximum number of elements");
     }
-    return (this->_triangulation->getNumElements());
+    return (2 * (_triangulation->getNumElements()) - 1);
   }
 
   template <typename FLOAT_TYPE>
@@ -147,7 +135,7 @@ namespace openviewfactor {
       }
     }
 
-    return index_at_which_to_split;
+    return index_at_which_to_split; //! this is the index of the first element on the side > split_location
   }
 
   template <typename FLOAT_TYPE>
@@ -162,14 +150,13 @@ namespace openviewfactor {
   OVF_HOST_DEVICE unsigned int BVH<FLOAT_TYPE>::createChildNodes(unsigned int node_index, unsigned int split_index, unsigned int num_triangles_on_left) {
     BVHNode<FLOAT_TYPE> current_node = _nodes[node_index];
 
-    unsigned int left_child_index = this->getNumNodesUsed() + 1;
+    unsigned int left_child_index = this->getNumNodesUsed();
     
     BVHNode<FLOAT_TYPE> left_child_node;
     BVHNode<FLOAT_TYPE> right_child_node;
     _nodes.push_back(left_child_node);
     _nodes.push_back(right_child_node);
-    _nodes_used++;
-    _nodes_used++;
+    this->setNumNodesUsed(this->getNumNodesUsed() + 2);
 
     current_node.setChildOneIndex(left_child_index);
 

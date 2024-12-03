@@ -17,15 +17,13 @@ construction_start = tic;
 bvh.constructBVH;
 total_construction_time = toc(construction_start);
 
-fprintf("nodes used: %d", bvh.nodes_used);
+fprintf("nodes used: %d\n", bvh.nodes_used);
 
 figure
 hold on
 bvh.plotLeafNodes;
 
 ray1 = Ray;
-% ray1.setOrigin(Vector3(-100, 0, 250));
-% ray1.setDirection(Vector3(1, 0, 0));
 ray1.setOrigin(Vector3(125, 0, 30));
 ray1.setDirection(Vector3(0, -1, 0));
 intersection_timer_start = tic;

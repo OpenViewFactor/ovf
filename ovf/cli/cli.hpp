@@ -192,7 +192,6 @@ po::variables_map parseCommandLine(int argc, char *argv[]) {
 }
 
 //* -------------------- PARSE COMMAND LINE -------------------- *//
-//TODO this is templatized in original openviewfactor and i think that's weird
 void ovfWorkflow(po::variables_map variables_map) {
   std::cout << "\n[VERSION] OpenViewFactor Version " << OVF_VERSION_STRING << '\n' << '\n';
 
@@ -209,12 +208,6 @@ void ovfWorkflow(po::variables_map variables_map) {
 
   std::string precision = variables_map["precision"].as<std::string>();
   std::cout << "[LOG] Solver Setting Loaded: Floating Point Precision - " << precision << '\n';
-
-  if (precision == "SINGLE") {
-#define FLOAT_TYPE float
-  } else if (precision == "DOUBLE") {
-#define FLOAT_TYPE double
-  }
 
   std::string matrix_outfile = variables_map["plaintextout"].as<std::string>();
   std::cout << "[LOG] Plain Text Matrix Output Path : " << matrix_outfile << '\n';
@@ -253,38 +246,37 @@ void ovfWorkflow(po::variables_map variables_map) {
       std::cout << "[LOG] Unified Graphic File Output Path : " << unified_output_filename << '\n';
       break;
   }
-  
 
   //* ----- load input meshes ----- *//
-  STLReader<FLOAT_TYPE> reader;
+  // STLReader<FLOAT_TYPE> reader;
 
   std::vector<std::string> input_filenames = variables_map["inputs"].as<std::vector<std::string>>();
   bool two_mesh_problem = (input_filenames.size() > 1) ? true : false;
   if (input_filenames.size() > 2) { std::cout << "<-----> [NOTIFIER] More than 2 input meshes were provided! Only the first two will be loaded" << '\n'; }
   
   std::cout << "[LOG] Loading Input Emitter Mesh : " << input_filenames[0] << '\n';
-  std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter = reader.getMesh(input_filenames[0]);
-  std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver = nullptr;
+  // std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter = reader.getMesh(input_filenames[0]);
+  // std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver = nullptr;
 
-  Blockers<FLOAT_TYPE> blockers;
-  auto emitter_bvh = std::make_shared<BVH<FLOAT_TYPE>>();
-  auto receiver_bvh = std::make_shared<BVH<FLOAT_TYPE>>();
+  // Blockers<FLOAT_TYPE> blockers;
+  // auto emitter_bvh = std::make_shared<BVH<FLOAT_TYPE>>();
+  // auto receiver_bvh = std::make_shared<BVH<FLOAT_TYPE>>();
 
   if (self_int_type == "BOTH" || self_int_type == "EMITTER") {
     std::cout << "[LOG] Constructing BVH for Emitter Mesh : " << input_filenames[0] << '\n';
-    emitter_bvh->linkToTriangulation(emitter);
-    emitter_bvh->constructBVH();
-    blockers.addBlocker(emitter_bvh);
+    // emitter_bvh->linkToTriangulation(emitter);
+    // emitter_bvh->constructBVH();
+    // blockers.addBlocker(emitter_bvh);
     std::cout << "[LOG] Construction Finished" << '\n';
   }
   if (two_mesh_problem) {
     std::cout << "[LOG] Loading Input Receiver Mesh : " << input_filenames[1] << '\n';
-    receiver = reader.getMesh(input_filenames[1]);
+    // receiver = reader.getMesh(input_filenames[1]);
     if (self_int_type == "BOTH" || self_int_type == "RECEIVER") {
       std::cout << "[LOG] Constructing BVH for Receiver Mesh : " << input_filenames[1] << '\n';
-      receiver_bvh->linkToTriangulation(receiver);
-      receiver_bvh->constructBVH();
-      blockers.addBlocker(receiver_bvh);
+      // receiver_bvh->linkToTriangulation(receiver);
+      // receiver_bvh->constructBVH();
+      // blockers.addBlocker(receiver_bvh);
       std::cout << "[LOG] Construction Finished" << '\n';
   }
   }
@@ -294,7 +286,7 @@ void ovfWorkflow(po::variables_map variables_map) {
   bool blocking_enabled = variables_map.count("blocking");
   if (blocking_enabled) {
     std::vector<std::string> blocker_filenames = variables_map["blocking"].as<std::vector<std::string>>();
-    blockers.setBlockers(blocker_filenames);
+    // blockers.setBlockers(blocker_filenames);
   } else {
     std::cout << "[LOG] No Blocking Meshes Loaded" << '\n';
   }

@@ -160,9 +160,9 @@ TEST(BVHNode_Tests, test_split_location_and_cost) {
 
   BVHNode<float> node;
   node.growToIncludeTriangulation(mesh);
-  std::pair<float, float> location_and_cost = node.getBestSplitLocationAndCost(mesh, 1);
+  std::pair<float, float> location_and_cost = node.getBestSplitLocationAndCost(mesh, 2, 1);
   EXPECT_EQ(location_and_cost.first, 1.5);
 
-  location_and_cost = node.getBestSplitLocationAndCost(mesh, 2);
+  location_and_cost = node.getBestSplitLocationAndCost(mesh, 2, 2);
   EXPECT_EQ(location_and_cost.first, 1.0);
 }

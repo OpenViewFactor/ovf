@@ -32,7 +32,7 @@ template <typename FLOAT_TYPE> class BVH {
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& setNumNodesUsed(unsigned int n);
     OVF_HOST_DEVICE unsigned int getMaxNumNodes() const;
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& subdivideNode(unsigned int node_index);
-    OVF_HOST_DEVICE unsigned int splitPrimitives(unsigned int node_index, unsigned int axis_index, unsigned int split_location);
+    OVF_HOST_DEVICE unsigned int splitPrimitives(unsigned int node_index, unsigned int axis_index, FLOAT_TYPE split_location);
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& swapElements(unsigned int index_one, unsigned int index_two);
     OVF_HOST_DEVICE unsigned int createChildNodes(unsigned int node_index, unsigned int split_index, unsigned int num_triangles_on_left);
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& constructNewNode(unsigned int node_index);

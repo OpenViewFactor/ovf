@@ -33,10 +33,7 @@ mesh_connections
 
 T = triangulation(mesh_connections, mesh_points);
 
-trisurf(T, 'EdgeColor', 'k', 'FaceColor', 'r', 'FaceAlpha', 0.3)
+trisurf(T, 'EdgeColor', 'k', 'FaceColor', 'r', 'FaceAlpha', 0.4)
 hold on
-trisurf(bvh_stl)
+trisurf(bvh_stl, 'FaceColor', 'b', 'FaceAlpha', 0.2)
 daspect([1,1,1])
-xlim([min(mesh_points(:,1)) - 1, max(mesh_points(:,1)) + 1])
-ylim([min(mesh_points(:,2)) - 1, max(mesh_points(:,2)) + 1])
-zlim([min(mesh_points(:,3)) - 1, max(mesh_points(:,3)) + 1])

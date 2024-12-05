@@ -28,16 +28,16 @@ TEST(BVH_Test, test_unlinked_construction) {
 }
 
 TEST(BVH_Test, test_linked_construction) {
-  STLReader<float> stl_reader;
+  STLReader<double> stl_reader;
   auto simple_mesh = stl_reader.getMesh(OVF_INPUT("xy_plane_unit_square_binary.stl"));
 
-  BVH<float> simple_bvh;
+  BVH<double> simple_bvh;
   simple_bvh.linkToTriangulation(simple_mesh);
   simple_bvh.constructBVH();
   EXPECT_EQ(simple_bvh.getNumNodesUsed(), 1);
 
   auto box = stl_reader.getMesh(OVF_INPUT("3_tall_box.stl"));
-  BVH<float> box_bvh;
+  BVH<double> box_bvh;
   box_bvh.linkToTriangulation(box);
   box_bvh.constructBVH();
   box_bvh.writeToFile(OVF_OUTPUT("3_tall_box_bvh"));
@@ -45,9 +45,9 @@ TEST(BVH_Test, test_linked_construction) {
 
   auto skull = stl_reader.getMesh(OVF_INPUT("skull.stl"));
   
-  BVH<float> skull_bvh;
+  BVH<double> skull_bvh;
   skull_bvh.linkToTriangulation(skull);
   skull_bvh.constructBVH();
   skull_bvh.writeToFile(OVF_OUTPUT("skull_bvh"));
-  EXPECT_EQ(skull_bvh.getNumNodesUsed(), 6053);
+  EXPECT_EQ(skull_bvh.getNumNodesUsed(), 6087);
 }

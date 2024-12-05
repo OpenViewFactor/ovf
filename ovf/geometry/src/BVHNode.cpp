@@ -101,8 +101,6 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE std::pair<FLOAT_TYPE, FLOAT_TYPE> BVHNode<FLOAT_TYPE>::getBestSplitLocationAndCost(std::shared_ptr<Triangulation<FLOAT_TYPE>> triangulation, std::vector<unsigned int> mesh_element_indices, unsigned int axis_index, unsigned int num_evaluation_points) const {
 
-    std::cout << ">>>>>> BVHNode getBestSplitLocationAndCost Initiated" << std::endl;
-
     std::vector<unsigned int> submesh_indices(this->getNumTriangles());
     for (int i = 0; i < submesh_indices.size(); i++) {
       submesh_indices[i] = mesh_element_indices[(this->getElementArraySubindices())[i]];
@@ -111,8 +109,6 @@ namespace openviewfactor {
 
     FLOAT_TYPE axis_length = (this->getBoundingBoxSpan())[axis_index];
     FLOAT_TYPE axis_min = (this->getBoundingBoxMin())[axis_index];
-
-    std::cout << ">>>>>>> Axis: " << axis_index << ". Axis Length: " << axis_length << ". Axis Minimum: " << axis_min << std::endl;
 
     std::vector<FLOAT_TYPE> evaluation_point_costs(num_evaluation_points);
     std::vector<FLOAT_TYPE> evaluation_point_positions(num_evaluation_points);
@@ -124,26 +120,14 @@ namespace openviewfactor {
       evaluation_point_costs[i-1] = cost;
     }
 
-    for (int i = 0; i < num_evaluation_points; i++) {
-      std::cout << ">>>>>>>> Position: " << evaluation_point_positions[i] << ". Cost: " << evaluation_point_costs[i] << std::endl;
-    }
-
     typename std::vector<FLOAT_TYPE>::iterator best_cost_iterator = std::min_element(evaluation_point_costs.begin(), evaluation_point_costs.end(), [] (const FLOAT_TYPE& a, const FLOAT_TYPE& b) {
       if (std::isnan(a)) return false;
       if (std::isnan(b)) return true;
       return (a < b); });
     FLOAT_TYPE best_cost = *best_cost_iterator;
     unsigned int best_cost_index = std::distance(evaluation_point_costs.begin(), best_cost_iterator);
-
-    std::cout << ">>>>>>>> best_cost: " << best_cost << " -- best_cost_index: " << best_cost_index << std::endl;
-
     std::pair<FLOAT_TYPE, FLOAT_TYPE> split_location_and_cost;
-
-    std::cout << ">>>>>>>> best evaluation point: " << evaluation_point_positions[best_cost_index] << std::endl;
-
     split_location_and_cost.first = evaluation_point_positions[best_cost_index];
-
-    std::cout << ">>>>>>>> best evaluation point in the pair : " << split_location_and_cost.first << std::endl;
     split_location_and_cost.second = best_cost;
     return split_location_and_cost;
   }

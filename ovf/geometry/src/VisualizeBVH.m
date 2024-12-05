@@ -15,8 +15,8 @@ mesh_connections = file_contents{file_contents.Type == "c", ["X","Y","Z"]};
 
 T = triangulation(mesh_connections, mesh_points);
 
-trisurf(T, 'EdgeColor', 'k', 'FaceColor', 'r', 'FaceAlpha', 0.2)
+bvh = trisurf(T, 'EdgeColor', 'k', 'FaceColor', 'r', 'FaceAlpha', 0.2);
 hold on
-trisurf(bvh_stl, 'FaceColor', 'b', 'FaceAlpha', 0.1)
+stlmesh = trisurf(bvh_stl, 'FaceColor', 'b', 'FaceAlpha', 0.1);
 daspect([1,1,1])
 grid off

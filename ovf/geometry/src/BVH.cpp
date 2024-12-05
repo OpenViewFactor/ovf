@@ -18,12 +18,9 @@ namespace openviewfactor {
     }
 
     _triangulation = triangulation;
-    std::cout << "Mesh Num Elements: " << triangulation->getNumElements() << " ... Internal Mesh Num Elements: " << _triangulation->getNumElements() << std::endl;
     _mesh_element_indices = std::vector<unsigned int>((_triangulation)->getNumElements());
-    std::cout << "Mesh element indices size: " << _mesh_element_indices.size() << std::endl;
     std::iota(_mesh_element_indices.begin(), _mesh_element_indices.end(), 0);
     _nodes = std::vector<BVHNode<FLOAT_TYPE>>(this->getMaxNumNodes());
-    std::cout << "BVH _nodes vector size: " << _nodes.size() << std::endl;
     return *this;
   }
 
@@ -51,6 +48,7 @@ namespace openviewfactor {
     _nodes[root_node_index].growToIncludeTriangulation(_triangulation);
     this->setNumNodesUsed(1);
     this->subdivideNode(root_node_index);
+    std::cout << "> BVH Construction Completed. " << this->getNumNodesUsed() << " Nodes used." << std::endl;
     return *this;
   }
 
@@ -103,12 +101,8 @@ namespace openviewfactor {
     //* [6] create child nodes for each half of the current node
     //* [7] recurse into each of the child nodes
 
-    std::cout << ">> Node Subdivision Initiated for BVHNode: " << node_index << std::endl;
-
     //* --------------- [1] --------------- *//
     if ((_nodes[node_index]).getNumTriangles() <= _minimum_triangle_threshold) { return *this; }
-    
-    std::cout << ">>> BVHNode " << node_index << " contains enough triangles to proceed" << std::endl;
 
     //* --------------- [2] --------------- *//
     unsigned int axis_index = (_nodes[node_index]).getSplitLocationAxis();
@@ -118,15 +112,11 @@ namespace openviewfactor {
     //* --------------- [3] --------------- *//
     if ((_nodes[node_index]).getNodeCost() <= best_cost) { return *this; }
 
-    std::cout << ">>> BVHNode " << node_index << " cost analysis is favorable to proceed" << std::endl;
-
     //* --------------- [4] --------------- *//
     unsigned int split_index = this->splitPrimitives(node_index, axis_index, best_location);
     //* --------------- [5] --------------- *//
     unsigned int num_triangles_on_left = split_index - (_nodes[node_index]).getFirstTriangleIndex();
     if (num_triangles_on_left == 0 || num_triangles_on_left == (_nodes[node_index]).getNumTriangles()) { return *this; }
-
-    std::cout << ">>> BVHNode " << node_index << " actually gets split at index " << split_index << " with " << num_triangles_on_left << " triangles on the 'left'" << std::endl;
 
     //* --------------- [6] --------------- *//
     unsigned int left_child_index = this->createChildNodes(node_index, split_index, num_triangles_on_left);
@@ -139,22 +129,11 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE unsigned int BVH<FLOAT_TYPE>::splitPrimitives(unsigned int node_index, unsigned int axis_index, FLOAT_TYPE split_location) {
-
-    std::cout << ">>>> splitPrimitives Initiated for BVHNode: " << node_index << " -- Split Axis: " << axis_index << " -- Split Location: " << split_location << std::endl;
     
     unsigned int index_at_which_to_split = (_nodes[node_index]).getFirstTriangleIndex();
     unsigned int index_of_last_unsorted_element = index_at_which_to_split + (_nodes[node_index]).getNumTriangles() - 1;
 
     while (index_at_which_to_split <= index_of_last_unsorted_element) {
-
-      // std::cout << ">>>>> Sorting primitives. Current index_at_which_to_split: " << index_at_which_to_split << " ... Current index_of_last_unsorted_element: " << index_of_last_unsorted_element << ". ";
-
-      // if (index_at_which_to_split == index_of_last_unsorted_element) {
-      //   std::cout << "Indices are EQUAL" << std::endl;
-      // } else {
-      //   std::cout << "Indices are NOT EQUAL" << std::endl;
-      // }
-
       Triangle<FLOAT_TYPE> current_element = (*_triangulation)[_mesh_element_indices[index_at_which_to_split]];
       if ((current_element.getCentroid())[axis_index] < split_location) {
         index_at_which_to_split++;
@@ -162,7 +141,6 @@ namespace openviewfactor {
         this->swapElements(index_at_which_to_split, index_of_last_unsorted_element);
         index_of_last_unsorted_element--;
       }
-
     }
 
     return index_at_which_to_split; //! this is the index of the first element on the side > split_location

@@ -52,11 +52,11 @@ template <typename FLOAT_TYPE> class BVHNode {
 
     OVF_HOST_DEVICE unsigned int getSplitLocationAxis() const;
     OVF_HOST_DEVICE FLOAT_TYPE evaluateNodeChildrenSurfaceAreaHeuristic(std::shared_ptr<Triangulation<FLOAT_TYPE>> submesh, unsigned int axis_index, FLOAT_TYPE candidate_position) const;
-    OVF_HOST_DEVICE std::pair<FLOAT_TYPE, FLOAT_TYPE> getBestSplitLocationAndCost(std::shared_ptr<Triangulation<FLOAT_TYPE>> triangulation, unsigned int axis_index, unsigned int num_evaluation_points) const;
+    OVF_HOST_DEVICE std::pair<FLOAT_TYPE, FLOAT_TYPE> getBestSplitLocationAndCost(std::shared_ptr<Triangulation<FLOAT_TYPE>> triangulation, std::vector<unsigned int> mesh_element_indices, unsigned int axis_index, unsigned int num_evaluation_points) const;
 
     OVF_HOST_DEVICE std::vector<unsigned int> getElementArraySubindices() const;
 
-    OVF_HOST_DEVICE void writeToFile(std::ofstream& outfile) const;
+    OVF_HOST_DEVICE void writeToFile(std::ofstream& outfile, unsigned int node_index) const;
 };
 
 }

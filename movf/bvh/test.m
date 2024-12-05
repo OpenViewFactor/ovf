@@ -4,10 +4,6 @@ clc
 
 warning('off','all')
 
-% delete(gcp('nocreate'))
-% parpool
-% poolObj = gcp;
-
 filename = input("Enter the mesh filepath: ", "s");
 mesh = readMesh(filename);
 bvh = BVH;

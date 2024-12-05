@@ -54,29 +54,6 @@ namespace openviewfactor {
     this->setNumTriangles(triangulation->getNumElements());
     return *this;
   }
-  
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE bool BVHNode<FLOAT_TYPE>::intersectRayWithNodeBoundingBox(Ray<FLOAT_TYPE> ray) const {
-    FLOAT_TYPE tx1 = (this->getBoundingBoxMin().getX() - ray.getOrigin().getX()) / ray.getDirection().getX();
-    FLOAT_TYPE tx2 = (this->getBoundingBoxMax().getX() - ray.getOrigin().getX()) / ray.getDirection().getX();
-
-    FLOAT_TYPE tmin = std::min(tx1, tx2);
-    FLOAT_TYPE tmax = std::max(tx1, tx2);
-
-    FLOAT_TYPE ty1 = (this->getBoundingBoxMin().getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
-    FLOAT_TYPE ty2 = (this->getBoundingBoxMax().getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
-
-    tmin = std::min(tmin, std::min(ty1, ty2));
-    tmax = std::max(tmax, std::max(ty1, ty2));
-
-    FLOAT_TYPE tz1 = (this->getBoundingBoxMin().getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
-    FLOAT_TYPE tz2 = (this->getBoundingBoxMax().getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
-
-    tmin = std::min(tmin, std::min(tz1, tz2));
-    tmax = std::max(tmax, std::max(tz1, tz2));
-
-    return (tmax >= tmin && tmin < ray.getIntersectionDistance() && tmax > 0);
-  }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE BVHNode<FLOAT_TYPE>::getNodeCost() const {
@@ -85,11 +62,15 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE BVHNode<FLOAT_TYPE>::getSurfaceArea() const {
     Vector3<FLOAT_TYPE> span = this->getBoundingBoxSpan();
-    return (2 * ((span.getX() * span.getY()) + (span.getX() * span.getZ()) + (span.getY() * span.getZ())));
+    return ((span.getX() * span.getY()) + (span.getX() * span.getZ()) + (span.getY() * span.getZ()));
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE unsigned int BVHNode<FLOAT_TYPE>::getSplitLocationAxis() const { return this->getBoundingBoxSpan().getLongestDirection(); }
+  OVF_HOST_DEVICE unsigned int BVHNode<FLOAT_TYPE>::getSplitLocationAxis() const {
+    Vector3<FLOAT_TYPE> span = this->getBoundingBoxSpan();
+    unsigned int axis = span.getLongestDirection();
+    return axis;
+  }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE BVHNode<FLOAT_TYPE>::evaluateNodeChildrenSurfaceAreaHeuristic(std::shared_ptr<Triangulation<FLOAT_TYPE>> submesh, unsigned int axis_index, FLOAT_TYPE candidate_position) const {
@@ -118,11 +99,15 @@ namespace openviewfactor {
   }
   
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::pair<FLOAT_TYPE, FLOAT_TYPE> BVHNode<FLOAT_TYPE>::getBestSplitLocationAndCost(std::shared_ptr<Triangulation<FLOAT_TYPE>> triangulation, unsigned int axis_index, unsigned int num_evaluation_points) const {
+  OVF_HOST_DEVICE std::pair<FLOAT_TYPE, FLOAT_TYPE> BVHNode<FLOAT_TYPE>::getBestSplitLocationAndCost(std::shared_ptr<Triangulation<FLOAT_TYPE>> triangulation, std::vector<unsigned int> mesh_element_indices, unsigned int axis_index, unsigned int num_evaluation_points) const {
 
     std::cout << ">>>>>> BVHNode getBestSplitLocationAndCost Initiated" << std::endl;
 
-    auto submesh = triangulation->getSubMesh(this->getElementArraySubindices());
+    std::vector<unsigned int> submesh_indices(this->getNumTriangles());
+    for (int i = 0; i < submesh_indices.size(); i++) {
+      submesh_indices[i] = mesh_element_indices[(this->getElementArraySubindices())[i]];
+    }
+    auto submesh = triangulation->getSubMesh(submesh_indices);
 
     FLOAT_TYPE axis_length = (this->getBoundingBoxSpan())[axis_index];
     FLOAT_TYPE axis_min = (this->getBoundingBoxMin())[axis_index];
@@ -143,7 +128,10 @@ namespace openviewfactor {
       std::cout << ">>>>>>>> Position: " << evaluation_point_positions[i] << ". Cost: " << evaluation_point_costs[i] << std::endl;
     }
 
-    typename std::vector<FLOAT_TYPE>::iterator best_cost_iterator = std::min_element(evaluation_point_costs.begin(), evaluation_point_costs.end());
+    typename std::vector<FLOAT_TYPE>::iterator best_cost_iterator = std::min_element(evaluation_point_costs.begin(), evaluation_point_costs.end(), [] (const FLOAT_TYPE& a, const FLOAT_TYPE& b) {
+      if (std::isnan(a)) return false;
+      if (std::isnan(b)) return true;
+      return (a < b); });
     FLOAT_TYPE best_cost = *best_cost_iterator;
     unsigned int best_cost_index = std::distance(evaluation_point_costs.begin(), best_cost_iterator);
 
@@ -168,7 +156,7 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE void BVHNode<FLOAT_TYPE>::writeToFile(std::ofstream& outfile) const {
+  OVF_HOST_DEVICE void BVHNode<FLOAT_TYPE>::writeToFile(std::ofstream& outfile, unsigned int node_index) const {
     
     Vector3<FLOAT_TYPE> min_min_min = this->getBoundingBoxMin();
     Vector3<FLOAT_TYPE> max_min_min = (this->getBoundingBoxMin()).setX((this->getBoundingBoxMax())[0]);
@@ -200,10 +188,31 @@ namespace openviewfactor {
                                                             {8,6,2},{8,2,7}};
 
     for (auto c : connections) {
-      outfile << "c," << c[0] << "," << c[1] << "," << c[2] << "\n";
+      outfile << "c," << (8 * node_index) + c[0] << "," << (8 * node_index) + c[1] << "," << (8 * node_index) + c[2] << "\n";
     }
+  }
 
-    outfile.close();
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE bool BVHNode<FLOAT_TYPE>::intersectRayWithNodeBoundingBox(Ray<FLOAT_TYPE> ray) const {
+    FLOAT_TYPE tx1 = (this->getBoundingBoxMin().getX() - ray.getOrigin().getX()) / ray.getDirection().getX();
+    FLOAT_TYPE tx2 = (this->getBoundingBoxMax().getX() - ray.getOrigin().getX()) / ray.getDirection().getX();
+
+    FLOAT_TYPE tmin = std::min(tx1, tx2);
+    FLOAT_TYPE tmax = std::max(tx1, tx2);
+
+    FLOAT_TYPE ty1 = (this->getBoundingBoxMin().getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
+    FLOAT_TYPE ty2 = (this->getBoundingBoxMax().getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
+
+    tmin = std::min(tmin, std::min(ty1, ty2));
+    tmax = std::max(tmax, std::max(ty1, ty2));
+
+    FLOAT_TYPE tz1 = (this->getBoundingBoxMin().getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
+    FLOAT_TYPE tz2 = (this->getBoundingBoxMax().getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
+
+    tmin = std::min(tmin, std::min(tz1, tz2));
+    tmax = std::max(tmax, std::max(tz1, tz2));
+
+    return (tmax >= tmin && tmin < ray.getIntersectionDistance() && tmax > 0);
   }
 
 template class BVHNode<float>;

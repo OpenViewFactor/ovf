@@ -64,11 +64,16 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE void BVH<FLOAT_TYPE>::writeToFile(const std::string& filename) const {
+    std::ofstream outfile(filename + ".txt");
+    outfile << "Encoding,X,Y,Z\n";
+    unsigned int j = 0;
     for (unsigned int i = 0; i < _nodes_used; i++) {
-      std::ofstream outfile(filename + std::to_string(i) + ".txt");
-      outfile << "Encoding,X,Y,Z\n";
-      (_nodes[i]).writeToFile(outfile);
+      auto node = _nodes[i];
+      if (node.isLeaf()) {
+        node.writeToFile(outfile, j++);
+      }
     }
+    outfile.close();
   }
 
   //* ------------------------------ PRIVATE METHODS ------------------------------ *//
@@ -101,26 +106,25 @@ namespace openviewfactor {
     std::cout << ">> Node Subdivision Initiated for BVHNode: " << node_index << std::endl;
 
     //* --------------- [1] --------------- *//
-    BVHNode<FLOAT_TYPE> current_node = _nodes[node_index];
-    if (current_node.getNumTriangles() <= _minimum_triangle_threshold) { return *this; }
+    if ((_nodes[node_index]).getNumTriangles() <= _minimum_triangle_threshold) { return *this; }
     
     std::cout << ">>> BVHNode " << node_index << " contains enough triangles to proceed" << std::endl;
 
     //* --------------- [2] --------------- *//
-    unsigned int axis_index = current_node.getSplitLocationAxis();
-    std::pair<FLOAT_TYPE, FLOAT_TYPE> location_and_cost = current_node.getBestSplitLocationAndCost(_triangulation, axis_index, _num_cost_evaluation_points);
+    unsigned int axis_index = (_nodes[node_index]).getSplitLocationAxis();
+    std::pair<FLOAT_TYPE, FLOAT_TYPE> location_and_cost = (_nodes[node_index]).getBestSplitLocationAndCost(_triangulation, _mesh_element_indices, axis_index, _num_cost_evaluation_points);
     FLOAT_TYPE best_location = location_and_cost.first;
     FLOAT_TYPE best_cost = location_and_cost.second;
     //* --------------- [3] --------------- *//
-    if (current_node.getNodeCost() <= best_cost) { return *this; }
+    if ((_nodes[node_index]).getNodeCost() <= best_cost) { return *this; }
 
     std::cout << ">>> BVHNode " << node_index << " cost analysis is favorable to proceed" << std::endl;
 
     //* --------------- [4] --------------- *//
     unsigned int split_index = this->splitPrimitives(node_index, axis_index, best_location);
     //* --------------- [5] --------------- *//
-    unsigned int num_triangles_on_left = split_index - current_node.getFirstTriangleIndex();
-    if (num_triangles_on_left == 0 || num_triangles_on_left == current_node.getNumTriangles()) { return *this; }
+    unsigned int num_triangles_on_left = split_index - (_nodes[node_index]).getFirstTriangleIndex();
+    if (num_triangles_on_left == 0 || num_triangles_on_left == (_nodes[node_index]).getNumTriangles()) { return *this; }
 
     std::cout << ">>> BVHNode " << node_index << " actually gets split at index " << split_index << " with " << num_triangles_on_left << " triangles on the 'left'" << std::endl;
 
@@ -137,11 +141,9 @@ namespace openviewfactor {
   OVF_HOST_DEVICE unsigned int BVH<FLOAT_TYPE>::splitPrimitives(unsigned int node_index, unsigned int axis_index, FLOAT_TYPE split_location) {
 
     std::cout << ">>>> splitPrimitives Initiated for BVHNode: " << node_index << " -- Split Axis: " << axis_index << " -- Split Location: " << split_location << std::endl;
-
-    BVHNode<FLOAT_TYPE> current_node = _nodes[node_index];
     
-    unsigned int index_at_which_to_split = current_node.getFirstTriangleIndex();
-    unsigned int index_of_last_unsorted_element = index_at_which_to_split + current_node.getNumTriangles() - 1;
+    unsigned int index_at_which_to_split = (_nodes[node_index]).getFirstTriangleIndex();
+    unsigned int index_of_last_unsorted_element = index_at_which_to_split + (_nodes[node_index]).getNumTriangles() - 1;
 
     while (index_at_which_to_split <= index_of_last_unsorted_element) {
 
@@ -176,56 +178,56 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE unsigned int BVH<FLOAT_TYPE>::createChildNodes(unsigned int node_index, unsigned int split_index, unsigned int num_triangles_on_left) {
-    BVHNode<FLOAT_TYPE> current_node = _nodes[node_index];
-
     unsigned int left_child_index = this->getNumNodesUsed();
-    
-    BVHNode<FLOAT_TYPE> left_child_node;
-    BVHNode<FLOAT_TYPE> right_child_node;
-    _nodes.push_back(left_child_node);
-    _nodes.push_back(right_child_node);
-    this->setNumNodesUsed(this->getNumNodesUsed() + 2);
 
-    current_node.setChildOneIndex(left_child_index);
+    this->setNumNodesUsed(left_child_index + 2);
 
-    (_nodes[left_child_index]).setFirstTriangleIndex(current_node.getFirstTriangleIndex());
+    (_nodes[node_index]).setChildOneIndex(left_child_index);
+
+    (_nodes[left_child_index]).setFirstTriangleIndex((_nodes[node_index]).getFirstTriangleIndex());
     (_nodes[left_child_index]).setNumTriangles(num_triangles_on_left);
 
     (_nodes[left_child_index + 1]).setFirstTriangleIndex(split_index);
-    (_nodes[left_child_index + 1]).setNumTriangles(current_node.getNumTriangles() - num_triangles_on_left);
+    (_nodes[left_child_index + 1]).setNumTriangles((_nodes[node_index]).getNumTriangles() - num_triangles_on_left);
 
-    current_node.setNumTriangles(0);
+    (_nodes[node_index]).setNumTriangles(0);
 
-    (this->constructNewNode(left_child_index)).constructNewNode(left_child_index + 1);
+    this->constructNewNode(left_child_index);
+    this->constructNewNode(left_child_index + 1);
 
     return left_child_index;
   }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::constructNewNode(unsigned int node_index) {
-    (_nodes[node_index]).growToIncludeTriangulation( _triangulation->getSubMesh( this->getSubMeshIndices(node_index) ) );
-    return *this;
-  }
-
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::intersectRayWithBVHNode(Ray<FLOAT_TYPE> ray, unsigned int node_index) {
-    BVHNode<FLOAT_TYPE> current_node = _nodes[node_index];
-    if (!(current_node.intersectRayWithNodeBoundingBox(ray))) { return *this; }
-    if (current_node.isLeaf()) {
-      for (unsigned int i = current_node.getFirstTriangleIndex(); i < current_node.getFirstTriangleIndex() + current_node.getNumTriangles(); i++) {
-        ray.triangleIntersection((*_triangulation)[_mesh_element_indices[i]]);
-      }
-    } else {
-      (this->intersectRayWithBVHNode(ray, current_node.getChildOneIndex())).intersectRayWithBVHNode(ray, current_node.getChildTwoIndex());
-    }
+    std::vector<unsigned int> submesh_indices = this->getSubMeshIndices(node_index);
+    auto submesh = _triangulation->getSubMesh(submesh_indices);
+    (_nodes[node_index]).growToIncludeTriangulation( submesh );
     return *this;
   }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE std::vector<unsigned int> BVH<FLOAT_TYPE>::getSubMeshIndices(unsigned int node_index) const {
-    BVHNode<FLOAT_TYPE> current_node = _nodes[node_index];
-    std::vector<unsigned int> submesh_indices = current_node.getElementArraySubindices();
+    std::vector<unsigned int> element_array_indices = (_nodes[node_index]).getElementArraySubindices();
+    std::vector<unsigned int> submesh_indices(element_array_indices.size());
+    for (int i = 0; i < element_array_indices.size(); i++) {
+      submesh_indices[i] = _mesh_element_indices[element_array_indices[i]];
+    }
     return submesh_indices;
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::intersectRayWithBVHNode(Ray<FLOAT_TYPE> ray, unsigned int node_index) {
+    if (!((_nodes[node_index]).intersectRayWithNodeBoundingBox(ray))) { return *this; }
+    if ((_nodes[node_index]).isLeaf()) {
+      for (unsigned int i = (_nodes[node_index]).getFirstTriangleIndex(); i < (_nodes[node_index]).getFirstTriangleIndex() + (_nodes[node_index]).getNumTriangles(); i++) {
+        ray.triangleIntersection((*_triangulation)[_mesh_element_indices[i]]);
+      }
+    } else {
+      this->intersectRayWithBVHNode(ray, (_nodes[node_index]).getChildOneIndex());
+      this->intersectRayWithBVHNode(ray, (_nodes[node_index]).getChildTwoIndex());
+    }
+    return *this;
   }
 
 template class BVH<float>;

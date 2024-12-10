@@ -15,12 +15,11 @@ namespace openviewfactor {
     protected:
       SolverOptions _options;
     public:
-      OVF_HOST_DEVICE Solver()
-        : _options(SolverOptions()) {}
-      OVF_HOST_DEVICE Solver(SolverOptions options)
-        : _options(options) {}
+      OVF_HOST_DEVICE Solver();
+      OVF_HOST_DEVICE Solver(SolverOptions options);
       
-      OVF_HOST_DEVICE Solver& setOptions(const SolverOptions &options) { _options = options; return *this; }
+      OVF_HOST_DEVICE SolverOptions getOptions() const;
+      OVF_HOST_DEVICE Solver<FLOAT_TYPE>& setOptions(const SolverOptions &options);
 
       virtual ~Solver() {}
 

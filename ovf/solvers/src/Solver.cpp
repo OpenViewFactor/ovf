@@ -1,6 +1,21 @@
 #include "Solver.hpp"
 
 namespace openviewfactor {
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE Solver<FLOAT_TYPE>::Solver()
+    : _options(SolverOptions()) {}
+  
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE Solver<FLOAT_TYPE>::Solver(SolverOptions options)
+    : _options(options) {}
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE SolverOptions Solver<FLOAT_TYPE>::getOptions() const { return _options; }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE Solver<FLOAT_TYPE>& Solver<FLOAT_TYPE>::setOptions(const SolverOptions &options) { _options = options; return *this; }
+
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE bool Solver<FLOAT_TYPE>::backFaceCullElements(const Triangle<FLOAT_TYPE>& emitter_element, const Triangle<FLOAT_TYPE>& receiver_element) const {
     auto emitter_centroid = emitter_element.getCentroid();
@@ -89,4 +104,7 @@ namespace openviewfactor {
     }
     return results;
   }
+
+  template class Solver<float>;
+  template class Solver<double>;
 }

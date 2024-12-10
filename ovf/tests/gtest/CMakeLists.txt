@@ -4,7 +4,7 @@ set(ovf_gtest_executable_name ovfAllTests)
 
 message("Configuring OpenViewFactor Unit Tests")
 
-include_directories(${GTEST_INCLUDE_DIR} ${THIRD_PARTY_INCLUDE_DIR} ${_ovf_geometry_headers_dir} ${_ovf_viewfactor_headers_dir} ${PROJECT_BINARY_DIR}/include)
+include_directories(${GTEST_INCLUDE_DIR} ${THIRD_PARTY_INCLUDE_DIR} ${_ovf_geometry_headers_dir} ${_ovf_viewfactor_headers_dir} ${_ovf_solvers_headers_dir} ${PROJECT_BINARY_DIR}/include)
 
 set(_test_sources
   test_Vector3.cpp
@@ -14,6 +14,7 @@ set(_test_sources
   test_BVH.cpp
   test_IndexValuePair.cpp
   test_ViewFactor.cpp
+  test_DoubleAreaIntegration.cpp
   main.cpp
 )
 

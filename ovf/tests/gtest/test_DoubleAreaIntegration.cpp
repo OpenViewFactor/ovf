@@ -14,4 +14,5 @@ using namespace openviewfactor;
 
 TEST(DAI_Test, test_NullConstructor) {
   DoubleAreaIntegration<float> dai();
+  EXPECT_EQ((dai.getOptions()).getSelfIntersectionMode(), BOTH);
 }

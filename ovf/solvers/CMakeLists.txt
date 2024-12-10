@@ -2,7 +2,7 @@ message("Creating list of view factor headers")
 
 # -------------------- ADD DIRECTORIES FOR COMPILER TO SEARCH FOR INCLUDE FILES -------------------- #
 
-message("Include DAI headers directory and third-party directory")
+message("Include Solver headers directory and third-party directory")
 include_directories(${THIRD_PARTY_INCLUDE_DIR} ${_ovf_geometry_headers_dir} ${_ovf_viewfactor_headers_dir} ${_ovf_solvers_headers_dir})
 
 set(_solvers_headers
@@ -11,14 +11,15 @@ set(_solvers_headers
   headers/DoubleAreaIntegration.hpp
 )
 
-message("Creating list of DAI sources")
+message("Creating list of Solver sources")
 
 set(_solvers_sources
   src/SolverOptions.cpp
+  src/Solver.cpp
   src/DoubleAreaIntegration.cpp
 )
 
-message("Add DAI headers to list")
+message("Add Solver headers to list")
 
 set(_ovf_solvers_headers)
 foreach(_header ${_solvers_headers})

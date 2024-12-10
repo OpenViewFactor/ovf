@@ -25,7 +25,7 @@ namespace openviewfactor {
     std::vector<unsigned int> unculled_indices(num_emitter_elements * num_receiver_elements);
     for (unsigned int emitter_index = 0; emitter_index < num_emitter_elements; emitter_index++) {
       for (unsigned int receiver_index = 0; receiver_index < num_receiver_elements; receiver_index++) {
-        bool culler = this->backFaceCullElements(emitter_mesh, receiver_mesh, emitter_index, receiver_index);
+        bool culled = this->backFaceCullElements(emitter_mesh, receiver_mesh, emitter_index, receiver_index);
         auto full_matrix_index = emitter_index * num_receiver_elements + receiver_index;
         if (culled) {
           unculled_indices[full_matrix_index] = (unsigned int)0;
@@ -61,7 +61,7 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::vector<unsigned int> Solver<FLOAT_TYPE>::evaluateBlockingBetweenMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, Blockers<FLOAT_TYPE> blockers) const {
+  OVF_HOST_DEVICE std::vector<unsigned int> Solver<FLOAT_TYPE>::evaluateBlockingBetweenMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, Blockers<FLOAT_TYPE> blockers, std::vector<unsigned int> unculled_indices) const {
     std::vector<unsigned int> unblocked_indices;
     auto num_emitter_elements = emitter_mesh->getNumElements();
     auto num_receiver_elements = receiver_mesh->getNumElements();

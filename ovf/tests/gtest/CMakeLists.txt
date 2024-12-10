@@ -19,6 +19,6 @@ set(_test_sources
 
 # -------------------- BUILD TEST EXECUTABLE -------------------- #
 add_executable(ovfAllTests ${_test_sources})
-target_link_libraries(ovfAllTests ${GTEST_LIBS} ovfgeometry ovfviewfactor)
+target_link_libraries(ovfAllTests ${GTEST_LIBS} ovfgeometry ovfviewfactor ovfsolvers)
 
 add_test(NAME ovfAllTests COMMAND ovfAllTests WORKING_DIRECTORY ${TESTS_SRC_DIR})

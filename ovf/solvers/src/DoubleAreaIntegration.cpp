@@ -2,7 +2,7 @@
 
 namespace openviewfactor {
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::unique_ptr<ViewFactor<FLOAT_TYPE>> DoubleAreaIntegration<FLOAT_TYPE>::solveViewFactorBetweenElements(const Triangle<FLOAT_TYPE>& emitter_element, const Triangle<FLOAT_TYPE>& receiver_element) const {
+  OVF_HOST_DEVICE FLOAT_TYPE DoubleAreaIntegration<FLOAT_TYPE>::solveViewFactorBetweenElements(const Triangle<FLOAT_TYPE>& emitter_element, const Triangle<FLOAT_TYPE>& receiver_element) const {
     auto emitter_element_centroid = emitter_element.getCentroid();
     auto receiver_element_centroid = receiver_element.getCentroid();
     auto ray_vector = emitter_element_centroid - receiver_element_centroid;

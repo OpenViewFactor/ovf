@@ -20,7 +20,7 @@ namespace openviewfactor {
     private:
     protected:
     public:
-      OVF_HOST_DEVICE std::unique_ptr<ViewFactor<FLOAT_TYPE>> solveViewFactorBetweenElements(const Triangle<FLOAT_TYPE>& emitter_element, const Triangle<FLOAT_TYPE>& receiver_element) const;
+      OVF_HOST_DEVICE FLOAT_TYPE solveViewFactorBetweenElements(const Triangle<FLOAT_TYPE>& emitter_element, const Triangle<FLOAT_TYPE>& receiver_element) const;
   };
 }
 

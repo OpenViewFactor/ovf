@@ -1,5 +1,5 @@
 classdef SolverOptions < handle
-  properties (GetAccess = private, SetAccess = private)
+  properties
     blockers (1,:) Mesh
     self_intersection_mode SelfIntersectionMode = SelfIntersectionMode.NONE
     numeric_mode NumericMode = NumericMode.DAI

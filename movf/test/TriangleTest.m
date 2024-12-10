@@ -50,30 +50,30 @@ function testGetCA(testCase)
   verifyEqual(testCase, t.getCA, OA - OC);
 end
 
-function testNormal(testCase)
+function testGetNormal(testCase)
   OA = Vector3(0, 0, 0);
   OB = Vector3(1, 0, 0);
   OC = Vector3(0, 1, 0);
   k = Vector3(0,0,1);
   t = Triangle(OA, OB, OC);
-  verifyEqual(testCase, t.normal, k);
+  verifyEqual(testCase, t.getNormal, k);
 end
 
-function testCentroid(testCase)
+function testGetCentroid(testCase)
   OA = Vector3(0, 0, 0);
   OB = Vector3(1, 0, 0);
   OC = Vector3(0, 1, 0);
   t = Triangle(OA, OB, OC);
   c = Vector3(1/3, 1/3, 0);
-  verifyEqual(testCase, t.centroid, c);
+  verifyEqual(testCase, t.getCentroid, c);
 end
 
-function testArea(testCase)
+function testGetArea(testCase)
   OA = Vector3(0, 0, 0);
   OB = Vector3(1, 0, 0);
   OC = Vector3(0, 1, 0);
   t = Triangle(OA, OB, OC);
-  verifyEqual(testCase, t.area, 0.5);
+  verifyEqual(testCase, t.getArea, 0.5);
 end
 
 %* ----- TEST SETTERS ----- *%

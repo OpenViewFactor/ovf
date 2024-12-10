@@ -1,5 +1,5 @@
 classdef IndexValuePair < handle
-  properties (GetAccess = private, SetAccess = private)
+  properties
     full_matrix_index (1,1) uint64
     view_factor_value (1,1) double
   end

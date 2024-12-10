@@ -1,15 +1,7 @@
-set(_public_headers
-    header/config.hpp
-    geometry/include/Vector3.hpp
-    geometry/include/Triangle.hpp
-    geometry/include/Triangulation.hpp
-    geometry/include/Blockers.hpp
-    solver/include/Solver.hpp
-    solver/include/SolverOptions.hpp
-    solver/include/SolverFactory.hpp
-    solver/include/SolverSpecifier.hpp
-    solver/include/ViewFactor.hpp
-    solver/include/BFCull.hpp
-    solver/include/Blocking.hpp
-    solver/include/MollerTrumbore.hpp
-    numerics/include/DoubleAreaIntegration.hpp)
+message("Adding Subdirectories to ovf CMakeLists file")
+
+add_subdirectory(geometry)
+add_subdirectory(viewfactor)
+add_subdirectory(solvers)
+add_subdirectory(cli)
+add_subdirectory(tests)

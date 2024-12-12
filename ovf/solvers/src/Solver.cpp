@@ -56,7 +56,7 @@ namespace openviewfactor {
 
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE bool Solver<FLOAT_TYPE>::evaluateBlockingBetweenElements(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, unsigned int emitter_index, unsigned int receiver_index, Blockers<FLOAT_TYPE> blockers) const {
+  OVF_HOST_DEVICE bool Solver<FLOAT_TYPE>::evaluateBlockingBetweenElements(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, unsigned int emitter_index, unsigned int receiver_index, const Blockers<FLOAT_TYPE>& blockers) const {
     auto emitter_element = (*emitter_mesh)[emitter_index];
     auto receiver_element = (*receiver_mesh)[receiver_index];
     auto emitter_element_centroid = emitter_element.getCentroid();
@@ -65,8 +65,8 @@ namespace openviewfactor {
     Ray<FLOAT_TYPE> ray;
     ray.setOrigin(emitter_element_centroid).setDirection(ray_vector.normalize());
     bool blocked = false;
-    for (auto blocker : blockers) {
-      blocker->intersectRayWithBVH(ray);
+    for (unsigned int bvh_index = 0; bvh_index < blockers.size(); bvh_index++) {
+      (blockers.getBVH(bvh_index))->intersectRayWithBVH(ray);
       if (ray.getIntersectionDistance() < ray_vector.getMagnitude()) {
         blocked = true;
         break;

@@ -30,7 +30,7 @@ namespace openviewfactor {
 
       OVF_HOST_DEVICE std::vector<unsigned int> backFaceCullMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh) const;
 
-      OVF_HOST_DEVICE bool evaluateBlockingBetweenElements(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, unsigned int emitter_index, unsigned int receiver_index, Blockers<FLOAT_TYPE> blockers) const;
+      OVF_HOST_DEVICE bool evaluateBlockingBetweenElements(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, unsigned int emitter_index, unsigned int receiver_index, const Blockers<FLOAT_TYPE>& blockers) const;
 
       OVF_HOST_DEVICE std::vector<unsigned int> evaluateBlockingBetweenMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, Blockers<FLOAT_TYPE> blockers, std::vector<unsigned int> unculled_indices) const;
 

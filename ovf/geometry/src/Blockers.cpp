@@ -17,7 +17,7 @@ namespace openviewfactor {
       std::cout << "[LOG] Constructing BVH for Blocker : " << file << '\n';
       blocker_bvh->constructBVH();
       std::cout << "[LOG] Construction Finished" << '\n';
-      _blocking_bvhs.push_back(blocker_bvh);
+      this->addBlocker(blocker_bvh);
     }
     return *this;
   }
@@ -29,19 +29,10 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::shared_ptr<BVH<FLOAT_TYPE>> Blockers<FLOAT_TYPE>::getBVH(unsigned int index) const {
-    return _blocking_bvhs[index];
-  }
+  OVF_HOST_DEVICE std::shared_ptr<BVH<FLOAT_TYPE>> Blockers<FLOAT_TYPE>::getBVH(unsigned int index) const { return _blocking_bvhs.at(index); }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE typename std::vector<std::shared_ptr<BVH<FLOAT_TYPE>>>::iterator Blockers<FLOAT_TYPE>::begin() {
-    return _blocking_bvhs.begin();
-  }
-
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE typename std::vector<std::shared_ptr<BVH<FLOAT_TYPE>>>::iterator Blockers<FLOAT_TYPE>::end() {
-    return _blocking_bvhs.end();
-  }
+  OVF_HOST_DEVICE unsigned int Blockers<FLOAT_TYPE>::size() const { return _blocking_bvhs.size(); }
 
   template class Blockers<float>;
   template class Blockers<double>;

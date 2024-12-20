@@ -45,7 +45,7 @@ template <typename FLOAT_TYPE> class BVHNode {
     OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& growToIncludeTriangle(Triangle<FLOAT_TYPE> triangle);
     OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& growToIncludeTriangulation(std::shared_ptr<Triangulation<FLOAT_TYPE>> triangulation);
 
-    OVF_HOST_DEVICE bool intersectRayWithNodeBoundingBox(Ray<FLOAT_TYPE> ray) const;
+    OVF_HOST_DEVICE bool intersectRayWithNodeBoundingBox(std::shared_ptr<Ray<FLOAT_TYPE>> ray) const;
 
     OVF_HOST_DEVICE FLOAT_TYPE getNodeCost() const;
     OVF_HOST_DEVICE FLOAT_TYPE getSurfaceArea() const;

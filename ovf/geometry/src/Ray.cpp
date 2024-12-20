@@ -1,5 +1,3 @@
-#include "Vector3.hpp"
-#include "Triangle.hpp"
 #include "Ray.hpp"
 
 namespace openviewfactor {
@@ -32,7 +30,9 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE bool Ray<FLOAT_TYPE>::backFaceCull(Triangle<FLOAT_TYPE> emitter, Triangle<FLOAT_TYPE> receiver) const {
-    return (this->getDirection().dot(emitter.getNormal()) < 0 || this->getDirection().dot(receiver.getNormal()) > 0);
+    if (this->getDirection().dot(emitter.getNormal()) < 0) { return true; }
+    if (this->getDirection().dot(receiver.getNormal()) > 0) { return true; }
+    return false;
   }
 
   template <typename FLOAT_TYPE>
@@ -56,7 +56,7 @@ namespace openviewfactor {
       return *this;
     }
    
-    FLOAT_TYPE t = Q.dot(E2) * (1 / P.dot(E1));
+    FLOAT_TYPE t = Q.dot(E2) * scalar_multiplier;
     if (t > 0 && t < _intersection_distance) { this->setIntersectionDistance(t); }
 
     return *this;

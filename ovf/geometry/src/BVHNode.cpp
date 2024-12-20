@@ -177,26 +177,26 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE bool BVHNode<FLOAT_TYPE>::intersectRayWithNodeBoundingBox(Ray<FLOAT_TYPE> ray) const {
-    FLOAT_TYPE tx1 = (this->getBoundingBoxMin().getX() - ray.getOrigin().getX()) / ray.getDirection().getX();
-    FLOAT_TYPE tx2 = (this->getBoundingBoxMax().getX() - ray.getOrigin().getX()) / ray.getDirection().getX();
+  OVF_HOST_DEVICE bool BVHNode<FLOAT_TYPE>::intersectRayWithNodeBoundingBox(std::shared_ptr<Ray<FLOAT_TYPE>> ray) const {
+    FLOAT_TYPE tx1 = (this->getBoundingBoxMin().getX() - ray->getOrigin().getX()) / ray->getDirection().getX();
+    FLOAT_TYPE tx2 = (this->getBoundingBoxMax().getX() - ray->getOrigin().getX()) / ray->getDirection().getX();
 
     FLOAT_TYPE tmin = std::min(tx1, tx2);
     FLOAT_TYPE tmax = std::max(tx1, tx2);
 
-    FLOAT_TYPE ty1 = (this->getBoundingBoxMin().getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
-    FLOAT_TYPE ty2 = (this->getBoundingBoxMax().getY() - ray.getOrigin().getY()) / ray.getDirection().getY();
+    FLOAT_TYPE ty1 = (this->getBoundingBoxMin().getY() - ray->getOrigin().getY()) / ray->getDirection().getY();
+    FLOAT_TYPE ty2 = (this->getBoundingBoxMax().getY() - ray->getOrigin().getY()) / ray->getDirection().getY();
 
-    tmin = std::min(tmin, std::min(ty1, ty2));
-    tmax = std::max(tmax, std::max(ty1, ty2));
+    tmin = std::max(tmin, std::min(ty1, ty2));
+    tmax = std::min(tmax, std::max(ty1, ty2));
 
-    FLOAT_TYPE tz1 = (this->getBoundingBoxMin().getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
-    FLOAT_TYPE tz2 = (this->getBoundingBoxMax().getZ() - ray.getOrigin().getZ()) / ray.getDirection().getZ();
+    FLOAT_TYPE tz1 = (this->getBoundingBoxMin().getZ() - ray->getOrigin().getZ()) / ray->getDirection().getZ();
+    FLOAT_TYPE tz2 = (this->getBoundingBoxMax().getZ() - ray->getOrigin().getZ()) / ray->getDirection().getZ();
 
-    tmin = std::min(tmin, std::min(tz1, tz2));
-    tmax = std::max(tmax, std::max(tz1, tz2));
+    tmin = std::max(tmin, std::min(tz1, tz2));
+    tmax = std::min(tmax, std::max(tz1, tz2));
 
-    return (tmax >= tmin && tmin < ray.getIntersectionDistance() && tmax > 0);
+    return (tmax >= tmin && tmin < ray->getIntersectionDistance() && tmax > 0);
   }
 
 template class BVHNode<float>;

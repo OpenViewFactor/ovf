@@ -53,8 +53,8 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE void BVH<FLOAT_TYPE>::intersectRayWithBVH(Ray<FLOAT_TYPE> ray) {
-    this->intersectRayWithBVHNode(ray, 1);
+  OVF_HOST_DEVICE void BVH<FLOAT_TYPE>::intersectRayWithBVH(std::shared_ptr<Ray<FLOAT_TYPE>> ray) {
+    this->intersectRayWithBVHNode(ray, 0);
   }
 
   template <typename FLOAT_TYPE>
@@ -195,11 +195,12 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::intersectRayWithBVHNode(Ray<FLOAT_TYPE> ray, unsigned int node_index) {
-    if (!((_nodes[node_index]).intersectRayWithNodeBoundingBox(ray))) { return *this; }
+  OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::intersectRayWithBVHNode(std::shared_ptr<Ray<FLOAT_TYPE>> ray, unsigned int node_index) {
+    bool ray_intersects_with_node_bounding_box = (_nodes[node_index]).intersectRayWithNodeBoundingBox(ray);
+    if (!ray_intersects_with_node_bounding_box) { return *this; }
     if ((_nodes[node_index]).isLeaf()) {
-      for (unsigned int i = (_nodes[node_index]).getFirstTriangleIndex(); i < (_nodes[node_index]).getFirstTriangleIndex() + (_nodes[node_index]).getNumTriangles(); i++) {
-        ray.triangleIntersection((*_triangulation)[_mesh_element_indices[i]]);
+      for (unsigned int i = 0; i < (_nodes[node_index]).getNumTriangles(); i++) {
+        ray->triangleIntersection((*_triangulation)[_mesh_element_indices[i + (_nodes[node_index]).getFirstTriangleIndex()]]);
       }
     } else {
       this->intersectRayWithBVHNode(ray, (_nodes[node_index]).getChildOneIndex());

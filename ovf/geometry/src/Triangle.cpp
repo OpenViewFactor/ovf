@@ -14,6 +14,10 @@ namespace openviewfactor {
     : _pts(pts) {}
 
   template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE Triangle<FLOAT_TYPE>::Triangle(std::array<std::array<FLOAT_TYPE,3>,3> pts) 
+    : _pts({Vector3<FLOAT_TYPE>(pts[0]), Vector3<FLOAT_TYPE>(pts[1]), Vector3<FLOAT_TYPE>(pts[2])}) {}
+
+  template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangle<FLOAT_TYPE>::Triangle(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC)
     : _pts(std::array<Vector3<FLOAT_TYPE>,3>({OA,OB,OC})) {}
   

@@ -6,6 +6,7 @@
 #include "Triangle.hpp"
 #include <cmath>
 #include <memory>
+#include <iostream>
 
 namespace openviewfactor {
 

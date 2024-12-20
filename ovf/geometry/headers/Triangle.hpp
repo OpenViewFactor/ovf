@@ -16,6 +16,7 @@ template <typename FLOAT_TYPE> class Triangle {
     //* ----- CLASS CONSTRUCTORS ----- *//
     OVF_HOST_DEVICE Triangle();
     OVF_HOST_DEVICE Triangle(std::array<Vector3<FLOAT_TYPE>,3> pts);
+    OVF_HOST_DEVICE Triangle(std::array<std::array<FLOAT_TYPE,3>,3> pts);
     OVF_HOST_DEVICE Triangle(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC);    
 
     //* ----- ACCESSOR METHODS ----- *//

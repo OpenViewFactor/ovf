@@ -16,7 +16,6 @@ namespace openviewfactor {
       SolverOptions _options;
     public:
       OVF_HOST_DEVICE Solver();
-      OVF_HOST_DEVICE Solver(SolverOptions options);
       
       OVF_HOST_DEVICE SolverOptions getOptions() const;
       OVF_HOST_DEVICE Solver<FLOAT_TYPE>& setOptions(const SolverOptions &options);
@@ -30,7 +29,7 @@ namespace openviewfactor {
 
       OVF_HOST_DEVICE std::vector<unsigned int> backFaceCullMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh) const;
 
-      OVF_HOST_DEVICE bool evaluateBlockingBetweenElements(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, unsigned int emitter_index, unsigned int receiver_index, const Blockers<FLOAT_TYPE>& blockers) const;
+      OVF_HOST_DEVICE bool evaluateBlockingBetweenElements(Triangle<FLOAT_TYPE> emitter_element, Triangle<FLOAT_TYPE> receiver_element, const Blockers<FLOAT_TYPE>& blockers) const;
 
       OVF_HOST_DEVICE std::vector<unsigned int> evaluateBlockingBetweenMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, Blockers<FLOAT_TYPE> blockers, std::vector<unsigned int> unculled_indices) const;
 

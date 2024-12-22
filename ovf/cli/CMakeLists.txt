@@ -16,8 +16,12 @@ endforeach()
 
 # -------------------- BUILD COMMAND-LINE EXECUTABLE -------------------- #
 
+message("Check for OpenMP")
+find_package(OpenMP REQUIRED)
+message("OVF OpenMP Enabled")
+
 message("Adding openviewfactor executable")
 
 add_executable(openviewfactor ${_ovf_cli_sources})
 set_target_properties(openviewfactor PROPERTIES LINKER_LANGUAGE CXX)
-target_link_libraries(openviewfactor ovfgeometry ovfviewfactor ovfsolvers Boost::program_options Boost::boost)
+target_link_libraries(openviewfactor ovfgeometry ovfviewfactor ovfsolvers Boost::program_options Boost::boost OpenMP::OpenMP_CXX)

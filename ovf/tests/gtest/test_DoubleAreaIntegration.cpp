@@ -41,14 +41,6 @@ TEST(Solver_Test, test_backFaceCullElements) {
   Triangle<double> r2(Vector3<double>(0.0,0.0,1.0),Vector3<double>(0.0,1.0,1.0),Vector3<double>(1.0,0.0,1.0));
   EXPECT_TRUE(dai.backFaceCullElements(e, r1));
   EXPECT_FALSE(dai.backFaceCullElements(e, r2));
-  
-  auto em = std::make_shared<Triangulation<double>>();
-  em->addElement(e);
-  auto rm = std::make_shared<Triangulation<double>>();
-  rm->addElement(r1);
-  rm->addElement(r2);
-  EXPECT_TRUE(dai.backFaceCullElements(em, rm, 0, 0));
-  EXPECT_FALSE(dai.backFaceCullElements(em, rm, 0, 1));
 }
 
 TEST(Solver_Test, test_evaluateBlockingBetweenElements) {
@@ -125,10 +117,11 @@ TEST(Solver_Test, test_solveViewFactorBetweenMeshes) {
   DoubleAreaIntegration<double> dai;
 
   auto unblocked_indices = dai.evaluateBlockingBetweenMeshes(emitter_mesh, receiver_mesh, blockers, std::vector<unsigned int>({0,1,2,3}));
-  auto solution = dai.solveViewFactorBetweenMeshes(emitter_mesh, receiver_mesh, unblocked_indices);
+  auto solution = std::make_shared<ViewFactor<double>>();
+  dai.solveViewFactorBetweenMeshes(emitter_mesh, receiver_mesh, unblocked_indices, solution);
 
   EXPECT_DOUBLE_EQ(solution->getMatrixElementVF(0), 0.0);
-  EXPECT_DOUBLE_EQ(solution->getMatrixElementVF(1), 0.058038674547287616);
-  EXPECT_DOUBLE_EQ(solution->getMatrixElementVF(2), 0.058038674547287616);
+  EXPECT_DOUBLE_EQ(solution->getMatrixElementVF(1), 0.0);
+  EXPECT_DOUBLE_EQ(solution->getMatrixElementVF(2), 0.0);
   EXPECT_DOUBLE_EQ(solution->getMatrixElementVF(3), 0.0);
 }

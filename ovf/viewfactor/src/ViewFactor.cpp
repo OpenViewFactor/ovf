@@ -10,12 +10,13 @@ namespace openviewfactor {
     : _state(UNLINKED), _nonzero_vf(std::vector<IndexValuePair<FLOAT_TYPE>>()), _emitter(nullptr), _receiver(nullptr) {}
   
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& ViewFactor<FLOAT_TYPE>::linkTriangulations(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver) {
+  OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& ViewFactor<FLOAT_TYPE>::linkTriangulations(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver, unsigned int size) {
     _nonzero_vf.clear();
     bool same_triangulation = (emitter == receiver);
     if (same_triangulation) { _state = LINKED_ONE_MESH; } else { _state = LINKED_TWO_MESH; }
     _emitter = emitter;
     _receiver = receiver;
+    _nonzero_vf = std::vector<IndexValuePair<FLOAT_TYPE>>(size);
     return *this;
   }
 
@@ -104,15 +105,24 @@ namespace openviewfactor {
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getSurfaceToSurfaceAverageVF() const {
     if (!(this->isLinked())) { throw std::runtime_error("Cannot evaluate surface to surface, this object is not linked to any triangulations"); }
     FLOAT_TYPE total_vf = 0.0;
-    #pragma omp parallel
-    {
-      #pragma omp for reduction(+:total_vf) schedule(dynamic)
-      for (unsigned int i = 0; i < _emitter->getNumElements(); i++) {
-        total_vf += (this->getEmitterElementToReceiverSurfaceVF(i) * (*_emitter)[i].getArea());
-      }
+    #pragma omp parallel for reduction(+:total_vf)
+    for (unsigned int i = 0; i < _emitter->getNumElements(); i++) {
+      total_vf += (this->getEmitterElementToReceiverSurfaceVF(i) * (*_emitter)[i].getArea());
     }
     total_vf = -1 * total_vf / _emitter->getMeshArea();
     return total_vf;
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& ViewFactor<FLOAT_TYPE>::setElements(std::vector<unsigned int> indices, std::vector<FLOAT_TYPE> view_factors) {
+    #pragma omp parallel for
+    for (unsigned int pair_index = 0; pair_index < indices.size(); pair_index++) {
+      IndexValuePair<FLOAT_TYPE> new_pair;
+      new_pair.setFullMatrixIndex(indices[pair_index]);
+      new_pair.setValue(view_factors[pair_index]);
+      _nonzero_vf[pair_index] = new_pair;
+    }
+    return *this;
   }
 
   template <typename FLOAT_TYPE>

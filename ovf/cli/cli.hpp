@@ -327,7 +327,9 @@ void ovfWorkflow(po::variables_map variables_map) {
   DoubleAreaIntegration<FLOAT_TYPE> dai;
   auto unculled_indices = dai.backFaceCullMeshes(emitter, receiver);
   auto unblocked_indices = dai.evaluateBlockingBetweenMeshes(emitter, receiver, blockers, unculled_indices);
-  auto results = dai.solveViewFactorBetweenMeshes(emitter, receiver, unblocked_indices);
+  auto results = std::make_shared<ViewFactor<FLOAT_TYPE>>();
+  results->linkTriangulations(emitter, receiver, unblocked_indices.size());
+  dai.solveViewFactorBetweenMeshes(emitter, receiver, unblocked_indices, results);
 
   std::cout << "[LOG] View Factors Completed" << '\n';
   std::cout << "[LOG] Total Solution Time: " << view_factor_timer.elapsed() << " [s]" << '\n';

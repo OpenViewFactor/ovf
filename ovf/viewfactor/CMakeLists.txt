@@ -36,8 +36,13 @@ endforeach()
 
 # -------------------- BUILD GEOMETRY LIBRARY -------------------- #
 
+message("Check for OpenMP")
+find_package(OpenMP REQUIRED)
+message("OVF OpenMP Enabled")
+
 message("Building ovfviewfactor static library")
 
-add_library(ovfviewfactor STATIC ${_ovf_viewfactor_sources})  # add a static library target from the geometry source files
+add_library(ovfviewfactor STATIC ${_ovf_viewfactor_sources})
+target_link_libraries(ovfviewfactor OpenMP::OpenMP_CXX)
 add_compile_definitions(OVF_VERSION=${OVF_VERSION})
 include_directories(${PROJECT_BINARY_DIR}/include)

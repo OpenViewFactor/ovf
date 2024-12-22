@@ -23,33 +23,27 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE bool Solver<FLOAT_TYPE>::backFaceCullElements(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, unsigned int emitter_index, unsigned int receiver_index) const {
-    auto emitter_element = (*emitter_mesh)[emitter_index];
-    auto receiver_element = (*receiver_mesh)[receiver_index];
-    bool culled = this->backFaceCullElements(emitter_element, receiver_element);
-    return culled;
-  }
-
-  template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE std::vector<unsigned int> Solver<FLOAT_TYPE>::backFaceCullMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh) const {
     auto num_emitter_elements = emitter_mesh->getNumElements();
     auto num_receiver_elements = receiver_mesh->getNumElements();
     std::vector<unsigned int> unculled_indices(num_emitter_elements * num_receiver_elements, num_emitter_elements * num_receiver_elements);
-    #pragma omp parallel
-    {
-      #pragma omp for schedule(dynamic)
-      for (unsigned int emitter_index = 0; emitter_index < num_emitter_elements; emitter_index++) {
-        for (unsigned int receiver_index = 0; receiver_index < num_receiver_elements; receiver_index++) {
-          bool culled = this->backFaceCullElements(emitter_mesh, receiver_mesh, emitter_index, receiver_index);
-          auto full_matrix_index = emitter_index * num_receiver_elements + receiver_index;
-          if (!culled) {
-            #pragma omp critical
-            unculled_indices[full_matrix_index] = full_matrix_index;
-          }
+    auto emitter_elements = emitter_mesh->getTriangles();
+    auto receiver_elements = receiver_mesh->getTriangles();
+    #pragma omp parallel for shared (unculled_indices)
+    for (unsigned int emitter_index = 0; emitter_index < num_emitter_elements; emitter_index++) {
+      for (unsigned int receiver_index = 0; receiver_index < num_receiver_elements; receiver_index++) {
+        auto emitter_element = emitter_elements[emitter_index];
+        auto receiver_element = receiver_elements[receiver_index];
+        bool culled = this->backFaceCullElements(emitter_element, receiver_element);
+        auto full_matrix_index = emitter_index * num_receiver_elements + receiver_index;
+        if (!culled) {
+          #pragma omp critical
+          unculled_indices[full_matrix_index] = full_matrix_index;
         }
       }
     }
     unculled_indices.erase(std::remove(unculled_indices.begin(), unculled_indices.end(), (unsigned int)(num_emitter_elements * num_receiver_elements)), unculled_indices.end());
+    std::cout << "[LOG] Back-face Culling Completed" << '\n';
     return unculled_indices;
   }
 
@@ -78,43 +72,50 @@ namespace openviewfactor {
   OVF_HOST_DEVICE std::vector<unsigned int> Solver<FLOAT_TYPE>::evaluateBlockingBetweenMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, Blockers<FLOAT_TYPE> blockers, std::vector<unsigned int> unculled_indices) const {
     auto num_emitter_elements = emitter_mesh->getNumElements();
     auto num_receiver_elements = receiver_mesh->getNumElements();
-    std::vector<unsigned int> unblocked_indices(num_emitter_elements * num_receiver_elements, (unsigned int)(num_emitter_elements * num_receiver_elements));
-    #pragma omp parallel
-    {
-      #pragma omp for schedule(dynamic)
-      for (auto index : unculled_indices) {
-        auto emitter_index = index / num_receiver_elements;
-        auto receiver_index = index % num_receiver_elements;
-        auto emitter_element = (*emitter_mesh)[emitter_index];
-        auto receiver_element = (*receiver_mesh)[receiver_index];
-        bool blocked = this->evaluateBlockingBetweenElements(emitter_element, receiver_element, blockers);
+    std::vector<unsigned int> unblocked_indices(unculled_indices.size(), (unsigned int)(num_emitter_elements * num_receiver_elements));
+    if (blockers.size() == 0) {
+      std::copy(unculled_indices.begin(), unculled_indices.end(), unblocked_indices.begin());
+      std::cout << "[LOG] Empty Blocking Completed" << '\n';
+      return unblocked_indices;
+    }
+    auto emitter_elements = emitter_mesh->getTriangles();
+    auto receiver_elements = receiver_mesh->getTriangles();
+    #pragma omp parallel for shared (unculled_indices, unblocked_indices, blockers)
+    for (auto index : unculled_indices) {
+      auto emitter_index = index / num_receiver_elements;
+      auto receiver_index = index % num_receiver_elements;
+      auto emitter_element = emitter_elements[emitter_index];
+      auto receiver_element = receiver_elements[receiver_index];
+      bool blocked = this->evaluateBlockingBetweenElements(emitter_element, receiver_element, blockers);
+      if (!blocked) {
         #pragma omp critical
-        if (!blocked) { unblocked_indices[index] = index; }
+        unblocked_indices[index] = index;
       }
     }
     unblocked_indices.erase(std::remove(unblocked_indices.begin(), unblocked_indices.end(), (unsigned int)(num_emitter_elements * num_receiver_elements)), unblocked_indices.end());
+    std::cout << "[LOG] Blocking Filter Completed" << '\n';
     return unblocked_indices;
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::unique_ptr<ViewFactor<FLOAT_TYPE>> Solver<FLOAT_TYPE>::solveViewFactorBetweenMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, std::vector<unsigned int> unblocked_indices) const {
-    auto num_emitter_elements = emitter_mesh->getNumElements();
+    OVF_HOST_DEVICE void Solver<FLOAT_TYPE>::solveViewFactorBetweenMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, std::vector<unsigned int> unblocked_indices, std::shared_ptr<ViewFactor<FLOAT_TYPE>> results) const {
+    auto emitter_elements = emitter_mesh->getTriangles();
+    auto receiver_elements = receiver_mesh->getTriangles();
     auto num_receiver_elements = receiver_mesh->getNumElements();
-    auto results = std::make_unique<ViewFactor<FLOAT_TYPE>>();
-    results->linkTriangulations(emitter_mesh, receiver_mesh);
-    #pragma omp parallel
-    {
-      #pragma omp for schedule(dynamic)
-      for (auto index : unblocked_indices) {
-        auto emitter_index = index / num_receiver_elements;
-        auto receiver_index = index % num_receiver_elements;
-        auto emitter_element = (*emitter_mesh)[emitter_index];
-        auto receiver_element = (*receiver_mesh)[receiver_index];
-        FLOAT_TYPE view_factor = this->solveViewFactorBetweenElements(emitter_element, receiver_element);
-        results->setElement(index, view_factor);
-      }
+    std::vector<FLOAT_TYPE> view_factors(unblocked_indices.size());
+    #pragma omp parallel for shared(num_receiver_elements, view_factors)
+    for (unsigned int i = 0; i < unblocked_indices.size(); i++) {
+      auto index = unblocked_indices[i];
+      auto emitter_index = index / num_receiver_elements;
+      auto receiver_index = index % num_receiver_elements;
+      auto emitter_element = emitter_elements[emitter_index];
+      auto receiver_element = receiver_elements[receiver_index];
+      FLOAT_TYPE view_factor = this->solveViewFactorBetweenElements(emitter_element, receiver_element);
+      view_factors[i] = view_factor;
     }
-    return results;
+    std::cout << "[LOG] Unculled, Unblocked View Factors Completed" << '\n';
+    results->setElements(unblocked_indices, view_factors);
+    std::cout << "[LOG] Writing View Factors Completed" << '\n';
   }
 
   template class Solver<float>;

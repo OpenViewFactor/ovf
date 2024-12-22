@@ -21,7 +21,7 @@ namespace openviewfactor {
     public:
       OVF_HOST_DEVICE ViewFactor();
 
-      OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& linkTriangulations(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver);
+      OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& linkTriangulations(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver, unsigned int size);
 
       OVF_HOST_DEVICE ViewFactorState getState() const;
       OVF_HOST_DEVICE bool isLinked() const;
@@ -40,6 +40,7 @@ namespace openviewfactor {
       OVF_HOST_DEVICE FLOAT_TYPE getReceiverElementToEmitterSurfaceVF(unsigned int receiver_index) const;
       OVF_HOST_DEVICE FLOAT_TYPE getSurfaceToSurfaceAverageVF() const;
 
+      OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& setElements(std::vector<unsigned int> indices, std::vector<FLOAT_TYPE> view_factors);
       OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& setElement(unsigned int full_matrix_index, FLOAT_TYPE value);
       OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& setElement(unsigned int emitter_index, unsigned int receiver_index, FLOAT_TYPE value);
   };

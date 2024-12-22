@@ -31,12 +31,6 @@ add_subdirectory(${THIRD_PARTY_INCLUDE_DIR}/google-test)
 
 # -------------------- DEALING WITH COMPILE OPTIONS -------------------- #
 
-if(OVF_BUILD_OMP)
-  message("Check for OpenMP")
-  find_package(OpenMP)
-  message("OVF OpenMP Enabled")
-endif()
-
 if (OVF_BUILD_CUDA)
   message("Check for CUDA")
   find_package(CUDAToolkit REQUIRED)

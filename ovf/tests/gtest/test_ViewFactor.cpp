@@ -31,13 +31,13 @@ TEST(ViewFactor_Test, test_linking) {
   auto emit = reader.getMesh(OVF_INPUT("rtg_model.stl"));
   auto receiver = reader.getMesh(OVF_INPUT("skull.stl"));
 
-  vf.linkTriangulations(emit, emit);
+  vf.linkTriangulations(emit, emit, emit->getNumElements()*emit->getNumElements());
   EXPECT_TRUE(vf.isLinked());
   EXPECT_EQ(vf.getState(), LINKED_ONE_MESH);
   EXPECT_EQ(*(vf.getEmitterMesh()), *emit);
   EXPECT_EQ(*(vf.getReceiverMesh()), *emit);
 
-  vf.linkTriangulations(emit, receiver);
+  vf.linkTriangulations(emit, receiver, emit->getNumElements()*receiver->getNumElements());
   EXPECT_TRUE(vf.isLinked());
   EXPECT_EQ(vf.getState(), LINKED_TWO_MESH);
   EXPECT_EQ(*(vf.getEmitterMesh()), *emit);
@@ -51,7 +51,7 @@ TEST(ViewFactor_Test, test_number_of_elements) {
   auto r = reader.getMesh(OVF_INPUT("3_tall_box.stl"));
   EXPECT_EQ(e->getNumElements(), 2);
   EXPECT_EQ(r->getNumElements(), 28);
-  vf.linkTriangulations(e,r);
+  vf.linkTriangulations(e,r, 2*28);
   EXPECT_EQ(vf.getNumEmitterElements(), 2);
   EXPECT_EQ(vf.getNumReceiverElements(), 28);
 }
@@ -61,10 +61,10 @@ TEST(ViewFactor_Test, test_number_of_triangulations) {
   STLReader<float> reader;
   auto e = reader.getMesh(OVF_INPUT("xy_plane_unit_square_binary.stl"));
   auto r = reader.getMesh(OVF_INPUT("3_tall_box.stl"));
-  vf.linkTriangulations(e,e);
+  vf.linkTriangulations(e,e, 4);
   EXPECT_EQ(vf.getNumTriangulations(), 1);
 
-  vf.linkTriangulations(e,r);
+  vf.linkTriangulations(e,r, e->getNumElements() * r->getNumElements());
   EXPECT_EQ(vf.getNumTriangulations(), 2);
 }
 
@@ -79,7 +79,7 @@ TEST(ViewFactor_Test, test_matrix_elements) {
   EXPECT_THROW(vf.getReceiverElementToEmitterSurfaceVF(0), std::runtime_error);
   EXPECT_THROW(vf.getSurfaceToSurfaceAverageVF(), std::runtime_error);
 
-  vf.linkTriangulations(e,r);
+  vf.linkTriangulations(e,r, 4);
 
   EXPECT_THROW(vf.setElement(4,0.5), std::runtime_error);
 

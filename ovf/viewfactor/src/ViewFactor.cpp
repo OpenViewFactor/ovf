@@ -104,10 +104,14 @@ namespace openviewfactor {
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getSurfaceToSurfaceAverageVF() const {
     if (!(this->isLinked())) { throw std::runtime_error("Cannot evaluate surface to surface, this object is not linked to any triangulations"); }
     FLOAT_TYPE total_vf = 0.0;
-    for (unsigned int i = 0; i < _emitter->getNumElements(); i++) {
-      total_vf += this->getEmitterElementToReceiverSurfaceVF(i) * (*_emitter)[i].getArea();
+    #pragma omp parallel
+    {
+      #pragma omp for reduction(+:total_vf) schedule(dynamic)
+      for (unsigned int i = 0; i < _emitter->getNumElements(); i++) {
+        total_vf += (this->getEmitterElementToReceiverSurfaceVF(i) * (*_emitter)[i].getArea());
+      }
     }
-    total_vf = total_vf / _emitter->getMeshArea();
+    total_vf = -1 * total_vf / _emitter->getMeshArea();
     return total_vf;
   }
 

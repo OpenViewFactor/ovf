@@ -9,6 +9,8 @@
 #include "SolverOptions.hpp"
 #include "ViewFactor.hpp"
 
+#include <omp.h>
+
 namespace openviewfactor {
   template <typename FLOAT_TYPE> class Solver {
     private:

@@ -39,6 +39,32 @@ namespace po = boost::program_options;
 
 const std::string OVF_VERSION_STRING = "0.2";
 
+
+//* -------------------- TIMER CLASS FROM ONLINE -------------------- *//
+//* https://www.learncpp.com/cpp-tutorial/timing-your-code/
+class Timer
+{
+private:
+	// Type aliases to make accessing nested type easier
+	using Clock = std::chrono::steady_clock;
+	using Second = std::chrono::duration<double, std::ratio<1> >;
+
+	std::chrono::time_point<Clock> m_beg { Clock::now() };
+
+public:
+	void reset()
+	{
+		m_beg = Clock::now();
+	}
+
+	double elapsed() const
+	{
+		return std::chrono::duration_cast<Second>(Clock::now() - m_beg).count();
+	}
+};
+
+
+
 //* -------------------- MAP SELF-INT INPUTS AND OUTPUTS -------------------- *//
 // enum SelfIntersectionMode { NONE, BOTH, EMITTER, RECEIVER };
 //* map self-intersection type input string to enum
@@ -105,35 +131,35 @@ static std::map<PrecisionMode, std::string> PRECISION_ENUM_TO_OUTPUT =
 
 //* -------------------- NOTIFIERS -------------------- *//
 void checkSelfIntersectionType(const std::string &self_int_type) {
-  std::cout << "<-----> [CHECK] Checking Self-Intersection Argument" << '\n';
+  std::cout << "[CHECK] Checking Self-Intersection Argument" << '\n';
   if (!SELFINT_TYPE_INPUT_TO_ENUM.count(self_int_type)) {
     throw po::error("[ERROR] Selfint type not recognized: " + self_int_type);
   }
-  std::cout << "<-------> [VALID] Valid Self-Intersection Argument" << '\n';
+  std::cout << "> [VALID] Valid Self-Intersection Argument" << '\n';
 }
 
 void checkNumerics(const std::string &numerics) {
-  std::cout << "<-----> [CHECK] Checking Numeric Method Argument" << '\n';
+  std::cout << "[CHECK] Checking Numeric Method Argument" << '\n';
   if (!NUMERICS_INPUT_TO_ENUM.count(numerics)) {
     throw po::error("[ERROR] Numeric method not recognized: " + numerics);
   }
-  std::cout << "<-------> [VALID] Valid Numeric Method Argument" << '\n';
+  std::cout << "> [VALID] Valid Numeric Method Argument" << '\n';
 }
 
 void checkCompute(const std::string &compute) {
-  std::cout << "<-----> [CHECK] Checking Compute Backend Argument" << '\n';
+  std::cout << "[CHECK] Checking Compute Backend Argument" << '\n';
   if (!COMPUTE_INPUT_TO_ENUM.count(compute)) {
     throw po::error("[ERROR] Compute type not recognized: " + compute);
   }
-  std::cout << "<-------> [VALID] Valid Compute Backend Argument" << '\n';
+  std::cout << "> [VALID] Valid Compute Backend Argument" << '\n';
 }
 
 void checkPrecision(const std::string &precision) {
-  std::cout << "<-----> [CHECK] Checking Precision Argument" << '\n';
+  std::cout << "[CHECK] Checking Precision Argument" << '\n';
   if (!PRECISION_INPUT_TO_ENUM.count(precision)) {
     throw po::error("[ERROR] Precision type not recognized: " + precision);
   }
-  std::cout << "<-------> [VALID] Valid Precision Argument" << '\n';
+  std::cout << "> [VALID] Valid Precision Argument" << '\n';
 }
 
 //* -------------------- DEFINE PROGRAM OPTIONS -------------------- *//
@@ -145,7 +171,7 @@ po::options_description getOptions() {
     ("version,v",
       "\tOpenViewFactor version\n")
     ("inputs,i",
-      po::value<std::vector<std::string>>()->required()->multitoken(),
+      po::value<std::vector<std::string>>()->multitoken(),
       "-i <EMITTER FILEPATH> <RECEIVER FILEPATH> \n    Filepaths to input meshes (Minimum of 1, Maximum of 2)\n")
     ("blocking,b",
       po::value<std::vector<std::string>>()->multitoken(),
@@ -192,6 +218,7 @@ po::variables_map parseCommandLine(int argc, char *argv[]) {
 }
 
 //* -------------------- PARSE COMMAND LINE -------------------- *//
+template <typename FLOAT_TYPE>
 void ovfWorkflow(po::variables_map variables_map) {
   std::cout << "\n[VERSION] OpenViewFactor Version " << OVF_VERSION_STRING << '\n' << '\n';
 
@@ -247,57 +274,65 @@ void ovfWorkflow(po::variables_map variables_map) {
       break;
   }
 
-  //* ----- load input meshes ----- *//
-  // STLReader<FLOAT_TYPE> reader;
-
-  std::vector<std::string> input_filenames = variables_map["inputs"].as<std::vector<std::string>>();
-  bool two_mesh_problem = (input_filenames.size() > 1) ? true : false;
-  if (input_filenames.size() > 2) { std::cout << "<-----> [NOTIFIER] More than 2 input meshes were provided! Only the first two will be loaded" << '\n'; }
-  
-  std::cout << "[LOG] Loading Input Emitter Mesh : " << input_filenames[0] << '\n';
-  // std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter = reader.getMesh(input_filenames[0]);
-  // std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver = nullptr;
-
-  // Blockers<FLOAT_TYPE> blockers;
-  // auto emitter_bvh = std::make_shared<BVH<FLOAT_TYPE>>();
-  // auto receiver_bvh = std::make_shared<BVH<FLOAT_TYPE>>();
-
-  if (self_int_type == "BOTH" || self_int_type == "EMITTER") {
-    std::cout << "[LOG] Constructing BVH for Emitter Mesh : " << input_filenames[0] << '\n';
-    // emitter_bvh->linkToTriangulation(emitter);
-    // emitter_bvh->constructBVH();
-    // blockers.addBlocker(emitter_bvh);
-    std::cout << "[LOG] Construction Finished" << '\n';
-  }
-  if (two_mesh_problem) {
-    std::cout << "[LOG] Loading Input Receiver Mesh : " << input_filenames[1] << '\n';
-    // receiver = reader.getMesh(input_filenames[1]);
-    if (self_int_type == "BOTH" || self_int_type == "RECEIVER") {
-      std::cout << "[LOG] Constructing BVH for Receiver Mesh : " << input_filenames[1] << '\n';
-      // receiver_bvh->linkToTriangulation(receiver);
-      // receiver_bvh->constructBVH();
-      // blockers.addBlocker(receiver_bvh);
-      std::cout << "[LOG] Construction Finished" << '\n';
-  }
-  }
-
   //* ----- load blocking meshes ----- *//
+  Blockers<FLOAT_TYPE> blockers;
 
   bool blocking_enabled = variables_map.count("blocking");
   if (blocking_enabled) {
     std::vector<std::string> blocker_filenames = variables_map["blocking"].as<std::vector<std::string>>();
-    // blockers.setBlockers(blocker_filenames);
+    blockers.setBlockers(blocker_filenames);
   } else {
     std::cout << "[LOG] No Blocking Meshes Loaded" << '\n';
+  }
+
+  //* ----- load input meshes ----- *//
+  STLReader<FLOAT_TYPE> reader;
+
+  std::vector<std::string> input_filenames = variables_map["inputs"].as<std::vector<std::string>>();
+  bool two_mesh_problem = (input_filenames.size() > 1) ? true : false;
+  if (input_filenames.size() > 2) { std::cout << "<-----> [NOTIFIER] More than 2 input meshes were provided! Only the first two will be loaded" << '\n'; }
+
+  std::cout << "[LOG] Loading Input Emitter Mesh : " << input_filenames[0] << '\n';
+  auto emitter = reader.getMesh(input_filenames[0]);
+  auto receiver = std::make_shared<Triangulation<FLOAT_TYPE>>();
+
+  auto emitter_bvh = std::make_shared<BVH<FLOAT_TYPE>>();
+  auto receiver_bvh = std::make_shared<BVH<FLOAT_TYPE>>();
+
+  if (self_int_type == "BOTH" || self_int_type == "EMITTER") {
+    std::cout << "[LOG] Constructing BVH for Emitter Mesh : " << input_filenames[0] << '\n';
+    emitter_bvh->linkToTriangulation(emitter);
+    emitter_bvh->constructBVH();
+    blockers.addBlocker(emitter_bvh);
+    std::cout << "[LOG] Construction Finished" << '\n';
+  }
+  if (two_mesh_problem) {
+    std::cout << "[LOG] Loading Input Receiver Mesh : " << input_filenames[1] << '\n';
+    receiver = reader.getMesh(input_filenames[1]);
+    if (self_int_type == "BOTH" || self_int_type == "RECEIVER") {
+      std::cout << "[LOG] Constructing BVH for Receiver Mesh : " << input_filenames[1] << '\n';
+      receiver_bvh->linkToTriangulation(receiver);
+      receiver_bvh->constructBVH();
+      blockers.addBlocker(receiver_bvh);
+      std::cout << "[LOG] Construction Finished" << '\n';
+    }
   }
 
   std::cout << "[LOG] All Meshes Loaded" << '\n';
 
   std::cout << "\n[RUN] Computing View Factors" << '\n';
 
-  std::cout << "[LOG] View Factors Completed" << '\n';
+  Timer view_factor_timer;
 
-  std::cout << "\n[RESULT] Surface-Surface View Factor : " << 3.1415 << '\n' << '\n';
+  DoubleAreaIntegration<FLOAT_TYPE> dai;
+  auto unculled_indices = dai.backFaceCullMeshes(emitter, receiver);
+  auto unblocked_indices = dai.evaluateBlockingBetweenMeshes(emitter, receiver, blockers, unculled_indices);
+  auto results = dai.solveViewFactorBetweenMeshes(emitter, receiver, unblocked_indices);
+
+  std::cout << "[LOG] View Factors Completed" << '\n';
+  std::cout << "[LOG] Total Solution Time: " << view_factor_timer.elapsed() << " [s]" << '\n';
+
+  std::cout << "\n[RESULT] Surface-Surface View Factor : " << std::setprecision(15) << results->getSurfaceToSurfaceAverageVF() << '\n' << '\n';
 
   if (write_matrix) { std::cout << "[OUT] Writing Plain Text Matrix Output" << '\n'; }
   if (write_graphic) { std::cout << "[OUT] Writing Graphic File Output" << '\n'; }

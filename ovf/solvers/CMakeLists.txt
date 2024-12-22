@@ -38,6 +38,6 @@ endforeach()
 message("Building ovfsolver static library")
 
 add_library(ovfsolvers STATIC ${_ovf_solvers_sources})
-target_link_libraries(ovfsolvers ovfgeometry)
+target_link_libraries(ovfsolvers ovfgeometry ovfviewfactor)
 add_compile_definitions(OVF_VERSION=${OVF_VERSION})
 include_directories(${PROJECT_BINARY_DIR}/include)

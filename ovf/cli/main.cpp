@@ -14,15 +14,10 @@ int main(int argc, char *argv[]) {
   }
 
   po::notify(variables_map);
-
-  // std::string precision = variables_map["precision"].as<std::string>();
-  // std::cout << "[LOG] Solver Setting Loaded: Floating Point Precision - " << precision << '\n';
-
-  // if (precision == "SINGLE") {
-  //   ovfWorkflow<float>(variables_map);
-  // } else if (precision == "DOUBLE") {
-  //   ovfWorkflow<double>(variables_map);
-  // }
-
-  ovfWorkflow(variables_map);
+  std::string precision = variables_map["precision"].as<std::string>();
+  if (precision == "SINGLE") {
+    ovfWorkflow<float>(variables_map);
+  } else if (precision == "DOUBLE") {
+    ovfWorkflow<double>(variables_map);
+  }
 }

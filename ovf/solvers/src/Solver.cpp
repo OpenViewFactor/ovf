@@ -35,14 +35,17 @@ namespace openviewfactor {
     auto num_emitter_elements = emitter_mesh->getNumElements();
     auto num_receiver_elements = receiver_mesh->getNumElements();
     std::vector<unsigned int> unculled_indices(num_emitter_elements * num_receiver_elements, num_emitter_elements * num_receiver_elements);
-    for (unsigned int emitter_index = 0; emitter_index < num_emitter_elements; emitter_index++) {
-      for (unsigned int receiver_index = 0; receiver_index < num_receiver_elements; receiver_index++) {
-        bool culled = this->backFaceCullElements(emitter_mesh, receiver_mesh, emitter_index, receiver_index);
-        auto full_matrix_index = emitter_index * num_receiver_elements + receiver_index;
-        if (culled) {
-          unculled_indices[full_matrix_index] = (unsigned int)0;
-        } else {
-          unculled_indices[full_matrix_index] = full_matrix_index;
+    #pragma omp parallel
+    {
+      #pragma omp for schedule(dynamic)
+      for (unsigned int emitter_index = 0; emitter_index < num_emitter_elements; emitter_index++) {
+        for (unsigned int receiver_index = 0; receiver_index < num_receiver_elements; receiver_index++) {
+          bool culled = this->backFaceCullElements(emitter_mesh, receiver_mesh, emitter_index, receiver_index);
+          auto full_matrix_index = emitter_index * num_receiver_elements + receiver_index;
+          if (!culled) {
+            #pragma omp critical
+            unculled_indices[full_matrix_index] = full_matrix_index;
+          }
         }
       }
     }
@@ -76,13 +79,18 @@ namespace openviewfactor {
     auto num_emitter_elements = emitter_mesh->getNumElements();
     auto num_receiver_elements = receiver_mesh->getNumElements();
     std::vector<unsigned int> unblocked_indices(num_emitter_elements * num_receiver_elements, (unsigned int)(num_emitter_elements * num_receiver_elements));
-    for (auto index : unculled_indices) {
-      auto emitter_index = index / num_receiver_elements;
-      auto receiver_index = index % num_receiver_elements;
-      auto emitter_element = (*emitter_mesh)[emitter_index];
-      auto receiver_element = (*receiver_mesh)[receiver_index];
-      bool blocked = this->evaluateBlockingBetweenElements(emitter_element, receiver_element, blockers);
-      if (!blocked) { unblocked_indices[index] = index; }
+    #pragma omp parallel
+    {
+      #pragma omp for schedule(dynamic)
+      for (auto index : unculled_indices) {
+        auto emitter_index = index / num_receiver_elements;
+        auto receiver_index = index % num_receiver_elements;
+        auto emitter_element = (*emitter_mesh)[emitter_index];
+        auto receiver_element = (*receiver_mesh)[receiver_index];
+        bool blocked = this->evaluateBlockingBetweenElements(emitter_element, receiver_element, blockers);
+        #pragma omp critical
+        if (!blocked) { unblocked_indices[index] = index; }
+      }
     }
     unblocked_indices.erase(std::remove(unblocked_indices.begin(), unblocked_indices.end(), (unsigned int)(num_emitter_elements * num_receiver_elements)), unblocked_indices.end());
     return unblocked_indices;
@@ -94,13 +102,17 @@ namespace openviewfactor {
     auto num_receiver_elements = receiver_mesh->getNumElements();
     auto results = std::make_unique<ViewFactor<FLOAT_TYPE>>();
     results->linkTriangulations(emitter_mesh, receiver_mesh);
-    for (auto index : unblocked_indices) {
-      auto emitter_index = index / num_receiver_elements;
-      auto receiver_index = index % num_receiver_elements;
-      auto emitter_element = (*emitter_mesh)[emitter_index];
-      auto receiver_element = (*receiver_mesh)[receiver_index];
-      FLOAT_TYPE view_factor = this->solveViewFactorBetweenElements(emitter_element, receiver_element);
-      results->setElement(index, view_factor);
+    #pragma omp parallel
+    {
+      #pragma omp for schedule(dynamic)
+      for (auto index : unblocked_indices) {
+        auto emitter_index = index / num_receiver_elements;
+        auto receiver_index = index % num_receiver_elements;
+        auto emitter_element = (*emitter_mesh)[emitter_index];
+        auto receiver_element = (*receiver_mesh)[receiver_index];
+        FLOAT_TYPE view_factor = this->solveViewFactorBetweenElements(emitter_element, receiver_element);
+        results->setElement(index, view_factor);
+      }
     }
     return results;
   }

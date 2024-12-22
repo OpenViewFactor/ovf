@@ -30,8 +30,8 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE bool Ray<FLOAT_TYPE>::backFaceCull(Triangle<FLOAT_TYPE> emitter, Triangle<FLOAT_TYPE> receiver) const {
-    if (this->getDirection().dot(emitter.getNormal()) < 0) { return true; }
-    if (this->getDirection().dot(receiver.getNormal()) > 0) { return true; }
+    if (this->getDirection().dot(emitter.getNormal()) <= 0) { return true; }
+    if (this->getDirection().dot(receiver.getNormal()) >= 0) { return true; }
     return false;
   }
 

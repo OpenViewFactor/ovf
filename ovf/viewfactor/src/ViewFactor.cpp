@@ -120,7 +120,7 @@ namespace openviewfactor {
     for (unsigned int i = 0; i < num_emitter_elements; i++) {
       emitter_view_factors[i] = (this->getEmitterElementToReceiverSurfaceVF(i) * emitter_triangles[i].getArea());
     }
-    FLOAT_TYPE total_vf = -1.0 * std::accumulate(emitter_view_factors.begin(), emitter_view_factors.end(), 0.0) / _emitter->getMeshArea();
+    FLOAT_TYPE total_vf = -1.0 * std::reduce(std::execution::par, emitter_view_factors.cbegin(), emitter_view_factors.cend()) / _emitter->getMeshArea();
     return total_vf;
   }
 

@@ -288,6 +288,8 @@ void ovfWorkflow(po::variables_map variables_map) {
   //* ----- load input meshes ----- *//
   STLReader<FLOAT_TYPE> reader;
 
+  Timer total_program_timer;
+
   std::vector<std::string> input_filenames = variables_map["inputs"].as<std::vector<std::string>>();
   bool two_mesh_problem = (input_filenames.size() > 1) ? true : false;
   if (input_filenames.size() > 2) { std::cout << "<-----> [NOTIFIER] More than 2 input meshes were provided! Only the first two will be loaded" << '\n'; }
@@ -321,6 +323,7 @@ void ovfWorkflow(po::variables_map variables_map) {
   }
 
   std::cout << "[LOG] All Meshes Loaded" << '\n';
+  std::cout << "[LOG] Problem Size: " << emitter->getNumElements() * receiver->getNumElements() << " Pairs" << '\n';
 
   std::cout << "\n[RUN] Computing View Factors" << '\n';
 
@@ -338,7 +341,9 @@ void ovfWorkflow(po::variables_map variables_map) {
 
   std::cout << "\n[RESULT] Surface-Surface View Factor : " << std::setprecision(15) << results->getSurfaceToSurfaceAverageVF() << '\n' << '\n';
 
-  if (write_matrix) { std::cout << "[OUT] Writing Plain Text Matrix Output" << '\n'; }
-  if (write_graphic) { std::cout << "[OUT] Writing Graphic File Output" << '\n'; }
+  if (write_matrix) { std::cout << "[OUT] Writing Plain Text Matrix Output (not doing anything yet)" << '\n'; }
+  if (write_graphic) { std::cout << "[OUT] Writing Graphic File Output (not doing anything yet)" << '\n'; }
+
+  std::cout << "[LOG] Total I/O Time: " << total_program_timer.elapsed() << " [s]" << '\n';
 }
 #endif

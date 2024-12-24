@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <execution>
 #include <omp.h>
 
 #include "../../config.hpp"

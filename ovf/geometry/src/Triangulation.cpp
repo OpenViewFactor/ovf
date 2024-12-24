@@ -64,19 +64,28 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>> Triangulation<FLOAT_TYPE>::getCentroids() const {
-    std::vector<Vector3<FLOAT_TYPE>> mesh_centroids;
+  OVF_HOST_DEVICE std::vector<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::getAreas() const {
+    std::vector<FLOAT_TYPE> mesh_areas(this->getNumElements());
     for (int i = 0; i < getNumElements(); i++) {
-      mesh_centroids.push_back((*this)[i].getCentroid());
+      mesh_areas[i] = (*this)[i].getArea();
+    }
+    return mesh_areas;
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>> Triangulation<FLOAT_TYPE>::getCentroids() const {
+    std::vector<Vector3<FLOAT_TYPE>> mesh_centroids(this->getNumElements());
+    for (int i = 0; i < getNumElements(); i++) {
+      mesh_centroids[i] = (*this)[i].getCentroid();
     }
     return mesh_centroids;
   }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>> Triangulation<FLOAT_TYPE>::getNormals() const {
-    std::vector<Vector3<FLOAT_TYPE>> mesh_normals;
+    std::vector<Vector3<FLOAT_TYPE>> mesh_normals(this->getNumElements());
     for (int i = 0; i < getNumElements(); i++) {
-      mesh_normals.push_back((*this)[i].getNormal());
+      mesh_normals[i] = (*this)[i].getNormal();
     }
     return mesh_normals;
   }

@@ -26,7 +26,7 @@ namespace openviewfactor {
 
       //* ------------------------------ COMMON METHODS ------------------------------ *//
 
-      OVF_HOST_DEVICE bool backFaceCullElements(const Triangle<FLOAT_TYPE>& emitter_element, const Triangle<FLOAT_TYPE>& receiver_element) const;
+      OVF_HOST_DEVICE bool backFaceCullElements(const Vector3<FLOAT_TYPE>& emitter_centroid, const Vector3<FLOAT_TYPE>& emitter_normal, const Vector3<FLOAT_TYPE>& receiver_centroid, const Vector3<FLOAT_TYPE> receiver_normal) const;
 
       OVF_HOST_DEVICE std::vector<unsigned int> backFaceCullMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh) const;
 
@@ -38,7 +38,7 @@ namespace openviewfactor {
 
       //* ------------------------------ VIRTUAL METHODS ------------------------------ *//
 
-      virtual OVF_HOST_DEVICE FLOAT_TYPE solveViewFactorBetweenElements(const Triangle<FLOAT_TYPE>& emitter_element, const Triangle<FLOAT_TYPE>& receiver_element) const = 0;
+      virtual OVF_HOST_DEVICE FLOAT_TYPE solveViewFactorBetweenElements(const Vector3<FLOAT_TYPE>& emitter_centroid, const Vector3<FLOAT_TYPE>& emitter_normal, const Vector3<FLOAT_TYPE>& receiver_centroid, const Vector3<FLOAT_TYPE>& receiver_normal, FLOAT_TYPE receiver_area) const = 0;
   };
 }
 

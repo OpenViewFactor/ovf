@@ -29,13 +29,6 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE bool Ray<FLOAT_TYPE>::backFaceCull(Triangle<FLOAT_TYPE> emitter, Triangle<FLOAT_TYPE> receiver) const {
-    if (this->getDirection().dot(emitter.getNormal()) <= 0.0) { return true; }
-    if (this->getDirection().dot(receiver.getNormal()) >= 0.0) { return true; }
-    return false;
-  }
-
-  template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Ray<FLOAT_TYPE>& Ray<FLOAT_TYPE>::triangleIntersection(Triangle<FLOAT_TYPE> triangle) {
     Vector3<FLOAT_TYPE> V0 = triangle.getOA();
     Vector3<FLOAT_TYPE> E1 = triangle.getAB();

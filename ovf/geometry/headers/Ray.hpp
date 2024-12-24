@@ -27,7 +27,6 @@ template <typename FLOAT_TYPE> class Ray {
     OVF_HOST_DEVICE Ray<FLOAT_TYPE>& setDirection(Vector3<FLOAT_TYPE> direction);
     OVF_HOST_DEVICE Ray<FLOAT_TYPE>& setIntersectionDistance(FLOAT_TYPE t);
 
-    OVF_HOST_DEVICE bool backFaceCull(Triangle<FLOAT_TYPE> emitter, Triangle<FLOAT_TYPE> receiver) const;
     OVF_HOST_DEVICE Ray<FLOAT_TYPE>& triangleIntersection(Triangle<FLOAT_TYPE> triangle);
 };
 

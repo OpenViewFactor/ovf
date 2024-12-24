@@ -327,17 +327,22 @@ void ovfWorkflow(po::variables_map variables_map) {
 
   std::cout << "\n[RUN] Computing View Factors" << '\n';
 
-  Timer view_factor_timer;
-
   DoubleAreaIntegration<FLOAT_TYPE> dai;
+  Timer solver_timer;
   auto unculled_indices = dai.backFaceCullMeshes(emitter, receiver);
+  auto back_face_cull_time = solver_timer.elapsed();
   auto unblocked_indices = dai.evaluateBlockingBetweenMeshes(emitter, receiver, blockers, unculled_indices);
+  auto blocking_time = solver_timer.elapsed() - back_face_cull_time;
   auto results = std::make_shared<ViewFactor<FLOAT_TYPE>>();
   results->linkTriangulations(emitter, receiver, unblocked_indices.size());
   dai.solveViewFactorBetweenMeshes(emitter, receiver, unblocked_indices, results);
+  auto solver_time = solver_timer.elapsed() - back_face_cull_time - blocking_time;
 
-  std::cout << "[LOG] View Factors Completed" << '\n';
-  std::cout << "[LOG] Total Solution Time: " << view_factor_timer.elapsed() << " [s]" << '\n';
+
+  std::cout << "[LOG] Back Face Cull Completed in " << back_face_cull_time << " [s]" << '\n';
+  std::cout << "[LOG] Blocking Completed in " << blocking_time << " [s]" << '\n';
+  std::cout << "[LOG] View Factors Completed in " << solver_time << "[s]" << '\n';
+  std::cout << "[LOG] Total Solution Time: " << back_face_cull_time + blocking_time + solver_time << " [s]" << '\n';
 
   std::cout << "\n[RESULT] Surface-Surface View Factor : " << std::setprecision(15) << results->getSurfaceToSurfaceAverageVF() << '\n' << '\n';
 

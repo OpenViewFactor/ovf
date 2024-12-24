@@ -44,6 +44,7 @@ template <typename FLOAT_TYPE> class Triangulation {
 
     OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>> getCentroids() const;
     OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>> getNormals() const;
+    OVF_HOST_DEVICE std::vector<FLOAT_TYPE> getAreas() const;
     OVF_HOST_DEVICE std::vector<Triangle<FLOAT_TYPE>> getTriangles() const;
 
     //* ----- MUTATOR METHODS ----- *//

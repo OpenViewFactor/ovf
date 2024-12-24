@@ -92,7 +92,7 @@ namespace openviewfactor {
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Vector3<FLOAT_TYPE> Vector3<FLOAT_TYPE>::flip() const {
-    return this->scale(-1);
+    return this->scale(-1.0);
   }
 
   //* ----- VECTOR OPERATIONS ----- *//

@@ -6,7 +6,7 @@ namespace openviewfactor {
     auto emitter_element_centroid = emitter_element.getCentroid();
     auto receiver_element_centroid = receiver_element.getCentroid();
     auto ray_vector = receiver_element_centroid - emitter_element_centroid;
-    FLOAT_TYPE view_factor = (emitter_element.getNormal()).dot(ray_vector) * (receiver_element.getNormal()).dot(ray_vector) * receiver_element.getArea() / (ray_vector.dot(ray_vector) * M_PI);
+    FLOAT_TYPE view_factor = (emitter_element.getNormal()).dot(ray_vector) * (receiver_element.getNormal()).dot(ray_vector) * receiver_element.getArea() / (ray_vector.dot(ray_vector) * ray_vector.dot(ray_vector) * M_PI);
     return view_factor;
   }
 

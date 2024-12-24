@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <omp.h>
 
 #include "../../config.hpp"
 #include "Triangulation.hpp"
@@ -14,7 +15,9 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE> class ViewFactor {
     private:
       ViewFactorState _state;
-      std::vector<IndexValuePair<FLOAT_TYPE>> _nonzero_vf;
+      // std::vector<IndexValuePair<FLOAT_TYPE>> _nonzero_vf;
+      std::vector<unsigned int> _indices;
+      std::vector<FLOAT_TYPE> _view_factors;
       std::shared_ptr<Triangulation<FLOAT_TYPE>> _emitter;
       std::shared_ptr<Triangulation<FLOAT_TYPE>> _receiver;
     protected:
@@ -41,8 +44,8 @@ namespace openviewfactor {
       OVF_HOST_DEVICE FLOAT_TYPE getSurfaceToSurfaceAverageVF() const;
 
       OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& setElements(std::vector<unsigned int> indices, std::vector<FLOAT_TYPE> view_factors);
-      OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& setElement(unsigned int full_matrix_index, FLOAT_TYPE value);
-      OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& setElement(unsigned int emitter_index, unsigned int receiver_index, FLOAT_TYPE value);
+      // OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& setElement(unsigned int full_matrix_index, FLOAT_TYPE value);
+      // OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& setElement(unsigned int emitter_index, unsigned int receiver_index, FLOAT_TYPE value);
   };
 }
 #endif

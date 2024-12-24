@@ -30,8 +30,8 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE bool Ray<FLOAT_TYPE>::backFaceCull(Triangle<FLOAT_TYPE> emitter, Triangle<FLOAT_TYPE> receiver) const {
-    if (this->getDirection().dot(emitter.getNormal()) <= 0) { return true; }
-    if (this->getDirection().dot(receiver.getNormal()) >= 0) { return true; }
+    if (this->getDirection().dot(emitter.getNormal()) <= 0.0) { return true; }
+    if (this->getDirection().dot(receiver.getNormal()) >= 0.0) { return true; }
     return false;
   }
 
@@ -48,16 +48,16 @@ namespace openviewfactor {
 
     FLOAT_TYPE scalar_multiplier = 1 / P.dot(E1);
     FLOAT_TYPE u = P.dot(T) * scalar_multiplier;
-    if (u < 0 || u > 1) {
+    if (u < 0.0 || u > 1.0) {
       return *this;
     }
     FLOAT_TYPE v = Q.dot(D) * scalar_multiplier;
-    if (v < 0 || v > 1) {
+    if (v < 0.0 || v > 1.0) {
       return *this;
     }
    
     FLOAT_TYPE t = Q.dot(E2) * scalar_multiplier;
-    if (t > 0 && t < _intersection_distance) { this->setIntersectionDistance(t); }
+    if (t > 0.0 && t < _intersection_distance) { this->setIntersectionDistance(t); }
 
     return *this;
   }

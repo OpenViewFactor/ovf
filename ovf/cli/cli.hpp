@@ -131,35 +131,35 @@ static std::map<PrecisionMode, std::string> PRECISION_ENUM_TO_OUTPUT =
 
 //* -------------------- NOTIFIERS -------------------- *//
 void checkSelfIntersectionType(const std::string &self_int_type) {
-  std::cout << "[CHECK] Checking Self-Intersection Argument" << '\n';
+  std::cout << "[CHECK] Checking Self-Intersection Argument";
   if (!SELFINT_TYPE_INPUT_TO_ENUM.count(self_int_type)) {
-    throw po::error("[ERROR] Selfint type not recognized: " + self_int_type);
+    throw po::error("\t> [ERROR] Selfint type not recognized: " + self_int_type);
   }
-  std::cout << "> [VALID] Valid Self-Intersection Argument" << '\n';
+  std::cout << "\t> [VALID]" << '\n';
 }
 
 void checkNumerics(const std::string &numerics) {
-  std::cout << "[CHECK] Checking Numeric Method Argument" << '\n';
+  std::cout << "[CHECK] Checking Numeric Method Argument";
   if (!NUMERICS_INPUT_TO_ENUM.count(numerics)) {
-    throw po::error("[ERROR] Numeric method not recognized: " + numerics);
+    throw po::error("\t> [ERROR] Numeric method not recognized: " + numerics);
   }
-  std::cout << "> [VALID] Valid Numeric Method Argument" << '\n';
+  std::cout << "\t> [VALID]" << '\n';
 }
 
 void checkCompute(const std::string &compute) {
-  std::cout << "[CHECK] Checking Compute Backend Argument" << '\n';
+  std::cout << "[CHECK] Checking Compute Backend Argument";
   if (!COMPUTE_INPUT_TO_ENUM.count(compute)) {
-    throw po::error("[ERROR] Compute type not recognized: " + compute);
+    throw po::error("\t> [ERROR] Compute type not recognized: " + compute);
   }
-  std::cout << "> [VALID] Valid Compute Backend Argument" << '\n';
+  std::cout << "\t> [VALID]" << '\n';
 }
 
 void checkPrecision(const std::string &precision) {
-  std::cout << "[CHECK] Checking Precision Argument" << '\n';
+  std::cout << "[CHECK] Checking Precision Argument";
   if (!PRECISION_INPUT_TO_ENUM.count(precision)) {
-    throw po::error("[ERROR] Precision type not recognized: " + precision);
+    throw po::error("\t\t> [ERROR] Precision type not recognized: " + precision);
   }
-  std::cout << "> [VALID] Valid Precision Argument" << '\n';
+  std::cout << "\t\t> [VALID]" << '\n';
 }
 
 //* -------------------- DEFINE PROGRAM OPTIONS -------------------- *//
@@ -282,7 +282,7 @@ void ovfWorkflow(po::variables_map variables_map) {
     std::vector<std::string> blocker_filenames = variables_map["blocking"].as<std::vector<std::string>>();
     blockers.setBlockers(blocker_filenames);
   } else {
-    std::cout << "[LOG] No Blocking Meshes Loaded" << '\n';
+    std::cout << "\n[LOG] No Blocking Meshes Loaded" << '\n';
   }
 
   //* ----- load input meshes ----- *//
@@ -294,6 +294,7 @@ void ovfWorkflow(po::variables_map variables_map) {
 
   std::cout << "[LOG] Loading Input Emitter Mesh : " << input_filenames[0] << '\n';
   auto emitter = reader.getMesh(input_filenames[0]);
+  std::cout << "[LOG] Emitter Mesh Size: " << emitter->getNumElements() << " Elements" << '\n';
   auto receiver = std::make_shared<Triangulation<FLOAT_TYPE>>();
 
   auto emitter_bvh = std::make_shared<BVH<FLOAT_TYPE>>();
@@ -309,6 +310,7 @@ void ovfWorkflow(po::variables_map variables_map) {
   if (two_mesh_problem) {
     std::cout << "[LOG] Loading Input Receiver Mesh : " << input_filenames[1] << '\n';
     receiver = reader.getMesh(input_filenames[1]);
+  std::cout << "[LOG] Receiver Mesh Size: " << receiver->getNumElements() << " Elements" << '\n';
     if (self_int_type == "BOTH" || self_int_type == "RECEIVER") {
       std::cout << "[LOG] Constructing BVH for Receiver Mesh : " << input_filenames[1] << '\n';
       receiver_bvh->linkToTriangulation(receiver);

@@ -52,22 +52,31 @@ namespace openviewfactor {
   OVF_HOST_DEVICE std::shared_ptr<Triangulation<FLOAT_TYPE>> ViewFactor<FLOAT_TYPE>::getReceiverMesh() const { return _receiver; }
 
   template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE unsigned int ViewFactor<FLOAT_TYPE>::binarySearch(unsigned int full_matrix_index, unsigned int inclusive_start, unsigned int uninclusive_end) const {
+    if (uninclusive_end > inclusive_start) {
+      auto midpoint = (inclusive_start + uninclusive_end) / 2;
+      if (_indices[midpoint] == full_matrix_index) { return midpoint; }
+      if (_indices[midpoint] > full_matrix_index) { return binarySearch(full_matrix_index, inclusive_start, midpoint); }
+      return binarySearch(full_matrix_index, midpoint+1, uninclusive_end);
+    }
+    return -1;
+  }
+  template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getMatrixElementVF(unsigned int full_matrix_index) const {
     if (!(this->isLinked())) { throw std::runtime_error("Cannot access a value in this object, there are no linked triangulations"); }
-    //TODO this is taking unacceptably long. do this processing ahead of time to avoid searching the vector each time i query for a value
-    auto index_iterator = std::find(_indices.begin(), _indices.end(), full_matrix_index);
-    if (index_iterator != _indices.end()) { return _view_factors[std::distance(_indices.begin(), index_iterator)]; }
+    auto indices_index = this->binarySearch(full_matrix_index, 0, _indices.size());
+    if (indices_index != -1) { return _view_factors[_indices[indices_index]]; }
     return 0.0;
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getMatrixElementVF(unsigned int emitter_index, unsigned int receiver_index) const {
-    // if (!(this->isLinked())) { throw std::runtime_error("Cannot access a value in this object, there are no linked triangulations"); }
-    // if (emitter_index > (_emitter->getNumElements() - 1)) { throw std::runtime_error("Cannot evaluate the VF for an emitting element index which exceeds the number of elements in the emitting surface"); }
-    // if (receiver_index > (_receiver->getNumElements() - 1)) { throw std::runtime_error("Cannot evaluate the VF for a receiving element index which exceeds the number of elements in the receiving surface"); }
+    if (!(this->isLinked())) { throw std::runtime_error("Cannot access a value in this object, there are no linked triangulations"); }
+    if (emitter_index > (_emitter->getNumElements() - 1)) { throw std::runtime_error("Cannot evaluate the VF for an emitting element index which exceeds the number of elements in the emitting surface"); }
+    if (receiver_index > (_receiver->getNumElements() - 1)) { throw std::runtime_error("Cannot evaluate the VF for a receiving element index which exceeds the number of elements in the receiving surface"); }
 
     unsigned int full_matrix_index = (emitter_index * _emitter->getNumElements()) + receiver_index;
-    // unsigned int maximum_index = _emitter->getNumElements() * _receiver->getNumElements() - 1;
-    // if (full_matrix_index > maximum_index) { throw std::runtime_error("Cannot access a value for this index, it exceeds the matrix size"); }
+    unsigned int maximum_index = _emitter->getNumElements() * _receiver->getNumElements() - 1;
+    if (full_matrix_index > maximum_index) { throw std::runtime_error("Cannot access a value for this index, it exceeds the matrix size"); }
 
     return (this->getMatrixElementVF(full_matrix_index));
   }
@@ -89,8 +98,8 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getReceiverElementToEmitterSurfaceVF(unsigned int receiver_index) const {
-    // if (!(this->isLinked())) { throw std::runtime_error("Cannot evaluate receiver element to emitter surface, this object is not linked to any triangulations"); }
-    // if (receiver_index > (_receiver->getNumElements() - 1)) { throw std::runtime_error("Cannot evaluate the VF for a receiving element index which exceeds the number of elements in the receiving surface"); }
+    if (!(this->isLinked())) { throw std::runtime_error("Cannot evaluate receiver element to emitter surface, this object is not linked to any triangulations"); }
+    if (receiver_index > (_receiver->getNumElements() - 1)) { throw std::runtime_error("Cannot evaluate the VF for a receiving element index which exceeds the number of elements in the receiving surface"); }
 
     FLOAT_TYPE receiver_element_area = (*_receiver)[receiver_index].getArea();
     FLOAT_TYPE sum = 0.0;

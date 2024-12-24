@@ -36,6 +36,7 @@ namespace openviewfactor {
       OVF_HOST_DEVICE std::shared_ptr<Triangulation<FLOAT_TYPE>> getEmitterMesh() const;
       OVF_HOST_DEVICE std::shared_ptr<Triangulation<FLOAT_TYPE>> getReceiverMesh() const;
 
+      OVF_HOST_DEVICE unsigned int binarySearch(unsigned int full_matrix_index, unsigned int inclusive_start, unsigned int uninclusive_end) const;
       OVF_HOST_DEVICE FLOAT_TYPE getMatrixElementVF(unsigned int full_matrix_index) const;
       OVF_HOST_DEVICE FLOAT_TYPE getMatrixElementVF(unsigned int emitter_index, unsigned int receiver_index) const;
 

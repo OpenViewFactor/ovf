@@ -164,36 +164,36 @@ void checkPrecision(const std::string &precision) {
 
 //* -------------------- DEFINE PROGRAM OPTIONS -------------------- *//
 po::options_description getOptions() {
-  po::options_description options("OpenViewFactor options",300,250);
+  po::options_description options("OpenViewFactor Options",500,250);
   options.add_options()
     ("help,h",
-      "\tOpenViewFactor command-line interface\n")
+      "OpenViewFactor command-line interface")
     ("version,v",
-      "\tOpenViewFactor version\n")
+      "OpenViewFactor version")
     ("inputs,i",
       po::value<std::vector<std::string>>()->multitoken(),
-      "-i <EMITTER FILEPATH> <RECEIVER FILEPATH> \n    Filepaths to input meshes (Minimum of 1, Maximum of 2)\n")
+      "-i <EMITTER FILEPATH> <RECEIVER FILEPATH> \n[--+--] Filepaths to input meshes (Minimum of 1, Maximum of 2)")
     ("blocking,b",
       po::value<std::vector<std::string>>()->multitoken(),
-      "-b <BLOCKER1 FILEPATH> -b <BLOCKER2 FILEPATH> -b <etc.> \n    Filepath(s) to blocking mesh(es) (Minimum of 0, No Maximum)\n")
+      "-b <BLOCKER1 FILEPATH> -b <BLOCKER2 FILEPATH> -b <etc.> \n[--+--] Filepath(s) to blocking mesh(es) (Minimum of 0, No Maximum)")
     ("plaintextout,o",
       po::value<std::string>()->default_value(std::string("ovf.out")),
-      "-o <PLAINTEXT OUTPUT FILEPATH> \n    Filepath for nonzero element-wise view factor map output (defaults to 'ovf.out', write 'NONE' to skip)\n")
+      "-o <PLAINTEXT OUTPUT FILEPATH> \n[--+--] Filepath for nonzero element-wise view factor map output (defaults to 'ovf.out', write 'NONE' to skip)")
     ("graphicout,g",
       po::value<std::vector<std::string>>()->default_value(std::vector<std::string>({std::string("unified_graphic_out")}), "unified_graphic_out")->multitoken(),
-      "-g <GRAPHIC OUTPUT FILEPATH> \n    Filename for Paraview unstructured grid (.vtu) output (defaults to 'unified_graphic_out', write 'NONE' to skip)\n")
+      "-g <GRAPHIC OUTPUT FILEPATH> \n[--+--] Filename for Paraview unstructured grid (.vtu) output (defaults to 'unified_graphic_out', write 'NONE' to skip)")
     ("selfint,s",
       po::value<std::string>()->default_value("BOTH")->notifier(&checkSelfIntersectionType),
-      "-s <NONE/EMITTER/RECEIVER/BOTH> \n    Determines which input mesh(es) are included in evaluating obstruction (defaults to BOTH)\n")
+      "-s <NONE/EMITTER/RECEIVER/BOTH> \n[--+--] Determines which input mesh(es) are included in evaluating obstruction (defaults to BOTH)")
     ("numerics,n",
       po::value<std::string>()->default_value("DAI")->notifier(&checkNumerics),
-      "-n <DAI/SAI> \n    Numeric integration method (defaults to DAI)\n")
+      "-n <DAI/SAI> \n[--+--] Numeric integration method (defaults to DAI)")
     ("compute,c",
       po::value<std::string>()->default_value("CPU_N")->notifier(&checkCompute),
-      "-c <CPU/CPU_N/GPU/GPU_N \n    Compute backend (defaults to CPU_N)\n")
+      "-c <CPU/CPU_N/GPU/GPU_N> \n[--+--] Compute backend (defaults to CPU_N)")
     ("precision,p",
       po::value<std::string>()->default_value("SINGLE")->notifier(&checkPrecision),
-      "-p <SINGLE/DOUBLE> \n    Floating point precision (defaults to SINGLE)\n");
+      "-p <SINGLE/DOUBLE> \n[--+--] Floating point precision (defaults to SINGLE)");
   return options;
 }
 
@@ -213,7 +213,6 @@ po::variables_map parseCommandLine(int argc, char *argv[]) {
 
   //* parse using Boost
   po::store(po::command_line_parser(argc, argv).options(options).positional(positional_options).run(), variables_map);
-  po::notify(variables_map);
   return variables_map;
 }
 

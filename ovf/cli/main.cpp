@@ -13,6 +13,8 @@ int main(int argc, char *argv[]) {
     return 0;
   }
 
+  po::notify(variables_map);
+
   std::string precision = variables_map["precision"].as<std::string>();
   if (precision == "SINGLE") {
     ovfWorkflow<float>(variables_map);

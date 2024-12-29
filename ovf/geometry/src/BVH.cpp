@@ -178,8 +178,7 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE BVH<FLOAT_TYPE>& BVH<FLOAT_TYPE>::constructNewNode(unsigned int node_index) {
-    std::vector<unsigned int> submesh_indices = this->getSubMeshIndices(node_index);
-    auto submesh = _triangulation->getSubMesh(submesh_indices);
+    auto submesh = _triangulation->getSubMesh(this->getSubMeshIndices(node_index));
     (_nodes[node_index]).growToIncludeTriangulation( submesh );
     return *this;
   }

@@ -76,7 +76,8 @@ namespace openviewfactor {
   OVF_HOST_DEVICE FLOAT_TYPE BVHNode<FLOAT_TYPE>::evaluateNodeChildrenSurfaceAreaHeuristic(std::shared_ptr<Triangulation<FLOAT_TYPE>> submesh, unsigned int axis_index, FLOAT_TYPE candidate_position) const {
     BVHNode<FLOAT_TYPE> left_box, right_box;
 
-    std::vector<unsigned int> left_side_indices, right_side_indices;
+    std::vector<unsigned int> left_side_indices;
+    std::vector<unsigned int> right_side_indices;
     std::vector<Triangle<FLOAT_TYPE>> triangles = submesh->getTriangles();
     for (unsigned int i = 0; i < this->getNumTriangles(); i++) {
       if ((triangles[i].getCentroid())[axis_index] < candidate_position) {

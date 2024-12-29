@@ -32,10 +32,7 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE const Triangle<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::operator[](size_t index) const {
-    Triangle<FLOAT_TYPE> T;
-    T.setOA(_pts[ (_con[index])[0] ]);
-    T.setOB(_pts[ (_con[index])[1] ]);
-    T.setOC(_pts[ (_con[index])[2] ]);
+    Triangle<FLOAT_TYPE> T(_pts[ (_con[index])[0] ], _pts[ (_con[index])[1] ], _pts[ (_con[index])[2] ]);
     return T;
   }
   template <typename FLOAT_TYPE>
@@ -54,12 +51,12 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::shared_ptr<Triangulation<FLOAT_TYPE>> Triangulation<FLOAT_TYPE>::getSubMesh(std::vector<unsigned int> indices) const {
+  OVF_HOST_DEVICE std::shared_ptr<Triangulation<FLOAT_TYPE>> Triangulation<FLOAT_TYPE>::getSubMesh(std::vector<unsigned int> indices) const {    
     auto sub_mesh = std::make_shared<Triangulation<FLOAT_TYPE>>();
-    std::vector<std::array<size_t, 3>> sub_connectivity(indices.size());
-    for (unsigned int i = 0; i < indices.size(); i++) {
-      sub_mesh->addElement((*this)[indices[i]]);
-    }
+    std::vector<std::array<size_t, 3>> sub_mesh_connectivity(indices.size());
+    std::generate(sub_mesh_connectivity.begin(), sub_mesh_connectivity.end(), [this, indices] (unsigned int i=0) mutable { return (this->_con)[indices[i++]]; }); 
+    sub_mesh->setConnectivity(sub_mesh_connectivity);
+    sub_mesh->setPoints(_pts);    
     return sub_mesh;
   }
 
@@ -137,17 +134,13 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::setConnectivity(std::vector<std::array<size_t, 3>> con) {
     _con.clear();
-    for (std::array<size_t, 3> c : con) {
-      _con.push_back(c);
-    }
+    _con = std::move(con);
     return *this;
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::setPoints(std::vector<Vector3<FLOAT_TYPE>> pts) {
     _pts.clear();
-    for (Vector3<FLOAT_TYPE> pt : pts) {
-      _pts.push_back(pt);
-    }
+    _pts = std::move(pts);
     return *this;
   }
 

@@ -2,10 +2,16 @@
 #define OVF_STLREADER_H_
 
 #include "stl_reader.h"
-#include "Triangulation.hpp"
 #include "FileReader.hpp"
+#include "Vector3.hpp"
+#include "Triangle.hpp"
+#include "Triangulation.hpp"
+#include <vector>
+#include <array>
+#include <iostream>
 #include <exception>
 #include <memory>
+#include <omp.h>
 
 namespace openviewfactor {
 

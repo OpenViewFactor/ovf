@@ -116,7 +116,7 @@ namespace openviewfactor {
     std::vector<FLOAT_TYPE> emitter_view_factors(num_emitter_elements);
     auto emitter_areas = _emitter->getAreas();
     #pragma omp parallel for
-    for (unsigned int i = 0; i < num_emitter_elements; i++) {
+    for (int i = 0; i < num_emitter_elements; i++) {
       emitter_view_factors[i] = (this->getEmitterElementToReceiverSurfaceVF(i) * emitter_areas[i]);
     }
     FLOAT_TYPE total_vf = -1.0 * std::reduce(std::execution::par, emitter_view_factors.cbegin(), emitter_view_factors.cend()) / _emitter->getMeshArea();

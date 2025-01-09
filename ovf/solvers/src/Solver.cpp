@@ -28,8 +28,8 @@ namespace openviewfactor {
     auto emitter_normals = emitter_mesh->getNormals();
     auto receiver_normals = receiver_mesh->getNormals();
     #pragma omp parallel for
-    for (unsigned int emitter_index = 0; emitter_index < num_emitter_elements; emitter_index++) {
-      for (unsigned int receiver_index = 0; receiver_index < num_receiver_elements; receiver_index++) {
+    for (int emitter_index = 0; emitter_index < num_emitter_elements; emitter_index++) {
+      for (int receiver_index = 0; receiver_index < num_receiver_elements; receiver_index++) {
         bool culled = this->backFaceCullElements(emitter_centroids[emitter_index], emitter_normals[emitter_index], receiver_centroids[receiver_index], receiver_normals[receiver_index]);
         if (!culled) {
           auto full_matrix_index = emitter_index * num_receiver_elements + receiver_index;
@@ -52,7 +52,7 @@ namespace openviewfactor {
     ray->setOrigin(emitter_element_centroid);
     ray->setDirection(ray_vector.normalize());
     bool blocked = false;
-    for (unsigned int bvh_index = 0; bvh_index < blockers.size(); bvh_index++) {
+    for (int bvh_index = 0; bvh_index < blockers.size(); bvh_index++) {
       (blockers.getBVH(bvh_index))->intersectRayWithBVH(ray);
       if (ray->getIntersectionDistance() < ray_vector.getMagnitude()) {
         blocked = true;
@@ -73,7 +73,8 @@ namespace openviewfactor {
     auto emitter_elements = emitter_mesh->getTriangles();
     auto receiver_elements = receiver_mesh->getTriangles();
     #pragma omp parallel for
-    for (auto index : unculled_indices) {
+    for (int i = 0; i < unculled_indices.size(); i++) {
+      auto index = unculled_indices[i];
       auto emitter_index = index / num_receiver_elements;
       auto receiver_index = index % num_receiver_elements;
       bool blocked = this->evaluateBlockingBetweenElements(emitter_elements[emitter_index], receiver_elements[receiver_index], blockers);
@@ -95,7 +96,7 @@ namespace openviewfactor {
     auto num_receiver_elements = receiver_mesh->getNumElements();
     std::vector<FLOAT_TYPE> view_factors(unblocked_indices.size());
     #pragma omp parallel for shared(num_receiver_elements, view_factors)
-    for (unsigned int i = 0; i < unblocked_indices.size(); i++) {
+    for (int i = 0; i < unblocked_indices.size(); i++) {
       auto index = unblocked_indices[i];
       auto emitter_index = index / num_receiver_elements;
       auto receiver_index = index % num_receiver_elements;

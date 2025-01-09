@@ -26,7 +26,7 @@ set(_ovf_viewfactor_headers_dir ${CMAKE_CURRENT_SOURCE_DIR}/ovf/viewfactor/heade
 set(_ovf_solvers_headers_dir ${CMAKE_CURRENT_SOURCE_DIR}/ovf/solvers/headers)
 
 add_subdirectory(${THIRD_PARTY_INCLUDE_DIR}/lean-vtk)
-add_subdirectory(${THIRD_PARTY_INCLUDE_DIR}/boost-cmake)
+add_subdirectory(${THIRD_PARTY_INCLUDE_DIR}/build-boost)
 add_subdirectory(${THIRD_PARTY_INCLUDE_DIR}/google-test)
 
 # -------------------- DEALING WITH COMPILE OPTIONS -------------------- #

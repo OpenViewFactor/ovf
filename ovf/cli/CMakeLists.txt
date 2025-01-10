@@ -26,6 +26,22 @@ add_executable(openviewfactor ${_ovf_cli_sources})
 set_target_properties(openviewfactor PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(openviewfactor ovfgeometry ovfviewfactor ovfsolvers Boost::program_options Boost::boost OpenMP::OpenMP_CXX)
 
-message("Add binary directory to a user-scope environment variable")
-get_target_property(MY_BINARY_DIR openviewfactor BINARY_DIR)
-execute_process(COMMAND setx MY_BINARY_DIR "${MY_BINARY_DIR}")
+if(LINUX)
+  message("[Linux] Add binary directory to environment variable (NOT CURRENTLY FUNCTIONAL)")
+  # Get the directory where the binary is located
+  get_target_property(MY_BINARY_DIR openviewfactor BINARY_DIR)
+  # Define the line to append
+  set(export_line "export MY_BINARY_DIR=${MY_BINARY_DIR}")
+  # Path to the shell configuration file
+  set(shell_config_file "${CMAKE_HOME_DIRECTORY}/.bashrc")
+  # Read the contents of the file
+  file(READ "${shell_config_file}" file_contents)
+  # Check if the export line already exists in the file
+  if(NOT file_contents MATCHES "^export MY_BINARY_DIR=.*$")
+    # Append the export line if it doesn't exist
+    file(APPEND "${shell_config_file}" "${export_line}\n")
+elseif(WINDOWS)
+  message("[Windows] Add binary directory to environment variable")
+  get_target_property(MY_BINARY_DIR openviewfactor BINARY_DIR)
+  execute_process(COMMAND setx MY_BINARY_DIR "${MY_BINARY_DIR}")
+endif()

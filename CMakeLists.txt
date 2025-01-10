@@ -5,6 +5,14 @@ set(CMAKE_CXX_STANDARD 17)
 
 message("Beginning OVF Build")
 
+if(UNIX AND NOT APPLE)
+  message(STATUS ">>> Configuring for Linux")
+  set(LINUX TRUE)
+elseif(WIN32)
+  message(STATUS ">>> Configuring for Windows")
+  set(WINDOWS TRUE)
+endif()
+
 # -------------------- ADD COMPILE OPTIONS -------------------- #
 
 message("Add OVF Build Options")

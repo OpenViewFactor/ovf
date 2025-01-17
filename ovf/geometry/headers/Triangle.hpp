@@ -11,8 +11,7 @@ template <typename FLOAT_TYPE> class Triangle {
 
   private:
     std::array<Vector3<FLOAT_TYPE>,3> _pts;
-  protected:
-  public:
+  protected:public:
     //* ----- CLASS CONSTRUCTORS ----- *//
     OVF_HOST_DEVICE Triangle();
     OVF_HOST_DEVICE Triangle(std::array<Vector3<FLOAT_TYPE>,3> pts);

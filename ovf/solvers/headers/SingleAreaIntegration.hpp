@@ -1,5 +1,5 @@
-#ifndef _OVF_DOUBLEAREAINTEGRATION_H_
-#define _OVF_DOUBLEAREAINTEGRATION_H_
+#ifndef _OVF_SINGLEAREAINTEGRATION_H_
+#define _OVF_SINGLEAREAINTEGRATION_H_
 
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -16,7 +16,7 @@
 #include "Solver.hpp"
 
 namespace openviewfactor {
-  template <typename FLOAT_TYPE> class DoubleAreaIntegration : public Solver<FLOAT_TYPE> {
+  template <typename FLOAT_TYPE> class SingleAreaIntegration : public Solver<FLOAT_TYPE> {
     private:
     protected:
     public:

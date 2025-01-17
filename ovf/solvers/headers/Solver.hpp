@@ -38,7 +38,7 @@ namespace openviewfactor {
 
       //* ------------------------------ VIRTUAL METHODS ------------------------------ *//
 
-      virtual OVF_HOST_DEVICE FLOAT_TYPE solveViewFactorBetweenElements(const Vector3<FLOAT_TYPE>& emitter_centroid, const Vector3<FLOAT_TYPE>& emitter_normal, const Vector3<FLOAT_TYPE>& receiver_centroid, const Vector3<FLOAT_TYPE>& receiver_normal, FLOAT_TYPE receiver_area) const = 0;
+      virtual OVF_HOST_DEVICE FLOAT_TYPE solveViewFactorBetweenElements(const Vector3<FLOAT_TYPE>& emitter_centroid, const Vector3<FLOAT_TYPE>& emitter_normal, const Triangle<FLOAT_TYPE>& receiver_element) const = 0;
   };
 }
 

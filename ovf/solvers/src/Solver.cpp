@@ -89,10 +89,8 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
     OVF_HOST_DEVICE void Solver<FLOAT_TYPE>::solveViewFactorBetweenMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, std::vector<unsigned int> unblocked_indices, std::shared_ptr<ViewFactor<FLOAT_TYPE>> results) const {
     auto emitter_centroids = emitter_mesh->getCentroids();
-    auto receiver_centroids = receiver_mesh->getCentroids();
     auto emitter_normals = emitter_mesh->getNormals();
-    auto receiver_normals = receiver_mesh->getNormals();
-    auto receiver_areas = receiver_mesh->getAreas();
+    auto receiver_elements = receiver_mesh->getTriangles();
     auto num_receiver_elements = receiver_mesh->getNumElements();
     std::vector<FLOAT_TYPE> view_factors(unblocked_indices.size());
     #pragma omp parallel for shared(num_receiver_elements, view_factors)
@@ -100,7 +98,7 @@ namespace openviewfactor {
       auto index = unblocked_indices[i];
       auto emitter_index = index / num_receiver_elements;
       auto receiver_index = index % num_receiver_elements;
-      view_factors[i] = this->solveViewFactorBetweenElements(emitter_centroids[emitter_index], emitter_normals[emitter_index], receiver_centroids[receiver_index], receiver_normals[receiver_index], receiver_areas[receiver_index]);
+      view_factors[i] = this->solveViewFactorBetweenElements(emitter_centroids[emitter_index], emitter_normals[emitter_index], receiver_elements[receiver_index]);
     }
     results->setElements(unblocked_indices, view_factors);
   }

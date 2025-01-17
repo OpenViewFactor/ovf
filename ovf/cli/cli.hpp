@@ -15,6 +15,7 @@
 
 #include "SolverOptions.hpp"
 #include "DoubleAreaIntegration.hpp"
+#include "SingleAreaIntegration.hpp"
 
 #include <boost/assign.hpp>
 #include <boost/program_options.hpp>
@@ -326,15 +327,28 @@ void ovfWorkflow(po::variables_map variables_map) {
 
   std::cout << "\n[RUN] Computing View Factors" << '\n';
 
-  DoubleAreaIntegration<FLOAT_TYPE> dai;
+  FLOAT_TYPE back_face_cull_time;
+  FLOAT_TYPE blocking_time;
   Timer solver_timer;
-  auto unculled_indices = dai.backFaceCullMeshes(emitter, receiver);
-  auto back_face_cull_time = solver_timer.elapsed();
-  auto unblocked_indices = dai.evaluateBlockingBetweenMeshes(emitter, receiver, blockers, unculled_indices);
-  auto blocking_time = solver_timer.elapsed() - back_face_cull_time;
   auto results = std::make_shared<ViewFactor<FLOAT_TYPE>>();
-  results->linkTriangulations(emitter, receiver, unblocked_indices.size());
-  dai.solveViewFactorBetweenMeshes(emitter, receiver, unblocked_indices, results);
+  if (numeric == "DAI") {
+    DoubleAreaIntegration<FLOAT_TYPE> solver;
+    auto unculled_indices = solver.backFaceCullMeshes(emitter, receiver);
+    back_face_cull_time = solver_timer.elapsed();
+    auto unblocked_indices = solver.evaluateBlockingBetweenMeshes(emitter, receiver, blockers, unculled_indices);
+    blocking_time = solver_timer.elapsed() - back_face_cull_time;
+    results->linkTriangulations(emitter, receiver, unblocked_indices.size());
+    solver.solveViewFactorBetweenMeshes(emitter, receiver, unblocked_indices, results);
+  } else if (numeric == "SAI") {
+    SingleAreaIntegration<FLOAT_TYPE> solver;
+    auto unculled_indices = solver.backFaceCullMeshes(emitter, receiver);
+    back_face_cull_time = solver_timer.elapsed();
+    auto unblocked_indices = solver.evaluateBlockingBetweenMeshes(emitter, receiver, blockers, unculled_indices);
+    blocking_time = solver_timer.elapsed() - back_face_cull_time;
+    results->linkTriangulations(emitter, receiver, unblocked_indices.size());
+    solver.solveViewFactorBetweenMeshes(emitter, receiver, unblocked_indices, results);
+  }
+
   auto solver_time = solver_timer.elapsed() - back_face_cull_time - blocking_time;
 
 

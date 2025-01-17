@@ -9,6 +9,7 @@ set(_solvers_headers
   headers/SolverOptions.hpp
   headers/Solver.hpp
   headers/DoubleAreaIntegration.hpp
+  headers/SingleAreaIntegration.hpp
 )
 
 message("Creating list of Solver sources")
@@ -17,6 +18,7 @@ set(_solvers_sources
   src/SolverOptions.cpp
   src/Solver.cpp
   src/DoubleAreaIntegration.cpp
+  src/SingleAreaIntegration.cpp
 )
 
 message("Add Solver headers to list")

@@ -20,6 +20,10 @@
 #include <cuda_runtime_api.h>
 #include <device_launch_parameters.h>
 
+#include <thrust/host_vector.h>
+#include <thrust/device_vector.h>
+#include <thrust/copy.h>
+
 #include <omp.h>
 
 #define OVF_PI 3.1415926535897932
@@ -41,7 +45,8 @@ namespace openviewfactor {
 
       OVF_HOST_DEVICE bool backFaceCullElements(const Vector3<FLOAT_TYPE>& emitter_centroid, const Vector3<FLOAT_TYPE>& emitter_normal, const Vector3<FLOAT_TYPE>& receiver_centroid, const Vector3<FLOAT_TYPE> receiver_normal) const;
 
-      OVF_HOST_DEVICE std::vector<unsigned int> backFaceCullMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh) const;
+      std::vector<unsigned int> backFaceCullMeshesCPU(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh) const;
+      __global__ std::vector<unsigned int> backFaceCullMeshesGPU(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh) const;
 
       OVF_HOST_DEVICE bool evaluateBlockingBetweenElements(Triangle<FLOAT_TYPE> emitter_element, Triangle<FLOAT_TYPE> receiver_element, const Blockers<FLOAT_TYPE>& blockers) const;
 

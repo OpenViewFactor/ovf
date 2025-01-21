@@ -17,10 +17,10 @@ endif()
 
 message("Add OVF Build Options")
 
-option(OVF_BUILD_OMP "Build OpenMP solver implementations (Default: ON)" ON)
-option(OVF_BUILD_CUDA "Build CUDA solver implementations (Default: OFF)")
-option(OVF_BUILD_GTEST "Build unit tests (Default: OFF)" ON)
-option(OVF_BUILD_BENCHMARK "Build benchmarking tests (Default: OFF)")
+# option(OVF_BUILD_OMP "Build OpenMP solver implementations (Default: ON)" ON)
+# option(OVF_BUILD_CUDA "Build CUDA solver implementations (Default: OFF)")
+# option(OVF_BUILD_GTEST "Build unit tests (Default: OFF)" ON)
+# option(OVF_BUILD_BENCHMARK "Build benchmarking tests (Default: OFF)")
 
 # -------------------- ADD SUBDIRECTORIES -------------------- #
 
@@ -37,12 +37,15 @@ add_subdirectory(${THIRD_PARTY_INCLUDE_DIR}/lean-vtk)
 add_subdirectory(${THIRD_PARTY_INCLUDE_DIR}/build-boost)
 add_subdirectory(${THIRD_PARTY_INCLUDE_DIR}/google-test)
 
-# -------------------- DEALING WITH COMPILE OPTIONS -------------------- #
+message("Check for OpenMP")
+find_package(OpenMP REQUIRED)
 
 message("Check for CUDA")
 find_package(CUDAToolkit)
-if(CMAKE_CUDA_HOST_COMPILER)
-  enable_language(CUDA)
+message(STATUS "CUDAToolkit_FOUND: ${CUDAToolkit_FOUND}")
+
+if(CUDAToolkit_FOUND)
+  message(STATUS "CUDA Supported")
 else()
   message(STATUS "No CUDA Support")
 endif()

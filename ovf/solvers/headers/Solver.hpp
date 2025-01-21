@@ -2,16 +2,27 @@
 #define _OVF_SOLVER_H_
 
 #include "../../config.hpp"
-#include "Ray.hpp"
+
+#include <vector>
+#include <algorithm>
+#include <iostream>
+
+#include "Vector3.hpp"
+#include "Triangle.hpp"
 #include "Triangulation.hpp"
 #include "BVH.hpp"
 #include "Blockers.hpp"
+#include "Ray.hpp"
 #include "SolverOptions.hpp"
 #include "ViewFactor.hpp"
 
+#include <cuda.h>
+#include <cuda_runtime_api.h>
+#include <device_launch_parameters.h>
+
 #include <omp.h>
 
-#include <cuda_runtime.h>
+#define OVF_PI 3.1415926535897932
 
 namespace openviewfactor {
   template <typename FLOAT_TYPE> class Solver {

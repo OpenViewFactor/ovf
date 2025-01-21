@@ -50,6 +50,19 @@ endforeach()
 message("Building ovfgeometry static library")
 
 add_library(ovfgeometry STATIC ${_ovf_geometry_sources})  # add a static library target from the geometry source files
-target_link_libraries(ovfgeometry OpenMP::OpenMP_CXX)
+target_link_libraries(ovfgeometry PRIVATE OpenMP::OpenMP_CXX)
 add_compile_definitions(OVF_VERSION=${OVF_VERSION})
+
+if(CUDAToolkit_FOUND)
+  enable_language(CUDA)
+  message(STATUS "Set ovfgeometry source files language to CUDA")
+  set_source_files_properties(${_ovf_geometry_sources} PROPERTIES LANGUAGE CUDA)
+  message(STATUS "Set ovfgeometry library linker language to CUDA")
+  set_target_properties(ovfgeometry PROPERTIES LINKER_LANGUAGE CUDA)
+  message(STATUS "Link ovfgeometry library to CUDA runtime")
+  target_link_libraries(ovfgeometry PRIVATE CUDA::cudart)
+  # message(STATUS "Set separable compilation [ON] and resolve device symbols [OFF]")
+  # set_target_properties(ovfgeometry PROPERTIES CUDA_SEPARABLE_COMPILATION ON CUDA_RESOLVE_DEVICE_SYMBOLS OFF)
+endif()
+
 include_directories(${PROJECT_BINARY_DIR}/include)

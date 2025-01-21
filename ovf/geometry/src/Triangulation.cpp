@@ -8,15 +8,9 @@ namespace openviewfactor {
   //* ----- CLASS CONSTRUCTORS ----- *//
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>::Triangulation()
-    : _pts(std::vector<Vector3<FLOAT_TYPE>>()), _con(std::vector<std::array<size_t, 3>>()), _name(UNKNOWN) {}
-
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>::Triangulation(MeshType name)
-    : _pts(std::vector<Vector3<FLOAT_TYPE>>()), _con(std::vector<std::array<size_t, 3>>()), _name(name) {}
+    : _pts(std::vector<Vector3<FLOAT_TYPE>>()), _con(std::vector<std::array<size_t, 3>>()) {}
 
   //* ----- ACCESSOR METHODS ----- *//
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE MeshType Triangulation<FLOAT_TYPE>::getName() const { return _name; }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE size_t Triangulation<FLOAT_TYPE>::getNumElements() const { return _con.size(); }
   template <typename FLOAT_TYPE>
@@ -98,11 +92,6 @@ namespace openviewfactor {
   }
 
   //* ----- MUTATOR METHODS ----- *//
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::setName(const MeshType &name) {
-    _name = name;
-    return *this;
-  }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::clear() {
     _pts.clear();

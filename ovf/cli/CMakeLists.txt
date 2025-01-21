@@ -16,10 +16,6 @@ endforeach()
 
 # -------------------- BUILD COMMAND-LINE EXECUTABLE -------------------- #
 
-message("Check for OpenMP")
-find_package(OpenMP REQUIRED)
-message("OVF OpenMP Enabled")
-
 message("Adding openviewfactor executable")
 
 add_executable(openviewfactor ${_ovf_cli_sources})

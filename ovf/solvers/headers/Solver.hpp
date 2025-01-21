@@ -11,6 +11,8 @@
 
 #include <omp.h>
 
+#include <cuda_runtime.h>
+
 namespace openviewfactor {
   template <typename FLOAT_TYPE> class Solver {
     private:

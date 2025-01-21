@@ -6,7 +6,6 @@ message("Include view factor headers directory and third-party directory")
 include_directories(${THIRD_PARTY_INCLUDE_DIR} ${_ovf_geometry_headers_dir} ${_ovf_viewfactor_headers_dir})
 
 set(_viewfactor_headers
-    headers/IndexValuePair.hpp
     headers/ViewFactor.hpp
     headers/OutputWriter.hpp
 )
@@ -14,7 +13,6 @@ set(_viewfactor_headers
 message("Creating list of viewfactor sources")
 
 set(_viewfactor_sources
-    src/IndexValuePair.cpp
     src/ViewFactor.cpp
     src/OutputWriter.cpp
 )

@@ -8,7 +8,6 @@
 
 #include "../../config.hpp"
 #include "Triangulation.hpp"
-#include "IndexValuePair.hpp"
 
 enum ViewFactorState { UNLINKED, LINKED_ONE_MESH, LINKED_TWO_MESH };
 
@@ -46,8 +45,6 @@ namespace openviewfactor {
       OVF_HOST_DEVICE FLOAT_TYPE getSurfaceToSurfaceAverageVF() const;
 
       OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& setElements(std::vector<unsigned int> indices, std::vector<FLOAT_TYPE> view_factors);
-      // OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& setElement(unsigned int full_matrix_index, FLOAT_TYPE value);
-      // OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& setElement(unsigned int emitter_index, unsigned int receiver_index, FLOAT_TYPE value);
   };
 }
 #endif

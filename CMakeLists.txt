@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(OpenViewFactor)
+project(OpenViewFactor CXX)
 set(OVF_VERSION 0.2)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -39,13 +39,16 @@ add_subdirectory(${THIRD_PARTY_INCLUDE_DIR}/google-test)
 
 # -------------------- DEALING WITH COMPILE OPTIONS -------------------- #
 
-if (OVF_BUILD_CUDA)
-  message("Check for CUDA")
-  find_package(CUDAToolkit REQUIRED)
+message("Check for CUDA")
+find_package(CUDAToolkit)
+if(CMAKE_CUDA_HOST_COMPILER)
   enable_language(CUDA)
-  message("OVF CUDA Enabled")
-  set(CMAKE_CUDA_FLAGS_DEBUG ${CMAKE_CUDA_FLAGS_DEBUG} " -g -G ") # this enables the cuda-gdb
-  set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} --ptxas-options=-v")
+else()
+  message(STATUS "No CUDA Support")
 endif()
+
+# message("OVF CUDA Enabled")
+# set(CMAKE_CUDA_FLAGS_DEBUG ${CMAKE_CUDA_FLAGS_DEBUG} " -g -G ") # this enables the cuda-gdb
+# set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} --ptxas-options=-v")
 
 add_subdirectory(ovf)

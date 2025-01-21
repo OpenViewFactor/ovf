@@ -12,7 +12,6 @@ set(_test_sources
   test_Triangulation.cpp
   test_BVHNode.cpp
   test_BVH.cpp
-  test_IndexValuePair.cpp
   test_ViewFactor.cpp
   test_DoubleAreaIntegration.cpp
   main.cpp

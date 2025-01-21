@@ -6,7 +6,6 @@
 #include "STLReader.hpp"
 #include "Ray.hpp"
 
-#include "IndexValuePair.hpp"
 #include "ViewFactor.hpp"
 
 #include "TestGlobals.h"

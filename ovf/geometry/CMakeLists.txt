@@ -50,6 +50,6 @@ endforeach()
 message("Building ovfgeometry static library")
 
 add_library(ovfgeometry STATIC ${_ovf_geometry_sources})  # add a static library target from the geometry source files
-# target_include_directories(ovfgeometry PRIVATE ${_ovf_geometry_headers_dir})
+target_link_libraries(ovfgeometry OpenMP::OpenMP_CXX)
 add_compile_definitions(OVF_VERSION=${OVF_VERSION})
 include_directories(${PROJECT_BINARY_DIR}/include)

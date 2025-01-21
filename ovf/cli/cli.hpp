@@ -10,7 +10,6 @@
 #include "BVH.hpp"
 #include "Blockers.hpp"
 
-#include "IndexValuePair.hpp"
 #include "ViewFactor.hpp"
 
 #include "SolverOptions.hpp"
@@ -34,6 +33,8 @@
 #include <map>
 #include <set>
 #include <type_traits>
+
+#include <cuda_runtime_h>
 
 using namespace openviewfactor;
 namespace po = boost::program_options;

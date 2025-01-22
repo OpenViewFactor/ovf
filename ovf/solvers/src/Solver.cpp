@@ -19,7 +19,7 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  std::vector<unsigned int> Solver<FLOAT_TYPE>::backFaceCullMeshesCPU(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh) const {
+  OVF_HOST_DEVICE std::vector<unsigned int> Solver<FLOAT_TYPE>::backFaceCullMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh) const {
     auto num_emitter_elements = emitter_mesh->getNumElements();
     auto num_receiver_elements = receiver_mesh->getNumElements();
     std::vector<unsigned int> unculled_indices(num_emitter_elements * num_receiver_elements, num_emitter_elements * num_receiver_elements);
@@ -39,34 +39,6 @@ namespace openviewfactor {
     }
     unculled_indices.erase(std::remove(unculled_indices.begin(), unculled_indices.end(), (unsigned int)(num_emitter_elements * num_receiver_elements)), unculled_indices.end());
     return unculled_indices;
-  }
-
-  template <typename FLOAT_TYPE>
-  __global__ std::vector<unsigned int> Solver<FLOAT_TYPE>::backFaceCullMeshesGPU(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh) const {
-    auto num_emitter_elements = emitter_mesh->getNumElements();
-    auto num_receiver_elements = receiver_mesh->getNumElements();
-    
-    std::vector<unsigned int> unculled_indices(num_emitter_elements * num_receiver_elements, num_emitter_elements * num_receiver_elements);
-
-    unsigned int *unculled_indices = NULL;
-
-    std::vector<Vector3<FLOAT_TYPE>> emitter_centroids = emitter_mesh->getCentroids();
-    std::vector<Vector3<FLOAT_TYPE>> receiver_centroids = receiver_mesh->getCentroids();
-    std::vector<Vector3<FLOAT_TYPE>> emitter_normals = emitter_mesh->getNormals();
-    std::vector<Vector3<FLOAT_TYPE>> receiver_normals = receiver_mesh->getNormals();
-
-    Vector3<FLOAT_TYPE> *d_emitter_centroids = NULL;
-    cudaMalloc( (void **)&d_emitter_centroids, num_emitter_elements );
-    cudaMemcpy(d_emitter_centroids, emitter_centroids, cudaMemcpyHostToDevice);
-    Vector3<FLOAT_TYPE> *d_receiver_centroids = NULL;
-    cudaMalloc( (void **)&d_receiver_centroids, num_receiver_elements );
-    cudaMemcpy(d_receiver_centroids, receiver_centroids, cudaMemcpyHostToDevice);
-    Vector3<FLOAT_TYPE> *d_emitter_normals = NULL;
-    cudaMalloc( (void **)&d_emitter_normals, num_emitter_elements );
-    cudaMemcpy(d_emitter_normals, emitter_normals, cudaMemcpyHostToDevice);
-    Vector3<FLOAT_TYPE> *d_receiver_normals = NULL;
-    cudaMalloc( (void **)&d_receiver_normals, num_receiver_elements );
-    cudaMemcpy(d_receiver_normals, receiver_normals, cudaMemcpyHostToDevice);
   }
 
 

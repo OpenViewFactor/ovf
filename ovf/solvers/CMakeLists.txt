@@ -37,13 +37,22 @@ endforeach()
 
 # -------------------- BUILD GEOMETRY LIBRARY -------------------- #
 
-message("Check for OpenMP")
-find_package(OpenMP REQUIRED)
-message("OVF OpenMP Enabled")
-
 message("Building ovfsolver static library")
 
 add_library(ovfsolvers STATIC ${_ovf_solvers_sources})
-target_link_libraries(ovfsolvers ovfgeometry ovfviewfactor OpenMP::OpenMP_CXX)
+target_link_libraries(ovfsolvers PRIVATE ovfgeometry ovfviewfactor OpenMP::OpenMP_CXX)
 add_compile_definitions(OVF_VERSION=${OVF_VERSION})
+
+if(CUDAToolkit_FOUND)
+  enable_language(CUDA)
+  message(STATUS "Set ovfsovlers source files language to CUDA")
+  set_source_files_properties(${_ovf_solvers_sources} PROPERTIES LANGUAGE CUDA)
+  message(STATUS "Set ovfsolvers library linker language to CUDA")
+  set_target_properties(ovfsolvers PROPERTIES LINKER_LANGUAGE CUDA)
+  message(STATUS "Link ovfsolvers library to CUDA runtime")
+  target_link_libraries(ovfsolvers PRIVATE CUDA::cudart)
+  # message(STATUS "Set separable compilation [ON] and resolve device symbols [OFF]")
+  set_target_properties(ovfsolvers PROPERTIES CUDA_RESOLVE_DEVICE_SYMBOLS ON)
+endif()
+
 include_directories(${PROJECT_BINARY_DIR}/include)

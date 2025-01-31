@@ -46,7 +46,7 @@ message(STATUS "CUDAToolkit_FOUND: ${CUDAToolkit_FOUND}")
 
 if(CUDAToolkit_FOUND)
   message(STATUS "CUDA Supported")
-  set(OVF_SUPPORT_CUDA TRUE)
+  # set(OVF_SUPPORT_CUDA TRUE)
 else()
   message(STATUS "No CUDA Support")
 endif()

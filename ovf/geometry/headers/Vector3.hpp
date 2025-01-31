@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <array>
 #include <cmath>
+#include <algorithm>
 
 namespace openviewfactor {
   template <typename FLOAT_TYPE> class Vector3 {
@@ -55,7 +56,6 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Vector3<FLOAT_TYPE> vectorMaxima(const Vector3<FLOAT_TYPE> &v1, const Vector3<FLOAT_TYPE> &v2);
 
-  //TODO [] SHANE AND I HAVE NO IDEA WHY THESE EXPLICIT INSTANTIATIONS ARE NECESSARY, BUT THE COMPILER THROWS A TANTRUM IF THEY'RE NOT HERE
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Vector3<FLOAT_TYPE> operator+(const Vector3<FLOAT_TYPE> &lhs,
                                                 const Vector3<FLOAT_TYPE> &rhs);  // explicit instantiation of addition

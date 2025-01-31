@@ -11,15 +11,15 @@ namespace openviewfactor {
 
     std::vector<std::array<size_t,3>> reformatted_triangulations(triangulations.size() / 3);
     #pragma omp parallel for
-    for (unsigned int triangle_index = 0; triangle_index < reformatted_triangulations.size(); triangle_index++) {
+    for (int triangle_index = 0; triangle_index < reformatted_triangulations.size(); triangle_index++) {
       reformatted_triangulations[triangle_index] = std::array<size_t, 3>({triangulations[3 * triangle_index + 0],
-                                                                                triangulations[3 * triangle_index + 1],
-                                                                                triangulations[3 * triangle_index + 2]});
+                                                                          triangulations[3 * triangle_index + 1],
+                                                                          triangulations[3 * triangle_index + 2]});
     }
 
     std::vector<Vector3<FLOAT_TYPE>> reformatted_coordinates(coordinates.size() / 3);
     #pragma omp parallel for
-    for (size_t coordinates_index = 0; coordinates_index < reformatted_coordinates.size(); coordinates_index++) {
+    for (int coordinates_index = 0; coordinates_index < reformatted_coordinates.size(); coordinates_index++) {
       reformatted_coordinates[coordinates_index] = Vector3<FLOAT_TYPE>((coordinates.data())[3 * coordinates_index + 0],
                                                                        (coordinates.data())[3 * coordinates_index + 1],
                                                                        (coordinates.data())[3 * coordinates_index + 2]);

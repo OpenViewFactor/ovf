@@ -26,7 +26,12 @@ namespace openviewfactor {
     }
 
     FLOAT_TYPE scale_factor = 1.0 / (2.0*M_PI);
-    return (-1.0 * edge_integral * scale_factor);
+    auto fij = (1.0 * edge_integral * scale_factor);
+    if (std::isnan(fij)) {
+      return 0.0;
+    } else {
+      return fij;
+    }
   }
 
   template class SingleAreaIntegration<float>;

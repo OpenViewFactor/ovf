@@ -52,9 +52,9 @@ namespace openviewfactor {
   OVF_HOST_DEVICE std::shared_ptr<Triangulation<FLOAT_TYPE>> ViewFactor<FLOAT_TYPE>::getReceiverMesh() const { return _receiver; }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE unsigned int ViewFactor<FLOAT_TYPE>::binarySearch(unsigned int full_matrix_index, unsigned int inclusive_start, unsigned int uninclusive_end) const {
+  OVF_HOST_DEVICE int ViewFactor<FLOAT_TYPE>::binarySearch(unsigned int full_matrix_index, unsigned int inclusive_start, unsigned int uninclusive_end) const {
     if (uninclusive_end > inclusive_start) {
-      auto midpoint = (inclusive_start + uninclusive_end) / 2;
+      int midpoint = ((int)inclusive_start + (int)uninclusive_end) / 2;
       if (_indices[midpoint] == full_matrix_index) { return midpoint; }
       if (_indices[midpoint] > full_matrix_index) { return binarySearch(full_matrix_index, inclusive_start, midpoint); }
       return binarySearch(full_matrix_index, midpoint+1, uninclusive_end);
@@ -63,17 +63,12 @@ namespace openviewfactor {
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getMatrixElementVF(unsigned int full_matrix_index) const {
-    // if (!(this->isLinked())) { throw std::runtime_error("Cannot access a value in this object, there are no linked triangulations"); }
     auto indices_index = this->binarySearch(full_matrix_index, 0, _indices.size());
     if (indices_index != -1) { return _view_factors[_indices[indices_index]]; }
     return 0.0;
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getMatrixElementVF(unsigned int emitter_index, unsigned int receiver_index) const {
-    // if (!(this->isLinked())) { throw std::runtime_error("Cannot access a value in this object, there are no linked triangulations"); }
-    // if (emitter_index > (_emitter->getNumElements() - 1)) { throw std::runtime_error("Cannot evaluate the VF for an emitting element index which exceeds the number of elements in the emitting surface"); }
-    // if (receiver_index > (_receiver->getNumElements() - 1)) { throw std::runtime_error("Cannot evaluate the VF for a receiving element index which exceeds the number of elements in the receiving surface"); }
-
     unsigned int full_matrix_index = (emitter_index * _emitter->getNumElements()) + receiver_index;
     unsigned int maximum_index = _emitter->getNumElements() * _receiver->getNumElements() - 1;
     if (full_matrix_index > maximum_index) { throw std::runtime_error("Cannot access a value for this index, it exceeds the matrix size"); }
@@ -83,9 +78,6 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getEmitterElementToReceiverSurfaceVF(unsigned int emitter_index) const {
-    // if (!(this->isLinked())) { throw std::runtime_error("Cannot evaluate emitter element to receiver surface, this object is not linked to any triangulations"); }
-    // if (emitter_index > (_emitter->getNumElements() - 1)) { throw std::runtime_error("Cannot evaluate the VF for an emitting element index which exceeds the number of elements in the emitting surface"); }
-    
     unsigned int num_receiver_elements = _receiver->getNumElements();
     std::vector<FLOAT_TYPE> individual_view_factors(num_receiver_elements);
     for (unsigned int i = 0; i < _receiver->getNumElements(); i++) {
@@ -96,9 +88,6 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getReceiverElementToEmitterSurfaceVF(unsigned int receiver_index) const {
-    // if (!(this->isLinked())) { throw std::runtime_error("Cannot evaluate receiver element to emitter surface, this object is not linked to any triangulations"); }
-    // if (receiver_index > (_receiver->getNumElements() - 1)) { throw std::runtime_error("Cannot evaluate the VF for a receiving element index which exceeds the number of elements in the receiving surface"); }
-
     FLOAT_TYPE receiver_element_area = (*_receiver)[receiver_index].getArea();
     unsigned int num_emitter_elements = _emitter->getNumElements();
     std::vector<FLOAT_TYPE> individual_view_factors(num_emitter_elements);
@@ -111,15 +100,23 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getSurfaceToSurfaceAverageVF() const {
-    // if (!(this->isLinked())) { throw std::runtime_error("Cannot evaluate surface to surface, this object is not linked to any triangulations"); }
+    std::cout << "test 1" << '\n';
     auto num_emitter_elements = _emitter->getNumElements();
+    std::cout << "test 2" << '\n';
     std::vector<FLOAT_TYPE> emitter_view_factors(num_emitter_elements);
+    std::cout << "test 3" << '\n';
     auto emitter_areas = _emitter->getAreas();
-    #pragma omp parallel for
+    std::cout << "test 4" << '\n';
+    // #pragma omp parallel for
     for (int i = 0; i < num_emitter_elements; i++) {
+      // std::cout << i << " ";
       emitter_view_factors[i] = (this->getEmitterElementToReceiverSurfaceVF(i) * emitter_areas[i]);
     }
-    FLOAT_TYPE total_vf = -1.0 * std::reduce(std::execution::par, emitter_view_factors.cbegin(), emitter_view_factors.cend()) / _emitter->getMeshArea();
+    std::cout << "\ntest 5" << '\n';
+    FLOAT_TYPE scale_factor = 1.0 / _emitter->getMeshArea();
+    std::cout << "test 6" << '\n';
+    FLOAT_TYPE total_vf = std::reduce(std::execution::par, emitter_view_factors.cbegin(), emitter_view_factors.cend()) * scale_factor;
+    std::cout << "test 7" << '\n';
     return total_vf;
   }
 

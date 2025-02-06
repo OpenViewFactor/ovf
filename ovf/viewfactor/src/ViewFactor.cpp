@@ -71,7 +71,7 @@ namespace openviewfactor {
         FLOAT_TYPE fij = _view_factors[_indices[indices_index]];
         return fij;
       } else {
-        std::cout << "full_matrix_index : " << full_matrix_index << " -- indices_index : " << indices_index << " -- _indices[indices_index] : " << _indices[indices_index] << '\n';
+        return 0.0;
       }
     }
     return 0.0;

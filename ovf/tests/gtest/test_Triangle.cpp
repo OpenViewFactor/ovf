@@ -55,3 +55,17 @@ TEST(Triangle_Tests, test_overloads) {
 
   EXPECT_FALSE(t1 != t2);
 }
+
+TEST(Triangle_Tests, test_extremes) {
+  Triangle<double> t1({{2.0/3.0, 0.0, -1.0/3.0}, {-1.0/3.0, 0.0, -1.0/3.0}, {-1.0/3.0, 0.0, 2.0/3.0}});
+
+  EXPECT_EQ(t1.getNormal(), Vector3<double>(0.0, 1.0, 0.0));
+
+  Triangle<double> t2({{2.0/3.0, 1.0, 0.0}, {-1.0/3.0, 2.0, 0.0}, {-1.0/3.0, 1.0, 0.0}});
+
+  EXPECT_EQ(t2.getNormal(), Vector3<double>(0.0, 0.0, 1.0));
+
+  auto v = t2.getCentroid() - t1.getCentroid();
+  EXPECT_TRUE(v.dot(t1.getNormal()) > 0.0);
+  EXPECT_DOUBLE_EQ(v.dot(t2.getNormal()), 0.0);
+}

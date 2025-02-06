@@ -41,6 +41,6 @@ message("OVF OpenMP Enabled")
 message("Building ovfviewfactor static library")
 
 add_library(ovfviewfactor STATIC ${_ovf_viewfactor_sources})
-target_link_libraries(ovfviewfactor OpenMP::OpenMP_CXX)
+target_link_libraries(ovfviewfactor OpenMP::OpenMP_CXX LeanVTK)
 add_compile_definitions(OVF_VERSION=${OVF_VERSION})
 include_directories(${PROJECT_BINARY_DIR}/include)

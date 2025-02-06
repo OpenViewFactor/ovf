@@ -2,8 +2,11 @@
 #define OVF_OUTPUT_WRITER_H_
 
 #include <fstream>
+#include <algorithm>
 
 #include "ViewFactor.hpp"
+
+#include "lean_vtk.hpp"
 
 namespace openviewfactor {
   template <typename FLOAT_TYPE> class OutputWriter {
@@ -11,14 +14,15 @@ namespace openviewfactor {
       std::shared_ptr<ViewFactor<FLOAT_TYPE>> _vf;
     protected:
     public:
-      OutputWriter<FLOAT_TYPE>();
-      OutputWriter<FLOAT_TYPE>(std::shared_ptr<ViewFactor<FLOAT_TYPE>> vf);
+      OutputWriter();
+      OutputWriter(std::shared_ptr<ViewFactor<FLOAT_TYPE>> vf);
 
       bool isLinked() const;
       OutputWriter<FLOAT_TYPE>& linkToViewFactor(std::shared_ptr<ViewFactor<FLOAT_TYPE>> vf);
       
       void writeEmitterVisualization(const std::string& filename) const;
-      void writeReceiverVisualization(const std::string& filename) const;
+      void writeReceiverFromEmitterVisualization(const std::string& filename) const;
+      void writeReceiverToEmitterVisualization(const std::string& filename) const;
       void writeCombinedVisualization(const std::string& filename) const;
   };
   template class OutputWriter<float>;

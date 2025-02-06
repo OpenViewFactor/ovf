@@ -16,6 +16,8 @@
 #include "DoubleAreaIntegration.hpp"
 #include "SingleAreaIntegration.hpp"
 
+#include "OutputWriter.hpp"
+
 #include <boost/assign.hpp>
 #include <boost/program_options.hpp>
 #include <chrono>
@@ -359,7 +361,11 @@ void ovfWorkflow(po::variables_map variables_map) {
   std::cout << "\n[RESULT] Surface-Surface View Factor : " << std::setprecision(15) << results->getSurfaceToSurfaceAverageVF() << '\n' << '\n';
 
   if (write_matrix) { std::cout << "[OUT] Writing Plain Text Matrix Output (not doing anything yet)" << '\n'; }
-  if (write_graphic) { std::cout << "[OUT] Writing Graphic File Output (not doing anything yet)" << '\n'; }
+  if (write_graphic) {
+    std::cout << "[OUT] Writing Graphic File Output" << '\n';
+    OutputWriter<FLOAT_TYPE> output_writer(results);
+    output_writer.writeEmitterVisualization(unified_output_filename);
+  }
 
   std::cout << "[LOG] Total I/O Time: " << total_program_timer.elapsed() << " [s]" << '\n';
 }

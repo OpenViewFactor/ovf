@@ -1,4 +1,5 @@
-#include "cli.hpp"
+#include "CommandLineOptions.hpp"
+#include "ovfWorkflow.hpp"
 
 int main(int argc, char *argv[]) {
   po::variables_map variables_map = parseCommandLine(argc, argv);

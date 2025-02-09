@@ -21,12 +21,12 @@ namespace openviewfactor {
     FLOAT_TYPE edge_integral = 0.0;
     for (int i = 0; i < 3; i++) {
       auto section_normal = section_normals[i];
-      FLOAT_TYPE scale_factor = 1.0 / std::sqrt(dot(section_normal, section_normal));
+      FLOAT_TYPE scale_factor = 1.0 / section_normal.getMagnitude();
       edge_integral += ( dot(section_normal, emitter_normal) * scale_factor ) * ( OVF_PI*0.5 - std::atan(section_projections[i] * scale_factor) );
     }
 
     FLOAT_TYPE scale_factor = 1.0 / (2.0*OVF_PI);
-    auto fij = (1.0 * edge_integral * scale_factor);
+    auto fij = (edge_integral * scale_factor);
     if (std::isnan(fij)) {
       return 0.0;
     } else {

@@ -37,13 +37,13 @@ namespace openviewfactor {
 
       OVF_HOST_DEVICE bool backFaceCullElements(const Vector3<FLOAT_TYPE>& emitter_centroid, const Vector3<FLOAT_TYPE>& emitter_normal, const Vector3<FLOAT_TYPE>& receiver_centroid, const Vector3<FLOAT_TYPE> receiver_normal) const;
 
-      OVF_HOST_DEVICE std::vector<unsigned int> backFaceCullMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh) const;
+      OVF_HOST_DEVICE std::vector<unsigned int> backFaceCullMeshes(unsigned int num_emitter_elements, unsigned int num_receiver_elements, std::vector<Vector3<FLOAT_TYPE>>* emitter_centroids, std::vector<Vector3<FLOAT_TYPE>>* receiver_centroids, std::vector<Vector3<FLOAT_TYPE>>* emitter_normals, std::vector<Vector3<FLOAT_TYPE>>* receiver_normals) const;
       
-      OVF_HOST_DEVICE bool evaluateBlockingBetweenElements(Triangle<FLOAT_TYPE> emitter_element, Triangle<FLOAT_TYPE> receiver_element, const Blockers<FLOAT_TYPE>& blockers) const;
+      OVF_HOST_DEVICE bool evaluateBlockingBetweenElements(std::shared_ptr<Ray<FLOAT_TYPE>> ray, FLOAT_TYPE ray_magnitude, const Blockers<FLOAT_TYPE>& blockers) const;
 
-      OVF_HOST_DEVICE std::vector<unsigned int> evaluateBlockingBetweenMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, Blockers<FLOAT_TYPE> blockers, std::vector<unsigned int> unculled_indices) const;
+      OVF_HOST_DEVICE std::vector<unsigned int> evaluateBlockingBetweenMeshes(unsigned int num_emitter_elements, unsigned int num_receiver_elements, std::vector<Vector3<FLOAT_TYPE>> emitter_centroids, std::vector<Vector3<FLOAT_TYPE>> receiver_centroids, Blockers<FLOAT_TYPE> blockers, std::vector<unsigned int> unculled_indices) const;
 
-      OVF_HOST_DEVICE void solveViewFactorBetweenMeshes(std::shared_ptr<Triangulation<FLOAT_TYPE>> emitter_mesh, std::shared_ptr<Triangulation<FLOAT_TYPE>> receiver_mesh, std::vector<unsigned int> unblocked_indices, std::shared_ptr<ViewFactor<FLOAT_TYPE>> results) const;
+      OVF_HOST_DEVICE void solveViewFactorBetweenMeshes(unsigned int num_emitter_elements, unsigned int num_receiver_elements, std::vector<Vector3<FLOAT_TYPE>>* emitter_centroids, std::vector<Vector3<FLOAT_TYPE>>* emitter_normals, std::vector<Triangle<FLOAT_TYPE>>* receiver_elements, std::vector<unsigned int>* unblocked_indices, std::shared_ptr<ViewFactor<FLOAT_TYPE>> results) const;
 
       //* ------------------------------ VIRTUAL METHODS ------------------------------ *//
 

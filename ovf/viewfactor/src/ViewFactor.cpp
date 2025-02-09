@@ -64,16 +64,7 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getMatrixElementVF(unsigned int full_matrix_index) const {
     auto indices_index = this->binarySearch(full_matrix_index, 0, _indices.size());
-    if (indices_index != -1 && indices_index < _indices.size()) {
-      //TODO THE SECOND ARGUMENT IN THIS IF STATEMENT IS BOGUS AND IT SHOULD NOT EXIST
-      if (_indices[indices_index] >= 0 && _indices[indices_index] < _view_factors.size()) {
-        //TODO THIS IF STATEMENT IS BOGUS AND IT SHOULD NOT EXIST
-        FLOAT_TYPE fij = _view_factors[_indices[indices_index]];
-        return fij;
-      } else {
-        return 0.0;
-      }
-    }
+    if (indices_index != -1) { return _view_factors[indices_index]; }
     return 0.0;
   }
   template <typename FLOAT_TYPE>
@@ -88,44 +79,35 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getEmitterElementToReceiverSurfaceVF(unsigned int emitter_index) const {
     unsigned int num_receiver_elements = _receiver->getNumElements();
-    std::vector<FLOAT_TYPE> individual_view_factors(num_receiver_elements);
+    FLOAT_TYPE total_view_factor = 0.0;
     for (unsigned int i = 0; i < num_receiver_elements; i++) {
-      individual_view_factors[i] = this->getMatrixElementVF(emitter_index, i);
+      total_view_factor += this->getMatrixElementVF(emitter_index, i);
     }
-    return std::reduce(individual_view_factors.cbegin(), individual_view_factors.cend());
+    return total_view_factor;
   }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getReceiverElementToEmitterSurfaceVF(unsigned int receiver_index) const {
     FLOAT_TYPE receiver_element_area = (*_receiver)[receiver_index].getArea();
     unsigned int num_emitter_elements = _emitter->getNumElements();
-    std::vector<FLOAT_TYPE> individual_view_factors(num_emitter_elements);
+    FLOAT_TYPE total_view_factor = 0.0;
     for (unsigned int i = 0; i < num_emitter_elements; i++) {
-      individual_view_factors[i] = (this->getMatrixElementVF(i, receiver_index) * (*_emitter)[i].getArea() / receiver_element_area);
+      total_view_factor += (this->getMatrixElementVF(i, receiver_index) * (*_emitter)[i].getArea() / receiver_element_area);
     }
-
-    return std::reduce(individual_view_factors.cbegin(), individual_view_factors.cend());
+    return total_view_factor;
   }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getSurfaceToSurfaceAverageVF() const {
-    // std::cout << "test 1" << '\n';
     auto num_emitter_elements = _emitter->getNumElements();
-    // std::cout << "test 2" << '\n';
     std::vector<FLOAT_TYPE> emitter_view_factors(num_emitter_elements);
-    // std::cout << "test 3" << '\n';
     auto emitter_areas = _emitter->getAreas();
-    // std::cout << "test 4" << '\n';
-    // #pragma omp parallel for
+    #pragma omp parallel for
     for (int i = 0; i < num_emitter_elements; i++) {
-      // std::cout << i << " ";
       emitter_view_factors[i] = (this->getEmitterElementToReceiverSurfaceVF(i) * emitter_areas[i]);
     }
-    // std::cout << "\ntest 5" << '\n';
     FLOAT_TYPE scale_factor = 1.0 / _emitter->getMeshArea();
-    // std::cout << "test 6" << '\n';
     FLOAT_TYPE total_vf = std::reduce(std::execution::par, emitter_view_factors.cbegin(), emitter_view_factors.cend()) * scale_factor;
-    // std::cout << "test 7" << '\n';
     return total_vf;
   }
 

@@ -6,6 +6,7 @@
 namespace openviewfactor {
 
   enum SelfIntersectionMode { NONE, BOTH, EMITTER, RECEIVER };
+  enum BackFaceCullMode { ON, OFF };
   enum NumericMode { DAI, SAI };
   enum ComputeMode { CPU, CPU_N, GPU, GPU_N };
   enum PrecisionMode { SINGLE, DOUBLE };
@@ -13,6 +14,7 @@ namespace openviewfactor {
   class SolverOptions {
     private:
       SelfIntersectionMode _self_intersection;
+      BackFaceCullMode _back_face_cull;
       NumericMode _numerics;
       ComputeMode _compute;
       PrecisionMode _precision;
@@ -21,11 +23,13 @@ namespace openviewfactor {
       OVF_HOST_DEVICE SolverOptions();
 
       OVF_HOST_DEVICE SelfIntersectionMode getSelfIntersectionMode() const;
+      OVF_HOST_DEVICE BackFaceCullMode getBackFaceCullMode() const;
       OVF_HOST_DEVICE NumericMode getNumericMode() const;
       OVF_HOST_DEVICE ComputeMode getComputeMode() const;
       OVF_HOST_DEVICE PrecisionMode getPrecisionMode() const;
 
       OVF_HOST_DEVICE SolverOptions& setSelfIntersectionMode(SelfIntersectionMode sim);
+      OVF_HOST_DEVICE SolverOptions& setBackFaceCullMode(BackFaceCullMode bfm);
       OVF_HOST_DEVICE SolverOptions& setNumericMode(NumericMode nm);
       OVF_HOST_DEVICE SolverOptions& setComputeMode(ComputeMode cm);
       OVF_HOST_DEVICE SolverOptions& setPrecisionMode(PrecisionMode pm);

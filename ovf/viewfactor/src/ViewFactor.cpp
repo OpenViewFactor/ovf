@@ -69,7 +69,7 @@ namespace openviewfactor {
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getMatrixElementVF(unsigned int emitter_index, unsigned int receiver_index) const {
-    unsigned int full_matrix_index = (emitter_index * _emitter->getNumElements()) + receiver_index;
+    unsigned int full_matrix_index = (emitter_index * _receiver->getNumElements()) + receiver_index;
     unsigned int maximum_index = _emitter->getNumElements() * _receiver->getNumElements() - 1;
     if (full_matrix_index > maximum_index) { throw std::runtime_error("Cannot access a value for this index, it exceeds the matrix size"); }
 
@@ -89,10 +89,11 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getReceiverElementToEmitterSurfaceVF(unsigned int receiver_index) const {
     FLOAT_TYPE receiver_element_area = (*_receiver)[receiver_index].getArea();
+    FLOAT_TYPE inverse_receiver_element_area = 1.0 / receiver_element_area;
     unsigned int num_emitter_elements = _emitter->getNumElements();
     FLOAT_TYPE total_view_factor = 0.0;
     for (unsigned int i = 0; i < num_emitter_elements; i++) {
-      total_view_factor += (this->getMatrixElementVF(i, receiver_index) * (*_emitter)[i].getArea() / receiver_element_area);
+      total_view_factor += (this->getMatrixElementVF(i, receiver_index) * (*_emitter)[i].getArea() * inverse_receiver_element_area);
     }
     return total_view_factor;
   }
@@ -106,7 +107,7 @@ namespace openviewfactor {
     for (int i = 0; i < num_emitter_elements; i++) {
       emitter_view_factors[i] = (this->getEmitterElementToReceiverSurfaceVF(i) * emitter_areas[i]);
     }
-    FLOAT_TYPE scale_factor = 1.0 / _emitter->getMeshArea();
+    FLOAT_TYPE scale_factor = 1.0 / std::reduce(std::execution::par, emitter_areas.cbegin(), emitter_areas.cend());
     FLOAT_TYPE total_vf = std::reduce(std::execution::par, emitter_view_factors.cbegin(), emitter_view_factors.cend()) * scale_factor;
     return total_vf;
   }

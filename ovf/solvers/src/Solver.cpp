@@ -33,11 +33,10 @@ namespace openviewfactor {
         }
       }
     }
+    std::cout << "[TEMP LOG] Unculled Indices Size (Pre-Filter): " << unculled_indices.size() << '\n';
     auto end_iterator = std::remove(unculled_indices.begin(), unculled_indices.end(), problem_size);
     unculled_indices.erase(end_iterator, unculled_indices.end());
-
-    std::cout << "[TEMP LOG] Back Face Cull Removed " << problem_size - unculled_indices.size() << " Elements" << '\n';
-    std::cout << "[TEMP LOG] Largest Index Remaining: " << unculled_indices[unculled_indices.size() - 1] << '\n';
+    std::cout << "[TEMP LOG] Unculled Indices Size (Post-Filter): " << unculled_indices.size() << '\n';
     return unculled_indices;
   }
 
@@ -93,8 +92,6 @@ namespace openviewfactor {
       auto receiver_index = index % num_receiver_elements;
       view_factors[i] = this->solveViewFactorBetweenElements((*emitter_centroids)[emitter_index], (*emitter_normals)[emitter_index], (*receiver_elements)[receiver_index]);
     }
-    std::cout << "[TEMP LOG] Unblocked Indices Size: " << unblocked_indices->size() << '\n';
-    std::cout << "[TEMP LOG] View Factors Size: " << view_factors.size() << '\n';
     results->setElements(*unblocked_indices, view_factors);
   }
 

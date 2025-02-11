@@ -167,7 +167,8 @@ void ovfWorkflow(po::variables_map variables_map) {
     DoubleAreaIntegration<FLOAT_TYPE> solver;
     std::vector<unsigned int> unculled_indices(num_emitter_elements * num_receiver_elements);
     if (back_face_cull_mode == "ON") {
-      auto unculled_indices = solver.backFaceCullMeshes(num_emitter_elements, num_receiver_elements, &emitter_centroids, &receiver_centroids, &emitter_normals, &receiver_normals);
+      std::cout << "[LOG] Applying Back Face Culling" << '\n';
+      unculled_indices = solver.backFaceCullMeshes(num_emitter_elements, num_receiver_elements, &emitter_centroids, &receiver_centroids, &emitter_normals, &receiver_normals);
     } else {
       std::iota(unculled_indices.begin(), unculled_indices.end(), 0);
     }
@@ -183,7 +184,7 @@ void ovfWorkflow(po::variables_map variables_map) {
     SingleAreaIntegration<FLOAT_TYPE> solver;
     std::vector<unsigned int> unculled_indices(num_emitter_elements * num_receiver_elements);
     if (back_face_cull_mode == "ON") {
-      auto unculled_indices = solver.backFaceCullMeshes(num_emitter_elements, num_receiver_elements, &emitter_centroids, &receiver_centroids, &emitter_normals, &receiver_normals);
+      unculled_indices = solver.backFaceCullMeshes(num_emitter_elements, num_receiver_elements, &emitter_centroids, &receiver_centroids, &emitter_normals, &receiver_normals);
     } else {
       std::iota(unculled_indices.begin(), unculled_indices.end(), 0);
     }

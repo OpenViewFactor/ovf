@@ -5,6 +5,8 @@
 #include <array>
 #include <vector>
 #include <algorithm>
+#include <cmath>
+#include <numeric>
 #include <memory>
 
 #include "../../config.hpp"
@@ -51,6 +53,20 @@ template <typename FLOAT_TYPE> class Triangulation {
     OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& setPoints(std::vector<Vector3<FLOAT_TYPE>> pts);
 
     OVF_HOST_DEVICE bool operator==(const Triangulation<FLOAT_TYPE>& rhs) const;
+
+    //* ----- MESH QUALITY ANALYSIS ----- *//
+    OVF_HOST_DEVICE std::vector<FLOAT_TYPE> getAllElementsAspectRatios() const;
+    OVF_HOST_DEVICE std::vector<FLOAT_TYPE> getAllElementsSkewness() const;
+    OVF_HOST_DEVICE std::vector<FLOAT_TYPE> getAllElementsElementQualities() const;
+    OVF_HOST_DEVICE FLOAT_TYPE evaluateAspectRatioMean() const;
+    OVF_HOST_DEVICE FLOAT_TYPE evaluateSkewnessMean() const;
+    OVF_HOST_DEVICE FLOAT_TYPE evaluateElementQualityMean() const;
+    OVF_HOST_DEVICE FLOAT_TYPE evaluateAspectRatioStandardDeviation() const;
+    OVF_HOST_DEVICE FLOAT_TYPE evaluateSkewnessStandardDeviation() const;
+    OVF_HOST_DEVICE FLOAT_TYPE evaluateElementQualityStandardDeviation() const;
+    OVF_HOST_DEVICE std::pair<FLOAT_TYPE,FLOAT_TYPE> evaluateAspectRatioMinMax() const;
+    OVF_HOST_DEVICE std::pair<FLOAT_TYPE,FLOAT_TYPE> evaluateSkewnessMinMax() const;
+    OVF_HOST_DEVICE std::pair<FLOAT_TYPE,FLOAT_TYPE> evaluateElementQualityMinMax() const;
 };
 }
 

@@ -18,8 +18,6 @@
 
 #include <omp.h>
 
-#define OVF_PI 3.1415926535897932
-
 namespace openviewfactor {
   template <typename FLOAT_TYPE> class Solver {
     private:

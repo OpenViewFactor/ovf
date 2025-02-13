@@ -122,9 +122,9 @@ void checkSelfIntersectionType(const std::string &self_int_type) {
 }
 
 void checkBackFaceCull(const std::string &back_face_cull_mode) {
-  std::cout << "[CHECK] Checking Self-Intersection Argument";
+  std::cout << "[CHECK] Checking Back Face Cull Argument";
   if (!BACKFACECULL_INPUT_TO_ENUM.count(back_face_cull_mode)) {
-    throw po::error("\t> [ERROR] Selfint type not recognized: " + back_face_cull_mode);
+    throw po::error("\t> [ERROR] Back Face Cull option not recognized: " + back_face_cull_mode);
   }
   std::cout << "\t> [VALID]" << '\n';
 }
@@ -176,7 +176,7 @@ po::options_description getOptions() {
     ("selfint,s",
       po::value<std::string>()->default_value("BOTH")->notifier(&checkSelfIntersectionType),
       "-s <NONE/EMITTER/RECEIVER/BOTH> \n[--+--] Determines which input mesh(es) are included in evaluating obstruction (defaults to BOTH)")
-    ("backfacecull,-f",
+    ("backfacecull,f",
       po::value<std::string>()->default_value("ON")->notifier(&checkBackFaceCull),
       "-f <ON/OFF> \n[--+--] Determines whether to execute back face culling (defaults to ON)")
     ("numerics,n",

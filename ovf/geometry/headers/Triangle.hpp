@@ -4,6 +4,8 @@
 #include "../../config.hpp"
 #include "Vector3.hpp"
 #include <cmath>
+#include <vector>
+#include <algorithm>
 
 namespace openviewfactor {
 
@@ -19,15 +21,19 @@ template <typename FLOAT_TYPE> class Triangle {
     OVF_HOST_DEVICE Triangle(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC);    
 
     //* ----- ACCESSOR METHODS ----- *//
-    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> getOA() const;
-    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> getOB() const;
-    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> getOC() const;
-    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> getAB() const;
-    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> getBC() const;
-    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> getCA() const;
-    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> getNormal() const;
-    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> getCentroid() const;
-    OVF_HOST_DEVICE const FLOAT_TYPE getArea() const;
+    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getOA() const;
+    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getOB() const;
+    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getOC() const;
+    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getAB() const;
+    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getBC() const;
+    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getCA() const;
+    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getNormal() const;
+    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getCentroid() const;
+    OVF_HOST_DEVICE FLOAT_TYPE getArea() const;
+
+    OVF_HOST_DEVICE FLOAT_TYPE evaluateAspectRatio() const;
+    OVF_HOST_DEVICE FLOAT_TYPE evaluateSkewness() const;
+    OVF_HOST_DEVICE FLOAT_TYPE evaluateElementQuality() const;
 
     //* ----- MUTATOR METHODS ----- *//
     OVF_HOST_DEVICE Triangle<FLOAT_TYPE>& setOA(FLOAT_TYPE x, FLOAT_TYPE y, FLOAT_TYPE z);
@@ -40,6 +46,8 @@ template <typename FLOAT_TYPE> class Triangle {
     //* ----- OPERATOR OVERLOADS ----- *//
     OVF_HOST_DEVICE bool operator==(const Triangle<FLOAT_TYPE> &rhs) const;
     OVF_HOST_DEVICE bool operator!=(const Triangle<FLOAT_TYPE> &rhs) const;
+    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> operator[](size_t index) const;
+    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> operator[](size_t index);
 };
 
 template <typename FLOAT_TYPE>

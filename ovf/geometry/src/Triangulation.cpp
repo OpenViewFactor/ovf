@@ -144,6 +144,116 @@ namespace openviewfactor {
     return true;
   }
 
+
+  //* ----- MESH QUALITY ANALYSIS ----- *//
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE std::vector<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::getAllElementsAspectRatios() const {
+    auto all_triangles = this->getTriangles();
+    std::vector<FLOAT_TYPE> aspect_ratios(all_triangles.size());
+    for (int i = 0; i < all_triangles.size(); i++) {
+      aspect_ratios[i] = all_triangles[i].evaluateAspectRatio();
+    }
+    return aspect_ratios;
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE std::vector<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::getAllElementsElementQualities() const {
+    auto all_triangles = this->getTriangles();
+    std::vector<FLOAT_TYPE> qualities(all_triangles.size());
+    for (int i = 0; i < all_triangles.size(); i++) {
+      qualities[i] = all_triangles[i].evaluateElementQuality();
+    }
+    return qualities;
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE std::vector<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::getAllElementsSkewness() const {
+    auto all_triangles = this->getTriangles();
+    std::vector<FLOAT_TYPE> skewness(all_triangles.size());
+    for (int i = 0; i < all_triangles.size(); i++) {
+      skewness[i] = all_triangles[i].evaluateSkewness();
+    }
+    return skewness;
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE FLOAT_TYPE Triangulation<FLOAT_TYPE>::evaluateAspectRatioMean() const {
+    std::vector<FLOAT_TYPE> all_aspect_ratios = this->getAllElementsAspectRatios();
+    FLOAT_TYPE mean_aspect_ratio = std::accumulate(all_aspect_ratios.begin(), all_aspect_ratios.end(), 0.0) / all_aspect_ratios.size();
+    return mean_aspect_ratio;
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE FLOAT_TYPE Triangulation<FLOAT_TYPE>::evaluateElementQualityMean() const {
+    std::vector<FLOAT_TYPE> all_qualities = this->getAllElementsElementQualities();
+    FLOAT_TYPE mean_quality = std::accumulate(all_qualities.begin(), all_qualities.end(), 0.0) / all_qualities.size();
+    return mean_quality;
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE FLOAT_TYPE Triangulation<FLOAT_TYPE>::evaluateSkewnessMean() const {
+    std::vector<FLOAT_TYPE> all_skewness = this->getAllElementsSkewness();
+    FLOAT_TYPE mean_skewness = std::accumulate(all_skewness.begin(), all_skewness.end(), 0.0) / all_skewness.size();
+    return mean_skewness;
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE FLOAT_TYPE Triangulation<FLOAT_TYPE>::evaluateAspectRatioStandardDeviation() const {
+    std::vector<FLOAT_TYPE> all_aspect_ratios = this->getAllElementsAspectRatios();
+    FLOAT_TYPE mean_aspect_ratio = std::accumulate(all_aspect_ratios.begin(), all_aspect_ratios.end(), 0.0) / all_aspect_ratios.size();
+    FLOAT_TYPE standard_deviation = 0.0;
+    for (int i = 0; i < all_aspect_ratios.size(); i++) {
+      standard_deviation += std::pow(all_aspect_ratios[i] - mean_aspect_ratio, 2.0);
+    }
+    return std::sqrt(standard_deviation / all_aspect_ratios.size());
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE FLOAT_TYPE Triangulation<FLOAT_TYPE>::evaluateElementQualityStandardDeviation() const {
+    std::vector<FLOAT_TYPE> all_qualities = this->getAllElementsElementQualities();
+    FLOAT_TYPE mean_quality = std::accumulate(all_qualities.begin(), all_qualities.end(), 0.0) / all_qualities.size();
+    FLOAT_TYPE standard_deviation = 0.0;
+    for (int i = 0; i < all_qualities.size(); i++) {
+      standard_deviation += std::pow(all_qualities[i] - mean_quality, 2.0);
+    }
+    return std::sqrt(standard_deviation / all_qualities.size());
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE FLOAT_TYPE Triangulation<FLOAT_TYPE>::evaluateSkewnessStandardDeviation() const {
+    std::vector<FLOAT_TYPE> all_skewness = this->getAllElementsSkewness();
+    FLOAT_TYPE mean_skewness = std::accumulate(all_skewness.begin(), all_skewness.end(), 0.0) / all_skewness.size();
+    FLOAT_TYPE standard_deviation = 0.0;
+    for (int i = 0; i < all_skewness.size(); i++) {
+      standard_deviation += std::pow(all_skewness[i] - mean_skewness, 2.0);
+    }
+    return std::sqrt(standard_deviation / all_skewness.size());
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE std::pair<FLOAT_TYPE,FLOAT_TYPE> Triangulation<FLOAT_TYPE>::evaluateAspectRatioMinMax() const {
+    std::vector<FLOAT_TYPE> all_aspect_ratios = this->getAllElementsAspectRatios();
+    auto minimum_element = all_aspect_ratios[std::distance(all_aspect_ratios.begin(), std::min_element(all_aspect_ratios.begin(), all_aspect_ratios.end()))];
+    auto maximum_element = all_aspect_ratios[std::distance(all_aspect_ratios.begin(), std::max_element(all_aspect_ratios.begin(), all_aspect_ratios.end()))];
+    return std::pair<FLOAT_TYPE, FLOAT_TYPE>({minimum_element, maximum_element});
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE std::pair<FLOAT_TYPE,FLOAT_TYPE> Triangulation<FLOAT_TYPE>::evaluateElementQualityMinMax() const {
+    std::vector<FLOAT_TYPE> all_qualities = this->getAllElementsElementQualities();
+    auto minimum_element = all_qualities[std::distance(all_qualities.begin(), std::min_element(all_qualities.begin(), all_qualities.end()))];
+    auto maximum_element = all_qualities[std::distance(all_qualities.begin(), std::max_element(all_qualities.begin(), all_qualities.end()))];
+    return std::pair<FLOAT_TYPE, FLOAT_TYPE>({minimum_element, maximum_element});
+  }
+
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE std::pair<FLOAT_TYPE,FLOAT_TYPE> Triangulation<FLOAT_TYPE>::evaluateSkewnessMinMax() const {
+    std::vector<FLOAT_TYPE> all_skewness = this->getAllElementsSkewness();
+    auto minimum_element = all_skewness[std::distance(all_skewness.begin(), std::min_element(all_skewness.begin(), all_skewness.end()))];
+    auto maximum_element = all_skewness[std::distance(all_skewness.begin(), std::max_element(all_skewness.begin(), all_skewness.end()))];
+    return std::pair<FLOAT_TYPE, FLOAT_TYPE>({minimum_element, maximum_element});
+  }
+
 template class Triangulation<float>;
 template class Triangulation<double>;
 }

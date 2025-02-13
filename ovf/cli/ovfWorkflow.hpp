@@ -118,7 +118,17 @@ void ovfWorkflow(po::variables_map variables_map) {
 
   std::cout << "[LOG] Loading Input Emitter Mesh : " << input_filenames[0] << '\n';
   auto emitter = reader.getMesh(input_filenames[0]);
-  std::cout << "[LOG] Emitter Mesh Size: " << emitter->getNumElements() << " Elements" << '\n';
+  std::cout << " [MESH METRICS] Size: " << emitter->getNumElements() << " Elements" << '\n';
+  std::cout << " [MESH METRICS] [Aspect Ratio] Mean: " << emitter->evaluateAspectRatioMean() << '\n';
+  std::cout << " [MESH METRICS] [Aspect Ratio] Standard Deviation: " << emitter->evaluateAspectRatioStandardDeviation() << '\n';
+  std::cout << " [MESH METRICS] [Aspect Ratio] Min/Max: " << (emitter->evaluateAspectRatioMinMax()).first << " / " << (emitter->evaluateAspectRatioMinMax()).second << '\n';
+  std::cout << " [MESH METRICS] [Element Quality] Mean: " << emitter->evaluateElementQualityMean() << '\n';
+  std::cout << " [MESH METRICS] [Element Quality] Standard Deviation: " << emitter->evaluateElementQualityStandardDeviation() << '\n';
+  std::cout << " [MESH METRICS] [Element Quality] Min/Max: " << (emitter->evaluateElementQualityMinMax()).first << " / " << (emitter->evaluateElementQualityMinMax()).second << '\n';
+  std::cout << " [MESH METRICS] [Skewness] Mean: " << emitter->evaluateSkewnessMean() << '\n';
+  std::cout << " [MESH METRICS] [Skewness] Standard Deviation: " << emitter->evaluateSkewnessStandardDeviation() << '\n';
+  std::cout << " [MESH METRICS] [Skewness] Min/Max: " << (emitter->evaluateSkewnessMinMax()).first << " / " << (emitter->evaluateSkewnessMinMax()).second << '\n';
+
   auto receiver = std::make_shared<Triangulation<FLOAT_TYPE>>();
 
   auto emitter_bvh = std::make_shared<BVH<FLOAT_TYPE>>();
@@ -134,7 +144,16 @@ void ovfWorkflow(po::variables_map variables_map) {
   if (two_mesh_problem) {
     std::cout << "[LOG] Loading Input Receiver Mesh : " << input_filenames[1] << '\n';
     receiver = reader.getMesh(input_filenames[1]);
-  std::cout << "[LOG] Receiver Mesh Size: " << receiver->getNumElements() << " Elements" << '\n';
+    std::cout << " [MESH METRICS] Size: " << receiver->getNumElements() << " Elements" << '\n';
+    std::cout << " [MESH METRICS] [Aspect Ratio] Mean: " << receiver->evaluateAspectRatioMean() << '\n';
+    std::cout << " [MESH METRICS] [Aspect Ratio] Standard Deviation: " << receiver->evaluateAspectRatioStandardDeviation() << '\n';
+    std::cout << " [MESH METRICS] [Aspect Ratio] Min/Max: " << (receiver->evaluateAspectRatioMinMax()).first << " / " << (receiver->evaluateAspectRatioMinMax()).second << '\n';
+    std::cout << " [MESH METRICS] [Element Quality] Mean: " << receiver->evaluateElementQualityMean() << '\n';
+    std::cout << " [MESH METRICS] [Element Quality] Standard Deviation: " << receiver->evaluateElementQualityStandardDeviation() << '\n';
+    std::cout << " [MESH METRICS] [Element Quality] Min/Max: " << (receiver->evaluateElementQualityMinMax()).first << " / " << (receiver->evaluateElementQualityMinMax()).second << '\n';
+    std::cout << " [MESH METRICS] [Skewness] Mean: " << receiver->evaluateSkewnessMean() << '\n';
+    std::cout << " [MESH METRICS] [Skewness] Standard Deviation: " << receiver->evaluateSkewnessStandardDeviation() << '\n';
+    std::cout << " [MESH METRICS] [Skewness] Min/Max: " << (receiver->evaluateSkewnessMinMax()).first << " / " << (receiver->evaluateSkewnessMinMax()).second << '\n';
     if (self_int_type == "BOTH" || self_int_type == "RECEIVER") {
       std::cout << "[LOG] Constructing BVH for Receiver Mesh : " << input_filenames[1] << '\n';
       receiver_bvh->linkToTriangulation(receiver);

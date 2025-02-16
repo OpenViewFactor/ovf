@@ -33,7 +33,7 @@ public:
 
 
 //* -------------------- PARSE COMMAND LINE -------------------- *//
-template <typename FLOAT_TYPE>
+template <typename t>
 void ovfWorkflow(po::variables_map variables_map) {
   std::cout << "\n[VERSION] OpenViewFactor Version " << OVF_VERSION_STRING << '\n' << '\n';
 
@@ -97,7 +97,7 @@ void ovfWorkflow(po::variables_map variables_map) {
   }
 
   //* ----- load blocking meshes ----- *//
-  Blockers<FLOAT_TYPE> blockers;
+  Blockers<t> blockers;
 
   bool blocking_enabled = variables_map.count("blocking");
   if (blocking_enabled) {
@@ -108,7 +108,7 @@ void ovfWorkflow(po::variables_map variables_map) {
   }
 
   //* ----- load input meshes ----- *//
-  STLReader<FLOAT_TYPE> reader;
+  STLReader<t> reader;
 
   Timer total_program_timer;
 
@@ -129,10 +129,10 @@ void ovfWorkflow(po::variables_map variables_map) {
   std::cout << " [MESH METRICS] [Skewness] Standard Deviation: " << emitter->evaluateSkewnessStandardDeviation() << '\n';
   std::cout << " [MESH METRICS] [Skewness] Min/Max: " << (emitter->evaluateSkewnessMinMax()).first << " / " << (emitter->evaluateSkewnessMinMax()).second << '\n';
 
-  auto receiver = std::make_shared<Triangulation<FLOAT_TYPE>>();
+  auto receiver = std::make_shared<Triangulation<t>>();
 
-  auto emitter_bvh = std::make_shared<BVH<FLOAT_TYPE>>();
-  auto receiver_bvh = std::make_shared<BVH<FLOAT_TYPE>>();
+  auto emitter_bvh = std::make_shared<BVH<t>>();
+  auto receiver_bvh = std::make_shared<BVH<t>>();
 
   if (self_int_type == "BOTH" || self_int_type == "EMITTER") {
     std::cout << "[LOG] Constructing BVH for Emitter Mesh : " << input_filenames[0] << '\n';
@@ -178,12 +178,12 @@ void ovfWorkflow(po::variables_map variables_map) {
   auto receiver_elements = receiver->getTriangles(); //TODO I hate that i have to store this in addition to the normals and centroids and areas just for the virtual method
 
 
-  FLOAT_TYPE back_face_cull_time;
-  FLOAT_TYPE blocking_time;
+  t back_face_cull_time;
+  t blocking_time;
   Timer solver_timer;
-  auto results = std::make_shared<ViewFactor<FLOAT_TYPE>>();
+  auto results = std::make_shared<ViewFactor<t>>();
   if (numeric == "DAI") {
-    DoubleAreaIntegration<FLOAT_TYPE> solver;
+    DoubleAreaIntegration<t> solver;
     std::vector<unsigned int> unculled_indices(num_emitter_elements * num_receiver_elements);
     if (back_face_cull_mode == "ON") {
       std::cout << "[LOG] Applying Back Face Culling" << '\n';
@@ -200,7 +200,7 @@ void ovfWorkflow(po::variables_map variables_map) {
     solver.solveViewFactorBetweenMeshes(num_emitter_elements, num_receiver_elements, &emitter_centroids, &emitter_normals, &receiver_elements, &unblocked_indices, results);
 
   } else if (numeric == "SAI") {
-    SingleAreaIntegration<FLOAT_TYPE> solver;
+    SingleAreaIntegration<t> solver;
     std::vector<unsigned int> unculled_indices(num_emitter_elements * num_receiver_elements);
     if (back_face_cull_mode == "ON") {
       unculled_indices = solver.backFaceCullMeshes(num_emitter_elements, num_receiver_elements, &emitter_centroids, &receiver_centroids, &emitter_normals, &receiver_normals);
@@ -230,7 +230,7 @@ void ovfWorkflow(po::variables_map variables_map) {
   if (write_matrix) { std::cout << "[OUT] Writing Plain Text Matrix Output (not doing anything yet)" << '\n'; }
 
   if (write_graphic) {
-    OutputWriter<FLOAT_TYPE> output_writer(results);
+    OutputWriter<t> output_writer(results);
     switch (num_graphic_outfiles) {
       case 1:
         std::cout << "[OUT] Writing Emitter Graphic File Output" << '\n';

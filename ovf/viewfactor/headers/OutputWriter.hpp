@@ -9,16 +9,16 @@
 #include "lean_vtk.hpp"
 
 namespace openviewfactor {
-  template <typename FLOAT_TYPE> class OutputWriter {
+  template <typename t> class OutputWriter {
     private:
-      std::shared_ptr<ViewFactor<FLOAT_TYPE>> _vf;
+      std::shared_ptr<ViewFactor<t>> _vf;
     protected:
     public:
       OutputWriter();
-      OutputWriter(std::shared_ptr<ViewFactor<FLOAT_TYPE>> vf);
+      OutputWriter(std::shared_ptr<ViewFactor<t>> vf);
 
       bool isLinked() const;
-      OutputWriter<FLOAT_TYPE>& linkToViewFactor(std::shared_ptr<ViewFactor<FLOAT_TYPE>> vf);
+      OutputWriter<t>& linkToViewFactor(std::shared_ptr<ViewFactor<t>> vf);
       
       void writeEmitterVisualization(const std::string& filename) const;
       void writeReceiverFromEmitterVisualization(const std::string& filename) const;

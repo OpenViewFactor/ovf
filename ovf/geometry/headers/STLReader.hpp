@@ -15,11 +15,11 @@
 
 namespace openviewfactor {
 
-template <typename FLOAT_TYPE> class STLReader : public FileReader<FLOAT_TYPE> {
+template <typename t> class STLReader : public FileReader<t> {
   private:
   protected:
   public:
-    std::shared_ptr<Triangulation<FLOAT_TYPE>> getMesh(const std::string &filename);
+    std::shared_ptr<Triangulation<t>> getMesh(const std::string &filename);
 };
 }
 

@@ -20,19 +20,19 @@ namespace openviewfactor {
       PrecisionMode _precision;
     protected:
     public:
-      OVF_HOST_DEVICE SolverOptions();
+      gpuify SolverOptions();
 
-      OVF_HOST_DEVICE SelfIntersectionMode getSelfIntersectionMode() const;
-      OVF_HOST_DEVICE BackFaceCullMode getBackFaceCullMode() const;
-      OVF_HOST_DEVICE NumericMode getNumericMode() const;
-      OVF_HOST_DEVICE ComputeMode getComputeMode() const;
-      OVF_HOST_DEVICE PrecisionMode getPrecisionMode() const;
+      gpuify SelfIntersectionMode getSelfIntersectionMode() const;
+      gpuify BackFaceCullMode getBackFaceCullMode() const;
+      gpuify NumericMode getNumericMode() const;
+      gpuify ComputeMode getComputeMode() const;
+      gpuify PrecisionMode getPrecisionMode() const;
 
-      OVF_HOST_DEVICE SolverOptions& setSelfIntersectionMode(SelfIntersectionMode sim);
-      OVF_HOST_DEVICE SolverOptions& setBackFaceCullMode(BackFaceCullMode bfm);
-      OVF_HOST_DEVICE SolverOptions& setNumericMode(NumericMode nm);
-      OVF_HOST_DEVICE SolverOptions& setComputeMode(ComputeMode cm);
-      OVF_HOST_DEVICE SolverOptions& setPrecisionMode(PrecisionMode pm);
+      gpuify SolverOptions& setSelfIntersectionMode(SelfIntersectionMode sim);
+      gpuify SolverOptions& setBackFaceCullMode(BackFaceCullMode bfm);
+      gpuify SolverOptions& setNumericMode(NumericMode nm);
+      gpuify SolverOptions& setComputeMode(ComputeMode cm);
+      gpuify SolverOptions& setPrecisionMode(PrecisionMode pm);
   };
 }
 

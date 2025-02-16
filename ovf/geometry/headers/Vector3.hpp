@@ -8,73 +8,73 @@
 #include <algorithm>
 
 namespace openviewfactor {
-  template <typename FLOAT_TYPE> class Vector3 {
+  template <typename t> class Vector3 {
 
     private:  //* Private Class Attributes (x,y,z)
-      std::array<FLOAT_TYPE, 3> _xyz;
+      std::array<t, 3> _xyz;
     protected:
     public:
       //* ----- CLASS CONSTRUCTORS ----- *//
-      OVF_HOST_DEVICE Vector3();  // default constructor
-      OVF_HOST_DEVICE Vector3(std::array<FLOAT_TYPE,3> xyz);
-      OVF_HOST_DEVICE Vector3(FLOAT_TYPE x, FLOAT_TYPE y, FLOAT_TYPE z);  // (x,y,z) constructor
+      gpuify Vector3();  // default constructor
+      gpuify Vector3(std::array<t,3> xyz);
+      gpuify Vector3(t x, t y, t z);  // (x,y,z) constructor
 
       //* ----- ACCESSOR METHODS ----- *//
-      OVF_HOST_DEVICE FLOAT_TYPE getX() const;  // const method to access _x
-      OVF_HOST_DEVICE FLOAT_TYPE getY() const;  // const method to access _y
-      OVF_HOST_DEVICE FLOAT_TYPE getZ() const;  // const method to access _z
+      gpuify t getX() const;  // const method to access _x
+      gpuify t getY() const;  // const method to access _y
+      gpuify t getZ() const;  // const method to access _z
 
-      OVF_HOST_DEVICE const FLOAT_TYPE operator[](size_t index) const;
-      OVF_HOST_DEVICE FLOAT_TYPE operator[](size_t index);
+      gpuify const t operator[](size_t index) const;
+      gpuify t operator[](size_t index);
 
-      OVF_HOST_DEVICE unsigned int getLongestDirection() const;
+      gpuify unsigned int getLongestDirection() const;
 
-      OVF_HOST_DEVICE Vector3<FLOAT_TYPE> normalize() const;  // const method to return the direction vector
+      gpuify Vector3<t> normalize() const;  // const method to return the direction vector
       
-      OVF_HOST_DEVICE FLOAT_TYPE getMagnitude() const; // const method to calculate norm
+      gpuify t getMagnitude() const; // const method to calculate norm
       
       //* ----- MUTATOR METHODS ----- *//
-      OVF_HOST_DEVICE Vector3<FLOAT_TYPE>& setX(FLOAT_TYPE x);  // set _x and return it
-      OVF_HOST_DEVICE Vector3<FLOAT_TYPE>& setY(FLOAT_TYPE y);  // set _y and return it
-      OVF_HOST_DEVICE Vector3<FLOAT_TYPE>& setZ(FLOAT_TYPE z);  // set _z and return it
-      OVF_HOST_DEVICE Vector3<FLOAT_TYPE> scale(FLOAT_TYPE s) const;  // scale by a constant
-      OVF_HOST_DEVICE Vector3<FLOAT_TYPE> flip() const;
+      gpuify Vector3<t>& setX(t x);  // set _x and return it
+      gpuify Vector3<t>& setY(t y);  // set _y and return it
+      gpuify Vector3<t>& setZ(t z);  // set _z and return it
+      gpuify Vector3<t> scale(t s) const;  // scale by a constant
+      gpuify Vector3<t> flip() const;
 
       //* ----- VECTOR OPERATIONS ----- *//
-      OVF_HOST_DEVICE FLOAT_TYPE dot(const Vector3<FLOAT_TYPE> &rhs) const; // const method to dot two vectors
-      OVF_HOST_DEVICE Vector3<FLOAT_TYPE> cross(const Vector3<FLOAT_TYPE> &rhs) const;  // const method to cross two vectors
+      gpuify t dot(const Vector3<t> &rhs) const; // const method to dot two vectors
+      gpuify Vector3<t> cross(const Vector3<t> &rhs) const;  // const method to cross two vectors
 
       //* ----- OPERATOR OVERLOADS ----- *//
-      OVF_HOST_DEVICE Vector3<FLOAT_TYPE> operator+(const Vector3<FLOAT_TYPE> &rhs);  // enable vector addition
-      OVF_HOST_DEVICE Vector3<FLOAT_TYPE> operator-(const Vector3<FLOAT_TYPE> &rhs);  // enable vector subtraction
-      OVF_HOST_DEVICE bool operator==(const Vector3<FLOAT_TYPE> &rhs);  // enable vector equality comparison
-      OVF_HOST_DEVICE bool operator!=(const Vector3<FLOAT_TYPE> &rhs);  // enable vector inequality comparison
+      gpuify Vector3<t> operator+(const Vector3<t> &rhs);  // enable vector addition
+      gpuify Vector3<t> operator-(const Vector3<t> &rhs);  // enable vector subtraction
+      gpuify bool operator==(const Vector3<t> &rhs);  // enable vector equality comparison
+      gpuify bool operator!=(const Vector3<t> &rhs);  // enable vector inequality comparison
   };
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> vectorMinima(const Vector3<FLOAT_TYPE> &v1, const Vector3<FLOAT_TYPE> &v2);
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> vectorMaxima(const Vector3<FLOAT_TYPE> &v1, const Vector3<FLOAT_TYPE> &v2);
+  template <typename t>
+  gpuify Vector3<t> vectorMinima(const Vector3<t> &v1, const Vector3<t> &v2);
+  template <typename t>
+  gpuify Vector3<t> vectorMaxima(const Vector3<t> &v1, const Vector3<t> &v2);
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> operator+(const Vector3<FLOAT_TYPE> &lhs,
-                                                const Vector3<FLOAT_TYPE> &rhs);  // explicit instantiation of addition
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> operator-(const Vector3<FLOAT_TYPE> &lhs,
-                                                const Vector3<FLOAT_TYPE> &rhs);  // explicit instantiation of subtraction
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE bool operator==(const Vector3<FLOAT_TYPE> &lhs,
-                                  const Vector3<FLOAT_TYPE> &rhs);  // explicit instantiation of equality comparison
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE bool operator!=(const Vector3<FLOAT_TYPE> &lhs,
-                                  const Vector3<FLOAT_TYPE> &rhs);  // explicit instantiation of inequality comparison
+  template <typename t>
+  gpuify Vector3<t> operator+(const Vector3<t> &lhs,
+                                                const Vector3<t> &rhs);  // explicit instantiation of addition
+  template <typename t>
+  gpuify Vector3<t> operator-(const Vector3<t> &lhs,
+                                                const Vector3<t> &rhs);  // explicit instantiation of subtraction
+  template <typename t>
+  gpuify bool operator==(const Vector3<t> &lhs,
+                                  const Vector3<t> &rhs);  // explicit instantiation of equality comparison
+  template <typename t>
+  gpuify bool operator!=(const Vector3<t> &lhs,
+                                  const Vector3<t> &rhs);  // explicit instantiation of inequality comparison
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE FLOAT_TYPE dot(const Vector3<FLOAT_TYPE> &lhs,
-                                 const Vector3<FLOAT_TYPE> &rhs);
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Vector3<FLOAT_TYPE> cross(const Vector3<FLOAT_TYPE> &lhs,
-                                 const Vector3<FLOAT_TYPE> &rhs);
+  template <typename t>
+  gpuify t dot(const Vector3<t> &lhs,
+                                 const Vector3<t> &rhs);
+  template <typename t>
+  gpuify Vector3<t> cross(const Vector3<t> &lhs,
+                                 const Vector3<t> &rhs);
 }
 
 #endif

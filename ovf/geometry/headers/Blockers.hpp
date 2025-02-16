@@ -12,17 +12,17 @@
 #include <iostream>
 
 namespace openviewfactor {
-  template <typename FLOAT_TYPE> class Blockers {
+  template <typename t> class Blockers {
     private:
-      std::vector<std::shared_ptr<BVH<FLOAT_TYPE>>> _blocking_bvhs;
+      std::vector<std::shared_ptr<BVH<t>>> _blocking_bvhs;
     protected:
     public:
-      OVF_HOST_DEVICE Blockers();
+      gpuify Blockers();
 
-      OVF_HOST_DEVICE Blockers<FLOAT_TYPE>& setBlockers(std::vector<std::string> blocking_filenames);
-      OVF_HOST_DEVICE Blockers<FLOAT_TYPE>& addBlocker(std::shared_ptr<BVH<FLOAT_TYPE>> blocker);
-      OVF_HOST_DEVICE std::shared_ptr<BVH<FLOAT_TYPE>> getBVH(unsigned int index) const;
-      OVF_HOST_DEVICE unsigned int size() const;
+      gpuify Blockers<t>& setBlockers(std::vector<std::string> blocking_filenames);
+      gpuify Blockers<t>& addBlocker(std::shared_ptr<BVH<t>> blocker);
+      gpuify std::shared_ptr<BVH<t>> getBVH(unsigned int index) const;
+      gpuify unsigned int size() const;
   };
 }
 

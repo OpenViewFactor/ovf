@@ -10,24 +10,24 @@
 
 namespace openviewfactor {
 
-template <typename FLOAT_TYPE> class Ray {
+template <typename t> class Ray {
   private:
-    Vector3<FLOAT_TYPE> _origin;
-    Vector3<FLOAT_TYPE> _direction;
-    FLOAT_TYPE _intersection_distance;
+    Vector3<t> _origin;
+    Vector3<t> _direction;
+    t _intersection_distance;
   protected:
   public:
-    OVF_HOST_DEVICE Ray();
+    gpuify Ray();
 
-    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getOrigin() const;
-    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getDirection() const;
-    OVF_HOST_DEVICE FLOAT_TYPE getIntersectionDistance() const;
+    gpuify Vector3<t> getOrigin() const;
+    gpuify Vector3<t> getDirection() const;
+    gpuify t getIntersectionDistance() const;
 
-    OVF_HOST_DEVICE Ray<FLOAT_TYPE>& setOrigin(Vector3<FLOAT_TYPE> origin);
-    OVF_HOST_DEVICE Ray<FLOAT_TYPE>& setDirection(Vector3<FLOAT_TYPE> direction);
-    OVF_HOST_DEVICE Ray<FLOAT_TYPE>& setIntersectionDistance(FLOAT_TYPE t);
+    gpuify Ray<t>& setOrigin(Vector3<t> origin);
+    gpuify Ray<t>& setDirection(Vector3<t> direction);
+    gpuify Ray<t>& setIntersectionDistance(t t);
 
-    OVF_HOST_DEVICE Ray<FLOAT_TYPE>& triangleIntersection(Triangle<FLOAT_TYPE> triangle);
+    gpuify Ray<t>& triangleIntersection(Triangle<t> triangle);
 };
 
 }

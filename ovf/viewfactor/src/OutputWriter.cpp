@@ -1,18 +1,18 @@
 #include "OutputWriter.hpp"
 
 namespace openviewfactor {
-  template <typename FLOAT_TYPE>
-  OutputWriter<FLOAT_TYPE>::OutputWriter()
+  template <typename t>
+  OutputWriter<t>::OutputWriter()
     : _vf(nullptr) {};
 
-  template <typename FLOAT_TYPE>
-  OutputWriter<FLOAT_TYPE>::OutputWriter(std::shared_ptr<ViewFactor<FLOAT_TYPE>> vf)
+  template <typename t>
+  OutputWriter<t>::OutputWriter(std::shared_ptr<ViewFactor<t>> vf)
     : _vf(vf) {};
   
-  template <typename FLOAT_TYPE>
-  bool OutputWriter<FLOAT_TYPE>::isLinked() const { return (_vf != nullptr); }
-  template <typename FLOAT_TYPE>
-  OutputWriter<FLOAT_TYPE>& OutputWriter<FLOAT_TYPE>::linkToViewFactor(std::shared_ptr<ViewFactor<FLOAT_TYPE>> vf) {
+  template <typename t>
+  bool OutputWriter<t>::isLinked() const { return (_vf != nullptr); }
+  template <typename t>
+  OutputWriter<t>& OutputWriter<t>::linkToViewFactor(std::shared_ptr<ViewFactor<t>> vf) {
     _vf.reset();
     _vf = vf;
     return *this;
@@ -22,8 +22,8 @@ namespace openviewfactor {
 
 
 
-  template <typename FLOAT_TYPE>
-  void OutputWriter<FLOAT_TYPE>::writeEmitterVisualization(const std::string& filename) const {
+  template <typename t>
+  void OutputWriter<t>::writeEmitterVisualization(const std::string& filename) const {
     if (!(this->isLinked())) { throw std::runtime_error("Cannot write .vtu output with no ViewFactor linked"); }
     if (!(_vf->isLinked())) { throw std::runtime_error("Cannot write .vtu output with a ViewFactor object that is not linked to a mesh"); }
 
@@ -67,8 +67,8 @@ namespace openviewfactor {
   
 
 
-  template <typename FLOAT_TYPE>
-  void OutputWriter<FLOAT_TYPE>::writeReceiverFromEmitterVisualization(const std::string& filename) const {
+  template <typename t>
+  void OutputWriter<t>::writeReceiverFromEmitterVisualization(const std::string& filename) const {
     if (!(this->isLinked())) { throw std::runtime_error("Cannot write .vtu output with no ViewFactor linked"); }
     if (!(_vf->isLinked())) { throw std::runtime_error("Cannot write .vtu output with a ViewFactor object that is not linked to a mesh"); }
 
@@ -115,8 +115,8 @@ namespace openviewfactor {
 
 
 
-  template <typename FLOAT_TYPE>
-  void OutputWriter<FLOAT_TYPE>::writeReceiverToEmitterVisualization(const std::string& filename) const {
+  template <typename t>
+  void OutputWriter<t>::writeReceiverToEmitterVisualization(const std::string& filename) const {
     if (!(this->isLinked())) { throw std::runtime_error("Cannot write .vtu output with no ViewFactor linked"); }
     if (!(_vf->isLinked())) { throw std::runtime_error("Cannot write .vtu output with a ViewFactor object that is not linked to a mesh"); }
 
@@ -161,8 +161,8 @@ namespace openviewfactor {
 
 
 
-  template <typename FLOAT_TYPE>
-  void OutputWriter<FLOAT_TYPE>::writeCombinedVisualization(const std::string& filename) const {
+  template <typename t>
+  void OutputWriter<t>::writeCombinedVisualization(const std::string& filename) const {
     if (!(this->isLinked())) { throw std::runtime_error("Cannot write .vtu output with no ViewFactor linked"); }
     if (!(_vf->isLinked())) { throw std::runtime_error("Cannot write .vtu output with a ViewFactor object that is not linked to a mesh"); }
 

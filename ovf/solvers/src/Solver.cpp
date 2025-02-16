@@ -2,24 +2,24 @@
 
 namespace openviewfactor {
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Solver<FLOAT_TYPE>::Solver()
+  template <typename t>
+  gpuify Solver<t>::Solver()
     : _options(SolverOptions()) {}
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE SolverOptions Solver<FLOAT_TYPE>::getOptions() const { return _options; }
+  template <typename t>
+  gpuify SolverOptions Solver<t>::getOptions() const { return _options; }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Solver<FLOAT_TYPE>& Solver<FLOAT_TYPE>::setOptions(const SolverOptions &options) { _options = options; return *this; }
+  template <typename t>
+  gpuify Solver<t>& Solver<t>::setOptions(const SolverOptions &options) { _options = options; return *this; }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE bool Solver<FLOAT_TYPE>::backFaceCullElements(const Vector3<FLOAT_TYPE>& emitter_centroid, const Vector3<FLOAT_TYPE>& emitter_normal, const Vector3<FLOAT_TYPE>& receiver_centroid, const Vector3<FLOAT_TYPE> receiver_normal) const {
+  template <typename t>
+  gpuify bool Solver<t>::backFaceCullElements(const Vector3<t>& emitter_centroid, const Vector3<t>& emitter_normal, const Vector3<t>& receiver_centroid, const Vector3<t> receiver_normal) const {
     auto ray = (receiver_centroid - emitter_centroid).normalize();
     return (ray.dot(emitter_normal) <= 0.0 || ray.dot(receiver_normal) >= 0.0);
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::vector<unsigned int> Solver<FLOAT_TYPE>::backFaceCullMeshes(unsigned int num_emitter_elements, unsigned int num_receiver_elements, std::vector<Vector3<FLOAT_TYPE>>* emitter_centroids, std::vector<Vector3<FLOAT_TYPE>>* receiver_centroids, std::vector<Vector3<FLOAT_TYPE>>* emitter_normals, std::vector<Vector3<FLOAT_TYPE>>* receiver_normals) const {
+  template <typename t>
+  gpuify std::vector<unsigned int> Solver<t>::backFaceCullMeshes(unsigned int num_emitter_elements, unsigned int num_receiver_elements, std::vector<Vector3<t>>* emitter_centroids, std::vector<Vector3<t>>* receiver_centroids, std::vector<Vector3<t>>* emitter_normals, std::vector<Vector3<t>>* receiver_normals) const {
     auto problem_size = num_emitter_elements * num_receiver_elements;
     std::vector<unsigned int> unculled_indices(problem_size);
     std::iota(unculled_indices.begin(), unculled_indices.end(), 0);
@@ -42,8 +42,8 @@ namespace openviewfactor {
 
 
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE bool Solver<FLOAT_TYPE>::evaluateBlockingBetweenElements(std::shared_ptr<Ray<FLOAT_TYPE>> ray, FLOAT_TYPE ray_magnitude, const Blockers<FLOAT_TYPE>& blockers) const {
+  template <typename t>
+  gpuify bool Solver<t>::evaluateBlockingBetweenElements(std::shared_ptr<Ray<t>> ray, t ray_magnitude, const Blockers<t>& blockers) const {
     bool blocked = false;
     for (int bvh_index = 0; bvh_index < blockers.size(); bvh_index++) {
       (blockers.getBVH(bvh_index))->intersectRayWithBVH(ray);
@@ -55,8 +55,8 @@ namespace openviewfactor {
     return blocked;
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::vector<unsigned int> Solver<FLOAT_TYPE>::evaluateBlockingBetweenMeshes(unsigned int num_emitter_elements, unsigned int num_receiver_elements, std::vector<Vector3<FLOAT_TYPE>> emitter_centroids, std::vector<Vector3<FLOAT_TYPE>> receiver_centroids, Blockers<FLOAT_TYPE> blockers, std::vector<unsigned int> unculled_indices) const {
+  template <typename t>
+  gpuify std::vector<unsigned int> Solver<t>::evaluateBlockingBetweenMeshes(unsigned int num_emitter_elements, unsigned int num_receiver_elements, std::vector<Vector3<t>> emitter_centroids, std::vector<Vector3<t>> receiver_centroids, Blockers<t> blockers, std::vector<unsigned int> unculled_indices) const {
     if (blockers.size() == 0) {
       return unculled_indices;
     }
@@ -69,7 +69,7 @@ namespace openviewfactor {
       auto emitter_element_centroid = emitter_centroids[emitter_index];
       auto receiver_element_centroid = receiver_centroids[receiver_index];
       auto ray_vector = receiver_element_centroid - emitter_element_centroid;
-      auto ray = std::make_shared<Ray<FLOAT_TYPE>>();
+      auto ray = std::make_shared<Ray<t>>();
       ray->setOrigin(emitter_element_centroid);
       ray->setDirection(ray_vector.normalize());
       bool blocked = this->evaluateBlockingBetweenElements(ray, ray_vector.getMagnitude(), blockers);
@@ -82,9 +82,9 @@ namespace openviewfactor {
     return unblocked_indices;
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE void Solver<FLOAT_TYPE>::solveViewFactorBetweenMeshes(unsigned int num_emitter_elements, unsigned int num_receiver_elements, std::vector<Vector3<FLOAT_TYPE>>* emitter_centroids,std::vector<Vector3<FLOAT_TYPE>>* emitter_normals, std::vector<Triangle<FLOAT_TYPE>>* receiver_elements, std::vector<unsigned int>* unblocked_indices, std::shared_ptr<ViewFactor<FLOAT_TYPE>> results) const {
-    std::vector<FLOAT_TYPE> view_factors(unblocked_indices->size());
+  template <typename t>
+  gpuify void Solver<t>::solveViewFactorBetweenMeshes(unsigned int num_emitter_elements, unsigned int num_receiver_elements, std::vector<Vector3<t>>* emitter_centroids,std::vector<Vector3<t>>* emitter_normals, std::vector<Triangle<t>>* receiver_elements, std::vector<unsigned int>* unblocked_indices, std::shared_ptr<ViewFactor<t>> results) const {
+    std::vector<t> view_factors(unblocked_indices->size());
     #pragma omp parallel for
     for (int i = 0; i < unblocked_indices->size(); i++) {
       auto index = (*unblocked_indices)[i];

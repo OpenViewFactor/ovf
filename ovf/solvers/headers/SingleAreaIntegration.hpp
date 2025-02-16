@@ -4,11 +4,11 @@
 #include "Solver.hpp"
 
 namespace openviewfactor {
-  template <typename FLOAT_TYPE> class SingleAreaIntegration : public Solver<FLOAT_TYPE> {
+  template <typename t> class SingleAreaIntegration : public Solver<t> {
     private:
     protected:
     public:
-      OVF_HOST_DEVICE FLOAT_TYPE solveViewFactorBetweenElements(const Vector3<FLOAT_TYPE>& emitter_centroid, const Vector3<FLOAT_TYPE>& emitter_normal, const Triangle<FLOAT_TYPE>& receiver_element) const;
+      gpuify t solveViewFactorBetweenElements(const Vector3<t>& emitter_centroid, const Vector3<t>& emitter_normal, const Triangle<t>& receiver_element) const;
   };
 }
 

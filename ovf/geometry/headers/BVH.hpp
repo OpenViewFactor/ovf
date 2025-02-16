@@ -17,46 +17,47 @@
 
 namespace openviewfactor {
 
-template <typename FLOAT_TYPE> class BVH {
+template <typename t> class BVH {
   private:
     //* ----- CLASS ATTRIBUTES ----- *//
-    std::vector<BVHNode<FLOAT_TYPE>> _nodes;
-    std::shared_ptr<Triangulation<FLOAT_TYPE>> _triangulation;
-    std::vector<unsigned int> _mesh_element_indices;
-    unsigned int _nodes_used;
+    std::vector<BVHNode<t>> _nodes;
+    std::vector<size_t> _triangulations;
+    std::vector<t> _points;
+    std::vector<size_t> _mesh_element_indices;
+    size_t _nodes_used;
     //TODO could be interesting to study how these affect speed
-    unsigned int _minimum_triangle_threshold; //? do i really care about this
-    unsigned int _num_cost_evaluation_points; //? do i really care about this
+    size_t _minimum_triangle_threshold; //? do i really care about this
+    size_t _num_cost_evaluation_points; //? do i really care about this
 
     //* ----- PRIVATE METHODS ----- *//
-    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& setNumNodesUsed(unsigned int n);
-    OVF_HOST_DEVICE unsigned int getMaxNumNodes() const;
-    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& subdivideNode(unsigned int node_index);
-    OVF_HOST_DEVICE unsigned int splitPrimitives(unsigned int node_index, unsigned int axis_index, FLOAT_TYPE split_location);
-    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& swapElements(unsigned int index_one, unsigned int index_two);
-    OVF_HOST_DEVICE unsigned int createChildNodes(unsigned int node_index, unsigned int split_index, unsigned int num_triangles_on_left);
-    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& constructNewNode(unsigned int node_index);
-    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& intersectRayWithBVHNode(std::shared_ptr<Ray<FLOAT_TYPE>> ray, unsigned int node_index);
-    OVF_HOST_DEVICE std::vector<unsigned int> getSubMeshIndices(unsigned int node_index) const;
+    gpuify BVH<t>& setNumNodesUsed(size_t n);
+    gpuify size_t getMaxNumNodes() const;
+    gpuify BVH<t>& subdivideNode(size_t node_index);
+    gpuify size_t splitPrimitives(size_t node_index, size_t axis_index, t split_location);
+    gpuify BVH<t>& swapElements(size_t index_one, size_t index_two);
+    gpuify size_t createChildNodes(size_t node_index, size_t split_index, size_t num_triangles_on_left);
+    gpuify BVH<t>& constructNewNode(size_t node_index);
+    gpuify BVH<t>& intersectRayWithBVHNode(std::shared_ptr<Ray<t>> ray, size_t node_index);
+    gpuify std::vector<size_t> getSubMeshIndices(size_t node_index) const;
   protected:
   public:
     //* ----- PUBLIC METHODS ----- *//
-    OVF_HOST_DEVICE BVH();
+    gpuify BVH();
     
-    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& linkToTriangulation(std::shared_ptr<Triangulation<FLOAT_TYPE>> triangulation);
+    gpuify BVH<t>& linkToTriangulation(std::vector<size_t> &triangulations, std::vector<t> &points);
 
-    OVF_HOST_DEVICE bool isLinked() const;
+    gpuify bool isLinked() const;
 
-    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& setMinimumNumTriangles(unsigned int min_triangles);
-    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& setNumCostEvaluationPoints(unsigned int num_cost_evaluation_points);
+    gpuify BVH<t>& setMinimumNumTriangles(size_t min_triangles);
+    gpuify BVH<t>& setNumCostEvaluationPoints(size_t num_cost_evaluation_points);
 
-    OVF_HOST_DEVICE BVH<FLOAT_TYPE>& constructBVH();
+    gpuify BVH<t>& constructBVH();
 
-    OVF_HOST_DEVICE void intersectRayWithBVH(std::shared_ptr<Ray<FLOAT_TYPE>> ray);
+    gpuify void intersectRayWithBVH(std::shared_ptr<Ray<t>> ray);
 
-    OVF_HOST_DEVICE unsigned int getNumNodesUsed();
+    gpuify size_t getNumNodesUsed();
 
-    OVF_HOST_DEVICE void writeToFile(const std::string& filename) const;
+    gpuify void writeToFile(const std::string& filename) const;
 };
 
 }

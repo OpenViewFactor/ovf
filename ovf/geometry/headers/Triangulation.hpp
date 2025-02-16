@@ -14,59 +14,59 @@
 
 namespace openviewfactor {
 
-template <typename FLOAT_TYPE> class Triangulation {
+template <typename t> class Triangulation {
 
   private:
-    std::vector<Vector3<FLOAT_TYPE>> _pts;  // points list in the triangulation
+    std::vector<Vector3<t>> _pts;  // points list in the triangulation
     std::vector<std::array<size_t, 3>> _con; // connectivity list in the triangulation
   protected:
   public:
     //* ----- CLASS CONSTRUCTORS ----- *//
-    OVF_HOST_DEVICE Triangulation();  // default constructor
+    gpuify Triangulation();  // default constructor
 
     //* ----- ACCESSOR METHODS ----- *//
-    OVF_HOST_DEVICE size_t getNumElements() const;
-    OVF_HOST_DEVICE size_t getNumPoints() const;
-    OVF_HOST_DEVICE size_t getNumBytes() const;
+    gpuify size_t getNumElements() const;
+    gpuify size_t getNumPoints() const;
+    gpuify size_t getNumBytes() const;
 
-    OVF_HOST_DEVICE const std::array<size_t,3>* getConPtr() const;
-    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>* getPtsPtr() const;
+    gpuify const std::array<size_t,3>* getConPtr() const;
+    gpuify const Vector3<t>* getPtsPtr() const;
     
-    OVF_HOST_DEVICE const Triangle<FLOAT_TYPE> operator[](size_t index) const;
-    OVF_HOST_DEVICE Triangle<FLOAT_TYPE> operator[](size_t index);
+    gpuify const Triangle<t> operator[](size_t index) const;
+    gpuify Triangle<t> operator[](size_t index);
     
-    OVF_HOST_DEVICE FLOAT_TYPE getMeshArea() const;
+    gpuify t getMeshArea() const;
 
-    OVF_HOST_DEVICE std::shared_ptr<Triangulation<FLOAT_TYPE>> getSubMesh(std::vector<unsigned int> indices) const;
+    gpuify std::shared_ptr<Triangulation<t>> getSubMesh(std::vector<unsigned int> indices) const;
 
-    OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>> getCentroids() const;
-    OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>> getNormals() const;
-    OVF_HOST_DEVICE std::vector<FLOAT_TYPE> getAreas() const;
-    OVF_HOST_DEVICE std::vector<Triangle<FLOAT_TYPE>> getTriangles() const;
+    gpuify std::vector<Vector3<t>> getCentroids() const;
+    gpuify std::vector<Vector3<t>> getNormals() const;
+    gpuify std::vector<t> getAreas() const;
+    gpuify std::vector<Triangle<t>> getTriangles() const;
 
     //* ----- MUTATOR METHODS ----- *//
-    OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& clear();
-    OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& addElement(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC);
-    OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& addElement(Triangle<FLOAT_TYPE> tri);
+    gpuify Triangulation<t>& clear();
+    gpuify Triangulation<t>& addElement(Vector3<t> OA, Vector3<t> OB, Vector3<t> OC);
+    gpuify Triangulation<t>& addElement(Triangle<t> tri);
 
-    OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& setConnectivity(std::vector<std::array<size_t, 3>> con);
-    OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& setPoints(std::vector<Vector3<FLOAT_TYPE>> pts);
+    gpuify Triangulation<t>& setConnectivity(std::vector<std::array<size_t, 3>> con);
+    gpuify Triangulation<t>& setPoints(std::vector<Vector3<t>> pts);
 
-    OVF_HOST_DEVICE bool operator==(const Triangulation<FLOAT_TYPE>& rhs) const;
+    gpuify bool operator==(const Triangulation<t>& rhs) const;
 
     //* ----- MESH QUALITY ANALYSIS ----- *//
-    OVF_HOST_DEVICE std::vector<FLOAT_TYPE> getAllElementsAspectRatios() const;
-    OVF_HOST_DEVICE std::vector<FLOAT_TYPE> getAllElementsSkewness() const;
-    OVF_HOST_DEVICE std::vector<FLOAT_TYPE> getAllElementsElementQualities() const;
-    OVF_HOST_DEVICE FLOAT_TYPE evaluateAspectRatioMean() const;
-    OVF_HOST_DEVICE FLOAT_TYPE evaluateSkewnessMean() const;
-    OVF_HOST_DEVICE FLOAT_TYPE evaluateElementQualityMean() const;
-    OVF_HOST_DEVICE FLOAT_TYPE evaluateAspectRatioStandardDeviation() const;
-    OVF_HOST_DEVICE FLOAT_TYPE evaluateSkewnessStandardDeviation() const;
-    OVF_HOST_DEVICE FLOAT_TYPE evaluateElementQualityStandardDeviation() const;
-    OVF_HOST_DEVICE std::pair<FLOAT_TYPE,FLOAT_TYPE> evaluateAspectRatioMinMax() const;
-    OVF_HOST_DEVICE std::pair<FLOAT_TYPE,FLOAT_TYPE> evaluateSkewnessMinMax() const;
-    OVF_HOST_DEVICE std::pair<FLOAT_TYPE,FLOAT_TYPE> evaluateElementQualityMinMax() const;
+    gpuify std::vector<t> getAllElementsAspectRatios() const;
+    gpuify std::vector<t> getAllElementsSkewness() const;
+    gpuify std::vector<t> getAllElementsElementQualities() const;
+    gpuify t evaluateAspectRatioMean() const;
+    gpuify t evaluateSkewnessMean() const;
+    gpuify t evaluateElementQualityMean() const;
+    gpuify t evaluateAspectRatioStandardDeviation() const;
+    gpuify t evaluateSkewnessStandardDeviation() const;
+    gpuify t evaluateElementQualityStandardDeviation() const;
+    gpuify std::pair<t,t> evaluateAspectRatioMinMax() const;
+    gpuify std::pair<t,t> evaluateSkewnessMinMax() const;
+    gpuify std::pair<t,t> evaluateElementQualityMinMax() const;
 };
 }
 

@@ -9,53 +9,53 @@
 
 namespace openviewfactor {
 
-template <typename FLOAT_TYPE> class Triangle {
+template <typename t> class Triangle {
 
   private:
-    std::array<Vector3<FLOAT_TYPE>,3> _pts;
+    std::array<Vector3<t>,3> _pts;
   protected:public:
     //* ----- CLASS CONSTRUCTORS ----- *//
-    OVF_HOST_DEVICE Triangle();
-    OVF_HOST_DEVICE Triangle(std::array<Vector3<FLOAT_TYPE>,3> pts);
-    OVF_HOST_DEVICE Triangle(std::array<std::array<FLOAT_TYPE,3>,3> pts);
-    OVF_HOST_DEVICE Triangle(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC);    
+    gpuify Triangle();
+    gpuify Triangle(std::array<Vector3<t>,3> pts);
+    gpuify Triangle(std::array<std::array<t,3>,3> pts);
+    gpuify Triangle(Vector3<t> OA, Vector3<t> OB, Vector3<t> OC);    
 
     //* ----- ACCESSOR METHODS ----- *//
-    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getOA() const;
-    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getOB() const;
-    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getOC() const;
-    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getAB() const;
-    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getBC() const;
-    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getCA() const;
-    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getNormal() const;
-    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getCentroid() const;
-    OVF_HOST_DEVICE FLOAT_TYPE getArea() const;
+    gpuify Vector3<t> getOA() const;
+    gpuify Vector3<t> getOB() const;
+    gpuify Vector3<t> getOC() const;
+    gpuify Vector3<t> getAB() const;
+    gpuify Vector3<t> getBC() const;
+    gpuify Vector3<t> getCA() const;
+    gpuify Vector3<t> getNormal() const;
+    gpuify Vector3<t> getCentroid() const;
+    gpuify t getArea() const;
 
-    OVF_HOST_DEVICE FLOAT_TYPE evaluateAspectRatio() const;
-    OVF_HOST_DEVICE FLOAT_TYPE evaluateSkewness() const;
-    OVF_HOST_DEVICE FLOAT_TYPE evaluateElementQuality() const;
+    gpuify t evaluateAspectRatio() const;
+    gpuify t evaluateSkewness() const;
+    gpuify t evaluateElementQuality() const;
 
     //* ----- MUTATOR METHODS ----- *//
-    OVF_HOST_DEVICE Triangle<FLOAT_TYPE>& setOA(FLOAT_TYPE x, FLOAT_TYPE y, FLOAT_TYPE z);
-    OVF_HOST_DEVICE Triangle<FLOAT_TYPE>& setOA(Vector3<FLOAT_TYPE> v);
-    OVF_HOST_DEVICE Triangle<FLOAT_TYPE>& setOB(FLOAT_TYPE x, FLOAT_TYPE y, FLOAT_TYPE z);
-    OVF_HOST_DEVICE Triangle<FLOAT_TYPE>& setOB(Vector3<FLOAT_TYPE> v);
-    OVF_HOST_DEVICE Triangle<FLOAT_TYPE>& setOC(FLOAT_TYPE x, FLOAT_TYPE y, FLOAT_TYPE z);
-    OVF_HOST_DEVICE Triangle<FLOAT_TYPE>& setOC(Vector3<FLOAT_TYPE> v);
+    gpuify Triangle<t>& setOA(t x, t y, t z);
+    gpuify Triangle<t>& setOA(Vector3<t> v);
+    gpuify Triangle<t>& setOB(t x, t y, t z);
+    gpuify Triangle<t>& setOB(Vector3<t> v);
+    gpuify Triangle<t>& setOC(t x, t y, t z);
+    gpuify Triangle<t>& setOC(Vector3<t> v);
 
     //* ----- OPERATOR OVERLOADS ----- *//
-    OVF_HOST_DEVICE bool operator==(const Triangle<FLOAT_TYPE> &rhs) const;
-    OVF_HOST_DEVICE bool operator!=(const Triangle<FLOAT_TYPE> &rhs) const;
-    OVF_HOST_DEVICE const Vector3<FLOAT_TYPE> operator[](size_t index) const;
-    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> operator[](size_t index);
+    gpuify bool operator==(const Triangle<t> &rhs) const;
+    gpuify bool operator!=(const Triangle<t> &rhs) const;
+    gpuify const Vector3<t> operator[](size_t index) const;
+    gpuify Vector3<t> operator[](size_t index);
 };
 
-template <typename FLOAT_TYPE>
-bool operator==(const Triangle<FLOAT_TYPE> &lhs,
-                const Triangle<FLOAT_TYPE> &rhs);
-template <typename FLOAT_TYPE>
-bool operator!=(const Triangle<FLOAT_TYPE> &lhs,
-                const Triangle<FLOAT_TYPE> &rhs);
+template <typename t>
+bool operator==(const Triangle<t> &lhs,
+                const Triangle<t> &rhs);
+template <typename t>
+bool operator!=(const Triangle<t> &lhs,
+                const Triangle<t> &rhs);
 }
 
 #endif

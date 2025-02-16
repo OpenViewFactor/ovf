@@ -7,13 +7,13 @@
 
 namespace openviewfactor {
 
-template <typename FLOAT_TYPE> class FileReader {
+template <typename t> class FileReader {
   private:
   protected:
   public:
     virtual ~FileReader() {} //! declare this to be subclassable
 
-    virtual std::shared_ptr<Triangulation<FLOAT_TYPE>> getMesh(const std::string &filename) = 0;  //! pure virtual function will be defined in the subclass
+    virtual std::shared_ptr<Triangulation<t>> getMesh(const std::string &filename) = 0;  //! pure virtual function will be defined in the subclass
 };
 }
 

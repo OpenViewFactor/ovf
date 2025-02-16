@@ -1,11 +1,11 @@
 #include "STLReader.hpp"
 
 namespace openviewfactor {
-  template <typename FLOAT_TYPE>
-  std::shared_ptr<Triangulation<FLOAT_TYPE>> STLReader<FLOAT_TYPE>::getMesh(const std::string &filename) {
+  template <typename t>
+  std::shared_ptr<Triangulation<t>> STLReader<t>::getMesh(const std::string &filename) {
     //! set up inputs for the third-party library
-    auto mesh = std::make_shared<Triangulation<FLOAT_TYPE>>();
-    std::vector<FLOAT_TYPE> coordinates, normals;
+    auto mesh = std::make_shared<Triangulation<t>>();
+    std::vector<t> coordinates, normals;
     std::vector<size_t> triangulations, solids;
     stl_reader::ReadStlFile(filename.c_str(), coordinates, normals, triangulations, solids);  //! make use of third-party function
 
@@ -17,10 +17,10 @@ namespace openviewfactor {
                                                                           triangulations[3 * triangle_index + 2]});
     }
 
-    std::vector<Vector3<FLOAT_TYPE>> reformatted_coordinates(coordinates.size() / 3);
+    std::vector<Vector3<t>> reformatted_coordinates(coordinates.size() / 3);
     #pragma omp parallel for
     for (int coordinates_index = 0; coordinates_index < reformatted_coordinates.size(); coordinates_index++) {
-      reformatted_coordinates[coordinates_index] = Vector3<FLOAT_TYPE>((coordinates.data())[3 * coordinates_index + 0],
+      reformatted_coordinates[coordinates_index] = Vector3<t>((coordinates.data())[3 * coordinates_index + 0],
                                                                        (coordinates.data())[3 * coordinates_index + 1],
                                                                        (coordinates.data())[3 * coordinates_index + 2]);
     }

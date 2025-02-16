@@ -16,47 +16,47 @@
 
 namespace openviewfactor {
 
-template <typename FLOAT_TYPE> class BVHNode {
+template <typename t> class BVHNode {
   private:
-    Vector3<FLOAT_TYPE> _bounding_box_min;
-    Vector3<FLOAT_TYPE> _bounding_box_max;
+    Vector3<t> _bounding_box_min;
+    Vector3<t> _bounding_box_max;
     unsigned int _child_one_index;
     unsigned int _first_triangle_index;
     unsigned int _num_triangles;
   protected:
   public:
-    OVF_HOST_DEVICE BVHNode();
+    gpuify BVHNode();
 
-    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getBoundingBoxMin() const;
-    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getBoundingBoxMax() const;
-    OVF_HOST_DEVICE Vector3<FLOAT_TYPE> getBoundingBoxSpan() const;
+    gpuify Vector3<t> getBoundingBoxMin() const;
+    gpuify Vector3<t> getBoundingBoxMax() const;
+    gpuify Vector3<t> getBoundingBoxSpan() const;
 
-    OVF_HOST_DEVICE unsigned int getChildOneIndex() const;
-    OVF_HOST_DEVICE unsigned int getChildTwoIndex() const;
-    OVF_HOST_DEVICE unsigned int getFirstTriangleIndex() const;
-    OVF_HOST_DEVICE unsigned int getNumTriangles() const;
+    gpuify unsigned int getChildOneIndex() const;
+    gpuify unsigned int getChildTwoIndex() const;
+    gpuify unsigned int getFirstTriangleIndex() const;
+    gpuify unsigned int getNumTriangles() const;
 
-    OVF_HOST_DEVICE bool isLeaf() const;
+    gpuify bool isLeaf() const;
 
-    OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& setChildOneIndex(unsigned int const index);
-    OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& setFirstTriangleIndex(unsigned int const index);
-    OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& setNumTriangles(unsigned int const n);
+    gpuify BVHNode<t>& setChildOneIndex(unsigned int const index);
+    gpuify BVHNode<t>& setFirstTriangleIndex(unsigned int const index);
+    gpuify BVHNode<t>& setNumTriangles(unsigned int const n);
 
-    OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& growToIncludeTriangle(Triangle<FLOAT_TYPE> triangle);
-    OVF_HOST_DEVICE BVHNode<FLOAT_TYPE>& growToIncludeTriangulation(std::shared_ptr<Triangulation<FLOAT_TYPE>> triangulation);
+    gpuify BVHNode<t>& growToIncludeTriangle(Triangle<t> triangle);
+    gpuify BVHNode<t>& growToIncludeTriangulation(std::shared_ptr<Triangulation<t>> triangulation);
 
-    OVF_HOST_DEVICE bool intersectRayWithNodeBoundingBox(std::shared_ptr<Ray<FLOAT_TYPE>> ray) const;
+    gpuify bool intersectRayWithNodeBoundingBox(std::shared_ptr<Ray<t>> ray) const;
 
-    OVF_HOST_DEVICE FLOAT_TYPE getNodeCost() const;
-    OVF_HOST_DEVICE FLOAT_TYPE getSurfaceArea() const;
+    gpuify t getNodeCost() const;
+    gpuify t getSurfaceArea() const;
 
-    OVF_HOST_DEVICE unsigned int getSplitLocationAxis() const;
-    OVF_HOST_DEVICE FLOAT_TYPE evaluateNodeChildrenSurfaceAreaHeuristic(std::shared_ptr<Triangulation<FLOAT_TYPE>> submesh, unsigned int axis_index, FLOAT_TYPE candidate_position) const;
-    OVF_HOST_DEVICE std::pair<FLOAT_TYPE, FLOAT_TYPE> getBestSplitLocationAndCost(std::shared_ptr<Triangulation<FLOAT_TYPE>> triangulation, std::vector<unsigned int> mesh_element_indices, unsigned int axis_index, unsigned int num_evaluation_points) const;
+    gpuify unsigned int getSplitLocationAxis() const;
+    gpuify t evaluateNodeChildrenSurfaceAreaHeuristic(std::shared_ptr<Triangulation<t>> submesh, unsigned int axis_index, t candidate_position) const;
+    gpuify std::pair<t, t> getBestSplitLocationAndCost(std::shared_ptr<Triangulation<t>> triangulation, std::vector<unsigned int> mesh_element_indices, unsigned int axis_index, unsigned int num_evaluation_points) const;
 
-    OVF_HOST_DEVICE std::vector<unsigned int> getElementArraySubindices() const;
+    gpuify std::vector<unsigned int> getElementArraySubindices() const;
 
-    OVF_HOST_DEVICE void writeToFile(std::ofstream& outfile, unsigned int node_index) const;
+    gpuify void writeToFile(std::ofstream& outfile, unsigned int node_index) const;
 };
 
 }

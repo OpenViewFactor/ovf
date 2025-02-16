@@ -6,47 +6,47 @@
 
 namespace openviewfactor {
   //* ----- CLASS CONSTRUCTORS ----- *//
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>::Triangulation()
-    : _pts(std::vector<Vector3<FLOAT_TYPE>>()), _con(std::vector<std::array<size_t, 3>>()) {}
+  template <typename t>
+  gpuify Triangulation<t>::Triangulation()
+    : _pts(std::vector<Vector3<t>>()), _con(std::vector<std::array<size_t, 3>>()) {}
 
   //* ----- ACCESSOR METHODS ----- *//
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE size_t Triangulation<FLOAT_TYPE>::getNumElements() const { return _con.size(); }
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE size_t Triangulation<FLOAT_TYPE>::getNumPoints() const { return _pts.size(); }
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE size_t Triangulation<FLOAT_TYPE>::getNumBytes() const { return (_con.size() * sizeof(size_t) * 3) + (_pts.size() * sizeof(Vector3<FLOAT_TYPE>)); }
+  template <typename t>
+  gpuify size_t Triangulation<t>::getNumElements() const { return _con.size(); }
+  template <typename t>
+  gpuify size_t Triangulation<t>::getNumPoints() const { return _pts.size(); }
+  template <typename t>
+  gpuify size_t Triangulation<t>::getNumBytes() const { return (_con.size() * sizeof(size_t) * 3) + (_pts.size() * sizeof(Vector3<t>)); }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const std::array<size_t,3>* Triangulation<FLOAT_TYPE>::getConPtr() const { return _con.data(); }
+  template <typename t>
+  gpuify const std::array<size_t,3>* Triangulation<t>::getConPtr() const { return _con.data(); }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const Vector3<FLOAT_TYPE>* Triangulation<FLOAT_TYPE>::getPtsPtr() const { return _pts.data(); }
+  template <typename t>
+  gpuify const Vector3<t>* Triangulation<t>::getPtsPtr() const { return _pts.data(); }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE const Triangle<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::operator[](size_t index) const {
-    Triangle<FLOAT_TYPE> T(_pts[ (_con[index])[0] ], _pts[ (_con[index])[1] ], _pts[ (_con[index])[2] ]);
+  template <typename t>
+  gpuify const Triangle<t> Triangulation<t>::operator[](size_t index) const {
+    Triangle<t> T(_pts[ (_con[index])[0] ], _pts[ (_con[index])[1] ], _pts[ (_con[index])[2] ]);
     return T;
   }
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Triangle<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::operator[](size_t index) {
-    Triangle<FLOAT_TYPE> T(_pts[ (_con[index])[0] ], _pts[ (_con[index])[1] ], _pts[ (_con[index])[2] ]);
+  template <typename t>
+  gpuify Triangle<t> Triangulation<t>::operator[](size_t index) {
+    Triangle<t> T(_pts[ (_con[index])[0] ], _pts[ (_con[index])[1] ], _pts[ (_con[index])[2] ]);
     return T;
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE FLOAT_TYPE Triangulation<FLOAT_TYPE>::getMeshArea() const {
-    FLOAT_TYPE total_area = 0;
+  template <typename t>
+  gpuify t Triangulation<t>::getMeshArea() const {
+    t total_area = 0;
     for (size_t i = 0; i < this->getNumElements(); i++) {
       total_area += ((*this)[i]).getArea();
     }
     return total_area;
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::shared_ptr<Triangulation<FLOAT_TYPE>> Triangulation<FLOAT_TYPE>::getSubMesh(std::vector<unsigned int> indices) const {    
-    auto sub_mesh = std::make_shared<Triangulation<FLOAT_TYPE>>();
+  template <typename t>
+  gpuify std::shared_ptr<Triangulation<t>> Triangulation<t>::getSubMesh(std::vector<unsigned int> indices) const {    
+    auto sub_mesh = std::make_shared<Triangulation<t>>();
     std::vector<std::array<size_t, 3>> sub_mesh_connectivity(indices.size());
     std::generate(sub_mesh_connectivity.begin(), sub_mesh_connectivity.end(), [this, indices] (unsigned int i=0) mutable { return (this->_con)[indices[i++]]; }); 
     sub_mesh->setConnectivity(sub_mesh_connectivity);
@@ -54,36 +54,36 @@ namespace openviewfactor {
     return sub_mesh;
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::vector<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::getAreas() const {
-    std::vector<FLOAT_TYPE> mesh_areas(this->getNumElements());
+  template <typename t>
+  gpuify std::vector<t> Triangulation<t>::getAreas() const {
+    std::vector<t> mesh_areas(this->getNumElements());
     for (int i = 0; i < getNumElements(); i++) {
       mesh_areas[i] = (*this)[i].getArea();
     }
     return mesh_areas;
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>> Triangulation<FLOAT_TYPE>::getCentroids() const {
-    std::vector<Vector3<FLOAT_TYPE>> mesh_centroids(this->getNumElements());
+  template <typename t>
+  gpuify std::vector<Vector3<t>> Triangulation<t>::getCentroids() const {
+    std::vector<Vector3<t>> mesh_centroids(this->getNumElements());
     for (int i = 0; i < getNumElements(); i++) {
       mesh_centroids[i] = (*this)[i].getCentroid();
     }
     return mesh_centroids;
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::vector<Vector3<FLOAT_TYPE>> Triangulation<FLOAT_TYPE>::getNormals() const {
-    std::vector<Vector3<FLOAT_TYPE>> mesh_normals(this->getNumElements());
+  template <typename t>
+  gpuify std::vector<Vector3<t>> Triangulation<t>::getNormals() const {
+    std::vector<Vector3<t>> mesh_normals(this->getNumElements());
     for (int i = 0; i < getNumElements(); i++) {
       mesh_normals[i] = (*this)[i].getNormal();
     }
     return mesh_normals;
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::vector<Triangle<FLOAT_TYPE>> Triangulation<FLOAT_TYPE>::getTriangles() const {
-    std::vector<Triangle<FLOAT_TYPE>> mesh_triangles(this->getNumElements());
+  template <typename t>
+  gpuify std::vector<Triangle<t>> Triangulation<t>::getTriangles() const {
+    std::vector<Triangle<t>> mesh_triangles(this->getNumElements());
     for (unsigned int i = 0; i < this->getNumElements(); i++) {
       std::array<size_t, 3> connections = _con[i];
       mesh_triangles[i].setOA(_pts[connections[0]]).setOB(_pts[connections[1]]).setOC(_pts[connections[2]]);
@@ -92,15 +92,15 @@ namespace openviewfactor {
   }
 
   //* ----- MUTATOR METHODS ----- *//
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::clear() {
+  template <typename t>
+  gpuify Triangulation<t>& Triangulation<t>::clear() {
     _pts.clear();
     _con.clear();
     return *this;
   }
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::addElement(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC) {
-    std::array<Vector3<FLOAT_TYPE>, 3> new_points = {OA, OB, OC};
+  template <typename t>
+  gpuify Triangulation<t>& Triangulation<t>::addElement(Vector3<t> OA, Vector3<t> OB, Vector3<t> OC) {
+    std::array<Vector3<t>, 3> new_points = {OA, OB, OC};
     std::array<size_t, 3> new_connectivity;
     for (size_t i = 0; i < 3; i++) {
       auto point_location_iterator = std::find(_pts.begin(), _pts.end(), new_points[i]);
@@ -114,27 +114,27 @@ namespace openviewfactor {
     _con.push_back(new_connectivity);
     return *this;
   }
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::addElement(Triangle<FLOAT_TYPE> tri) {
+  template <typename t>
+  gpuify Triangulation<t>& Triangulation<t>::addElement(Triangle<t> tri) {
     this->addElement(tri.getOA(), tri.getOB(), tri.getOC());
     return *this;
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::setConnectivity(std::vector<std::array<size_t, 3>> con) {
+  template <typename t>
+  gpuify Triangulation<t>& Triangulation<t>::setConnectivity(std::vector<std::array<size_t, 3>> con) {
     _con.clear();
     _con = std::move(con);
     return *this;
   }
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::setPoints(std::vector<Vector3<FLOAT_TYPE>> pts) {
+  template <typename t>
+  gpuify Triangulation<t>& Triangulation<t>::setPoints(std::vector<Vector3<t>> pts) {
     _pts.clear();
     _pts = std::move(pts);
     return *this;
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE bool Triangulation<FLOAT_TYPE>::operator==(const Triangulation<FLOAT_TYPE>& rhs) const {
+  template <typename t>
+  gpuify bool Triangulation<t>::operator==(const Triangulation<t>& rhs) const {
     if (this->getNumElements() != rhs.getNumElements()) { return false; }
     if (this->getNumPoints() != rhs.getNumPoints()) { return false; }
     if (this->getMeshArea() != rhs.getMeshArea()) { return false; }
@@ -146,112 +146,112 @@ namespace openviewfactor {
 
 
   //* ----- MESH QUALITY ANALYSIS ----- *//
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::vector<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::getAllElementsAspectRatios() const {
+  template <typename t>
+  gpuify std::vector<t> Triangulation<t>::getAllElementsAspectRatios() const {
     auto all_triangles = this->getTriangles();
-    std::vector<FLOAT_TYPE> aspect_ratios(all_triangles.size());
+    std::vector<t> aspect_ratios(all_triangles.size());
     for (int i = 0; i < all_triangles.size(); i++) {
       aspect_ratios[i] = all_triangles[i].evaluateAspectRatio();
     }
     return aspect_ratios;
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::vector<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::getAllElementsElementQualities() const {
+  template <typename t>
+  gpuify std::vector<t> Triangulation<t>::getAllElementsElementQualities() const {
     auto all_triangles = this->getTriangles();
-    std::vector<FLOAT_TYPE> qualities(all_triangles.size());
+    std::vector<t> qualities(all_triangles.size());
     for (int i = 0; i < all_triangles.size(); i++) {
       qualities[i] = all_triangles[i].evaluateElementQuality();
     }
     return qualities;
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::vector<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::getAllElementsSkewness() const {
+  template <typename t>
+  gpuify std::vector<t> Triangulation<t>::getAllElementsSkewness() const {
     auto all_triangles = this->getTriangles();
-    std::vector<FLOAT_TYPE> skewness(all_triangles.size());
+    std::vector<t> skewness(all_triangles.size());
     for (int i = 0; i < all_triangles.size(); i++) {
       skewness[i] = all_triangles[i].evaluateSkewness();
     }
     return skewness;
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE FLOAT_TYPE Triangulation<FLOAT_TYPE>::evaluateAspectRatioMean() const {
-    std::vector<FLOAT_TYPE> all_aspect_ratios = this->getAllElementsAspectRatios();
-    FLOAT_TYPE mean_aspect_ratio = std::accumulate(all_aspect_ratios.begin(), all_aspect_ratios.end(), 0.0) / all_aspect_ratios.size();
+  template <typename t>
+  gpuify t Triangulation<t>::evaluateAspectRatioMean() const {
+    std::vector<t> all_aspect_ratios = this->getAllElementsAspectRatios();
+    t mean_aspect_ratio = std::accumulate(all_aspect_ratios.begin(), all_aspect_ratios.end(), 0.0) / all_aspect_ratios.size();
     return mean_aspect_ratio;
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE FLOAT_TYPE Triangulation<FLOAT_TYPE>::evaluateElementQualityMean() const {
-    std::vector<FLOAT_TYPE> all_qualities = this->getAllElementsElementQualities();
-    FLOAT_TYPE mean_quality = std::accumulate(all_qualities.begin(), all_qualities.end(), 0.0) / all_qualities.size();
+  template <typename t>
+  gpuify t Triangulation<t>::evaluateElementQualityMean() const {
+    std::vector<t> all_qualities = this->getAllElementsElementQualities();
+    t mean_quality = std::accumulate(all_qualities.begin(), all_qualities.end(), 0.0) / all_qualities.size();
     return mean_quality;
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE FLOAT_TYPE Triangulation<FLOAT_TYPE>::evaluateSkewnessMean() const {
-    std::vector<FLOAT_TYPE> all_skewness = this->getAllElementsSkewness();
-    FLOAT_TYPE mean_skewness = std::accumulate(all_skewness.begin(), all_skewness.end(), 0.0) / all_skewness.size();
+  template <typename t>
+  gpuify t Triangulation<t>::evaluateSkewnessMean() const {
+    std::vector<t> all_skewness = this->getAllElementsSkewness();
+    t mean_skewness = std::accumulate(all_skewness.begin(), all_skewness.end(), 0.0) / all_skewness.size();
     return mean_skewness;
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE FLOAT_TYPE Triangulation<FLOAT_TYPE>::evaluateAspectRatioStandardDeviation() const {
-    std::vector<FLOAT_TYPE> all_aspect_ratios = this->getAllElementsAspectRatios();
-    FLOAT_TYPE mean_aspect_ratio = std::accumulate(all_aspect_ratios.begin(), all_aspect_ratios.end(), 0.0) / all_aspect_ratios.size();
-    FLOAT_TYPE standard_deviation = 0.0;
+  template <typename t>
+  gpuify t Triangulation<t>::evaluateAspectRatioStandardDeviation() const {
+    std::vector<t> all_aspect_ratios = this->getAllElementsAspectRatios();
+    t mean_aspect_ratio = std::accumulate(all_aspect_ratios.begin(), all_aspect_ratios.end(), 0.0) / all_aspect_ratios.size();
+    t standard_deviation = 0.0;
     for (int i = 0; i < all_aspect_ratios.size(); i++) {
       standard_deviation += std::pow(all_aspect_ratios[i] - mean_aspect_ratio, 2.0);
     }
     return std::sqrt(standard_deviation / all_aspect_ratios.size());
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE FLOAT_TYPE Triangulation<FLOAT_TYPE>::evaluateElementQualityStandardDeviation() const {
-    std::vector<FLOAT_TYPE> all_qualities = this->getAllElementsElementQualities();
-    FLOAT_TYPE mean_quality = std::accumulate(all_qualities.begin(), all_qualities.end(), 0.0) / all_qualities.size();
-    FLOAT_TYPE standard_deviation = 0.0;
+  template <typename t>
+  gpuify t Triangulation<t>::evaluateElementQualityStandardDeviation() const {
+    std::vector<t> all_qualities = this->getAllElementsElementQualities();
+    t mean_quality = std::accumulate(all_qualities.begin(), all_qualities.end(), 0.0) / all_qualities.size();
+    t standard_deviation = 0.0;
     for (int i = 0; i < all_qualities.size(); i++) {
       standard_deviation += std::pow(all_qualities[i] - mean_quality, 2.0);
     }
     return std::sqrt(standard_deviation / all_qualities.size());
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE FLOAT_TYPE Triangulation<FLOAT_TYPE>::evaluateSkewnessStandardDeviation() const {
-    std::vector<FLOAT_TYPE> all_skewness = this->getAllElementsSkewness();
-    FLOAT_TYPE mean_skewness = std::accumulate(all_skewness.begin(), all_skewness.end(), 0.0) / all_skewness.size();
-    FLOAT_TYPE standard_deviation = 0.0;
+  template <typename t>
+  gpuify t Triangulation<t>::evaluateSkewnessStandardDeviation() const {
+    std::vector<t> all_skewness = this->getAllElementsSkewness();
+    t mean_skewness = std::accumulate(all_skewness.begin(), all_skewness.end(), 0.0) / all_skewness.size();
+    t standard_deviation = 0.0;
     for (int i = 0; i < all_skewness.size(); i++) {
       standard_deviation += std::pow(all_skewness[i] - mean_skewness, 2.0);
     }
     return std::sqrt(standard_deviation / all_skewness.size());
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::pair<FLOAT_TYPE,FLOAT_TYPE> Triangulation<FLOAT_TYPE>::evaluateAspectRatioMinMax() const {
-    std::vector<FLOAT_TYPE> all_aspect_ratios = this->getAllElementsAspectRatios();
+  template <typename t>
+  gpuify std::pair<t,t> Triangulation<t>::evaluateAspectRatioMinMax() const {
+    std::vector<t> all_aspect_ratios = this->getAllElementsAspectRatios();
     auto minimum_element = all_aspect_ratios[std::distance(all_aspect_ratios.begin(), std::min_element(all_aspect_ratios.begin(), all_aspect_ratios.end()))];
     auto maximum_element = all_aspect_ratios[std::distance(all_aspect_ratios.begin(), std::max_element(all_aspect_ratios.begin(), all_aspect_ratios.end()))];
-    return std::pair<FLOAT_TYPE, FLOAT_TYPE>({minimum_element, maximum_element});
+    return std::pair<t, t>({minimum_element, maximum_element});
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::pair<FLOAT_TYPE,FLOAT_TYPE> Triangulation<FLOAT_TYPE>::evaluateElementQualityMinMax() const {
-    std::vector<FLOAT_TYPE> all_qualities = this->getAllElementsElementQualities();
+  template <typename t>
+  gpuify std::pair<t,t> Triangulation<t>::evaluateElementQualityMinMax() const {
+    std::vector<t> all_qualities = this->getAllElementsElementQualities();
     auto minimum_element = all_qualities[std::distance(all_qualities.begin(), std::min_element(all_qualities.begin(), all_qualities.end()))];
     auto maximum_element = all_qualities[std::distance(all_qualities.begin(), std::max_element(all_qualities.begin(), all_qualities.end()))];
-    return std::pair<FLOAT_TYPE, FLOAT_TYPE>({minimum_element, maximum_element});
+    return std::pair<t, t>({minimum_element, maximum_element});
   }
 
-  template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE std::pair<FLOAT_TYPE,FLOAT_TYPE> Triangulation<FLOAT_TYPE>::evaluateSkewnessMinMax() const {
-    std::vector<FLOAT_TYPE> all_skewness = this->getAllElementsSkewness();
+  template <typename t>
+  gpuify std::pair<t,t> Triangulation<t>::evaluateSkewnessMinMax() const {
+    std::vector<t> all_skewness = this->getAllElementsSkewness();
     auto minimum_element = all_skewness[std::distance(all_skewness.begin(), std::min_element(all_skewness.begin(), all_skewness.end()))];
     auto maximum_element = all_skewness[std::distance(all_skewness.begin(), std::max_element(all_skewness.begin(), all_skewness.end()))];
-    return std::pair<FLOAT_TYPE, FLOAT_TYPE>({minimum_element, maximum_element});
+    return std::pair<t, t>({minimum_element, maximum_element});
   }
 
 template class Triangulation<float>;

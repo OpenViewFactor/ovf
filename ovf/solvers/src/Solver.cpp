@@ -15,7 +15,7 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE bool Solver<FLOAT_TYPE>::backFaceCullElements(const Vector3<FLOAT_TYPE>& emitter_centroid, const Vector3<FLOAT_TYPE>& emitter_normal, const Vector3<FLOAT_TYPE>& receiver_centroid, const Vector3<FLOAT_TYPE> receiver_normal) const {
     auto ray = (receiver_centroid - emitter_centroid).normalize();
-    return (ray.dot(emitter_normal) <= 0.0 || ray.dot(receiver_normal) >= 0.0);
+    return (ray.dot(emitter_normal) <= 0.0001 || ray.dot(receiver_normal) >= -0.0001);
   }
 
   template <typename FLOAT_TYPE>
@@ -85,7 +85,7 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE void Solver<FLOAT_TYPE>::solveViewFactorBetweenMeshes(unsigned int num_emitter_elements, unsigned int num_receiver_elements, std::vector<Vector3<FLOAT_TYPE>>* emitter_centroids,std::vector<Vector3<FLOAT_TYPE>>* emitter_normals, std::vector<Triangle<FLOAT_TYPE>>* receiver_elements, std::vector<unsigned int>* unblocked_indices, std::shared_ptr<ViewFactor<FLOAT_TYPE>> results) const {
     std::vector<FLOAT_TYPE> view_factors(unblocked_indices->size());
-    #pragma omp parallel for
+    // #pragma omp parallel for
     for (int i = 0; i < unblocked_indices->size(); i++) {
       auto index = (*unblocked_indices)[i];
       auto emitter_index = index / num_receiver_elements;

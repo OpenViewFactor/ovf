@@ -64,13 +64,13 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getMatrixElementVF(unsigned int full_matrix_index) const {
     auto indices_index = this->binarySearch(full_matrix_index, 0, _indices.size());
-    if (indices_index != -1) { return _view_factors[indices_index];
+    if (indices_index != -1) { return _view_factors[indices_index]; }
     return 0.0;
   }
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE ViewFactor<FLOAT_TYPE>::getMatrixElementVF(unsigned int emitter_index, unsigned int receiver_index, unsigned int num_receiver_elements) const {
     unsigned int full_matrix_index = (emitter_index * num_receiver_elements) + receiver_index;
-    return (this->getMatrixElementVF(full_matrix_index, num_receiver_elements));
+    return (this->getMatrixElementVF(full_matrix_index));
   }
 
   template <typename FLOAT_TYPE>

@@ -1,5 +1,7 @@
 #include "Solver.hpp"
 
+#define THRESHOLD 1e-10
+
 namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
@@ -15,7 +17,7 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE bool Solver<FLOAT_TYPE>::backFaceCullElements(const Vector3<FLOAT_TYPE>& emitter_centroid, const Vector3<FLOAT_TYPE>& emitter_normal, const Vector3<FLOAT_TYPE>& receiver_centroid, const Vector3<FLOAT_TYPE> receiver_normal) const {
     auto ray = (receiver_centroid - emitter_centroid).normalize();
-    return (ray.dot(emitter_normal) <= 0.0001 || ray.dot(receiver_normal) >= -0.0001);
+    return (ray.dot(emitter_normal) <= THRESHOLD || ray.dot(receiver_normal) >= -THRESHOLD);
   }
 
   template <typename FLOAT_TYPE>

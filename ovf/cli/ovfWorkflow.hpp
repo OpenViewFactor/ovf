@@ -166,26 +166,6 @@ void ovfWorkflow(po::variables_map variables_map) {
 
   std::cout << "\n[RUN] Computing View Factors" << '\n';
 
-
-
-  auto emitter_num_elements_original = emitter->getNumElements();
-  auto receiver_num_elements_original = receiver->getNumElements();
-
-  for (int i = 0; i < emitter->getNumElements(); i++) {
-    if (std::isinf((*emitter)[i].evaluateAspectRatio()) || std::isnan((*emitter)[i].evaluateSkewness())) {
-      emitter->removeElement(i);
-      i--;
-    }
-  }
-  std::cout << "[LOG] " << emitter_num_elements_original - emitter->getNumElements() << " Degenerate Elements Removed from Emitter Mesh" << '\n';
-  for (int i = 0; i < receiver->getNumElements(); i++) {
-    if (std::isinf((*receiver)[i].evaluateAspectRatio()) || std::isnan((*receiver)[i].evaluateSkewness())) {
-      receiver->removeElement(i);
-      i--;
-    }
-  }
-  std::cout << "[LOG] " << receiver_num_elements_original - receiver->getNumElements() << " Degenerate Elements Removed from Receiver Mesh" << '\n';
-
   auto num_emitter_elements = emitter->getNumElements();
   auto num_receiver_elements = receiver->getNumElements();
   auto emitter_centroids = emitter->getCentroids();
@@ -194,11 +174,10 @@ void ovfWorkflow(po::variables_map variables_map) {
   auto receiver_normals = receiver->getNormals();
   auto receiver_elements = receiver->getTriangles();
 
-
   FLOAT_TYPE back_face_cull_time;
   FLOAT_TYPE blocking_time;
   Timer solver_timer;
-  auto results = std::make_shared<ViewFactor<FLOAT_TYPE>>();
+  std::shared_ptr<ViewFactor<FLOAT_TYPE>> results = std::make_shared<ViewFactor<FLOAT_TYPE>>();
   if (numeric == "DAI") {
     //* ---------- DOUBLE AREA INTEGRATION ---------- *//
     DoubleAreaIntegration<FLOAT_TYPE> solver;

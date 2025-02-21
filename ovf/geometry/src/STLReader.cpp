@@ -27,6 +27,7 @@ namespace openviewfactor {
 
     mesh->setConnectivity(reformatted_triangulations);
     mesh->setPoints(reformatted_coordinates);
+    mesh->removeDegenerateElements();
     return mesh;
   }
 

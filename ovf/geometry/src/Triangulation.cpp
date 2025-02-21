@@ -128,6 +128,17 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::removeDegenerateElements() {
+    for (int i = 0; i < this->getNumElements(); i++) {
+      if (std::isinf((*this)[i].evaluateAspectRatio()) || std::isnan((*this)[i].evaluateSkewness())) {
+        this->removeElement(i);
+        i--;
+      }
+    }
+    return *this;
+  }
+
+  template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::setConnectivity(std::vector<std::array<size_t, 3>> con) {
     _con.clear();
     _con = std::move(con);

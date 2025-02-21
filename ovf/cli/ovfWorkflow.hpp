@@ -118,16 +118,15 @@ void ovfWorkflow(po::variables_map variables_map) {
 
   std::cout << "[LOG] Loading Input Emitter Mesh : " << input_filenames[0] << '\n';
   auto emitter = reader.getMesh(input_filenames[0]);
-  std::cout << " [MESH METRICS] Size: " << emitter->getNumElements() << " Elements" << '\n';
-  std::cout << " [MESH METRICS] [Aspect Ratio] Mean: " << emitter->evaluateAspectRatioMean() << '\n';
-  std::cout << " [MESH METRICS] [Aspect Ratio] Standard Deviation: " << emitter->evaluateAspectRatioStandardDeviation() << '\n';
-  std::cout << " [MESH METRICS] [Aspect Ratio] Min/Max: " << (emitter->evaluateAspectRatioMinMax()).first << " / " << (emitter->evaluateAspectRatioMinMax()).second << '\n';
-  std::cout << " [MESH METRICS] [Element Quality] Mean: " << emitter->evaluateElementQualityMean() << '\n';
-  std::cout << " [MESH METRICS] [Element Quality] Standard Deviation: " << emitter->evaluateElementQualityStandardDeviation() << '\n';
-  std::cout << " [MESH METRICS] [Element Quality] Min/Max: " << (emitter->evaluateElementQualityMinMax()).first << " / " << (emitter->evaluateElementQualityMinMax()).second << '\n';
-  std::cout << " [MESH METRICS] [Skewness] Mean: " << emitter->evaluateSkewnessMean() << '\n';
-  std::cout << " [MESH METRICS] [Skewness] Standard Deviation: " << emitter->evaluateSkewnessStandardDeviation() << '\n';
-  std::cout << " [MESH METRICS] [Skewness] Min/Max: " << (emitter->evaluateSkewnessMinMax()).first << " / " << (emitter->evaluateSkewnessMinMax()).second << '\n';
+  std::cout << " -----------------------------------------------------------------" << '\n';
+    std::cout << " [Size]\t\t\t\t\t" << emitter->getNumElements() << " Elements" << '\n';
+    std::cout << " [Aspect Ratio]\t\tMean\t\t" << emitter->evaluateAspectRatioMean() << '\n';
+    std::cout << " [Aspect Ratio]\t\tMin/Max\t\t" << (emitter->evaluateAspectRatioMinMax()).first << " / " << (emitter->evaluateAspectRatioMinMax()).second << '\n';
+    std::cout << " [Element Quality]\tMean\t\t" << emitter->evaluateElementQualityMean() << '\n';
+    std::cout << " [Element Quality]\tMin/Max\t\t" << (emitter->evaluateElementQualityMinMax()).first << " / " << (emitter->evaluateElementQualityMinMax()).second << '\n';
+    std::cout << " [Skewness]\t\tMean\t\t" << emitter->evaluateSkewnessMean() << '\n';
+    std::cout << " [Skewness]\t\tMin/Max\t\t" << (emitter->evaluateSkewnessMinMax()).first << " / " << (emitter->evaluateSkewnessMinMax()).second << '\n';
+    std::cout << " -----------------------------------------------------------------" << '\n';
 
   auto receiver = std::make_shared<Triangulation<FLOAT_TYPE>>();
 
@@ -144,16 +143,15 @@ void ovfWorkflow(po::variables_map variables_map) {
   if (two_mesh_problem) {
     std::cout << "[LOG] Loading Input Receiver Mesh : " << input_filenames[1] << '\n';
     receiver = reader.getMesh(input_filenames[1]);
-    std::cout << " [MESH METRICS] Size: " << receiver->getNumElements() << " Elements" << '\n';
-    std::cout << " [MESH METRICS] [Aspect Ratio] Mean: " << receiver->evaluateAspectRatioMean() << '\n';
-    std::cout << " [MESH METRICS] [Aspect Ratio] Standard Deviation: " << receiver->evaluateAspectRatioStandardDeviation() << '\n';
-    std::cout << " [MESH METRICS] [Aspect Ratio] Min/Max: " << (receiver->evaluateAspectRatioMinMax()).first << " / " << (receiver->evaluateAspectRatioMinMax()).second << '\n';
-    std::cout << " [MESH METRICS] [Element Quality] Mean: " << receiver->evaluateElementQualityMean() << '\n';
-    std::cout << " [MESH METRICS] [Element Quality] Standard Deviation: " << receiver->evaluateElementQualityStandardDeviation() << '\n';
-    std::cout << " [MESH METRICS] [Element Quality] Min/Max: " << (receiver->evaluateElementQualityMinMax()).first << " / " << (receiver->evaluateElementQualityMinMax()).second << '\n';
-    std::cout << " [MESH METRICS] [Skewness] Mean: " << receiver->evaluateSkewnessMean() << '\n';
-    std::cout << " [MESH METRICS] [Skewness] Standard Deviation: " << receiver->evaluateSkewnessStandardDeviation() << '\n';
-    std::cout << " [MESH METRICS] [Skewness] Min/Max: " << (receiver->evaluateSkewnessMinMax()).first << " / " << (receiver->evaluateSkewnessMinMax()).second << '\n';
+    std::cout << " -----------------------------------------------------------------" << '\n';
+    std::cout << " [Size]\t\t\t\t\t" << receiver->getNumElements() << " Elements" << '\n';
+    std::cout << " [Aspect Ratio]\t\tMean\t\t" << receiver->evaluateAspectRatioMean() << '\n';
+    std::cout << " [Aspect Ratio]\t\tMin/Max\t\t" << (receiver->evaluateAspectRatioMinMax()).first << " / " << (receiver->evaluateAspectRatioMinMax()).second << '\n';
+    std::cout << " [Element Quality]\tMean\t\t" << receiver->evaluateElementQualityMean() << '\n';
+    std::cout << " [Element Quality]\tMin/Max\t\t" << (receiver->evaluateElementQualityMinMax()).first << " / " << (receiver->evaluateElementQualityMinMax()).second << '\n';
+    std::cout << " [Skewness]\t\tMean\t\t" << receiver->evaluateSkewnessMean() << '\n';
+    std::cout << " [Skewness]\t\tMin/Max\t\t" << (receiver->evaluateSkewnessMinMax()).first << " / " << (receiver->evaluateSkewnessMinMax()).second << '\n';
+    std::cout << " -----------------------------------------------------------------" << '\n';
     if (self_int_type == "BOTH" || self_int_type == "RECEIVER") {
       std::cout << "[LOG] Constructing BVH for Receiver Mesh : " << input_filenames[1] << '\n';
       receiver_bvh->linkToTriangulation(receiver);
@@ -169,13 +167,32 @@ void ovfWorkflow(po::variables_map variables_map) {
   std::cout << "\n[RUN] Computing View Factors" << '\n';
 
 
+
+  auto emitter_num_elements_original = emitter->getNumElements();
+  auto receiver_num_elements_original = receiver->getNumElements();
+
+  for (int i = 0; i < emitter->getNumElements(); i++) {
+    if (std::isinf((*emitter)[i].evaluateAspectRatio()) || std::isnan((*emitter)[i].evaluateSkewness())) {
+      emitter->removeElement(i);
+      i--;
+    }
+  }
+  std::cout << "[LOG] " << emitter_num_elements_original - emitter->getNumElements() << " Degenerate Elements Removed from Emitter Mesh" << '\n';
+  for (int i = 0; i < receiver->getNumElements(); i++) {
+    if (std::isinf((*receiver)[i].evaluateAspectRatio()) || std::isnan((*receiver)[i].evaluateSkewness())) {
+      receiver->removeElement(i);
+      i--;
+    }
+  }
+  std::cout << "[LOG] " << receiver_num_elements_original - receiver->getNumElements() << " Degenerate Elements Removed from Receiver Mesh" << '\n';
+
   auto num_emitter_elements = emitter->getNumElements();
   auto num_receiver_elements = receiver->getNumElements();
   auto emitter_centroids = emitter->getCentroids();
   auto receiver_centroids = receiver->getCentroids();
   auto emitter_normals = emitter->getNormals();
   auto receiver_normals = receiver->getNormals();
-  auto receiver_elements = receiver->getTriangles(); //TODO I hate that i have to store this in addition to the normals and centroids and areas just for the virtual method
+  auto receiver_elements = receiver->getTriangles();
 
 
   FLOAT_TYPE back_face_cull_time;
@@ -183,7 +200,9 @@ void ovfWorkflow(po::variables_map variables_map) {
   Timer solver_timer;
   auto results = std::make_shared<ViewFactor<FLOAT_TYPE>>();
   if (numeric == "DAI") {
+    //* ---------- DOUBLE AREA INTEGRATION ---------- *//
     DoubleAreaIntegration<FLOAT_TYPE> solver;
+    //! ---------- BACK-FACE CULLING ---------- !//
     std::vector<unsigned int> unculled_indices(num_emitter_elements * num_receiver_elements);
     if (back_face_cull_mode == "ON") {
       std::cout << "[LOG] Applying Back Face Culling" << '\n';
@@ -192,15 +211,17 @@ void ovfWorkflow(po::variables_map variables_map) {
       std::iota(unculled_indices.begin(), unculled_indices.end(), 0);
     }
     back_face_cull_time = solver_timer.elapsed();
-
+    //! ---------- OBSTRUCTIONS ---------- !//
     auto unblocked_indices = solver.evaluateBlockingBetweenMeshes(num_emitter_elements, num_receiver_elements, emitter_centroids, receiver_centroids, blockers, unculled_indices);
     blocking_time = solver_timer.elapsed() - back_face_cull_time;
-
+    //! ---------- VIEW FACTOR SOLUTIONS ---------- !//
     results->linkTriangulations(emitter, receiver, unblocked_indices.size());
     solver.solveViewFactorBetweenMeshes(num_emitter_elements, num_receiver_elements, &emitter_centroids, &emitter_normals, &receiver_elements, &unblocked_indices, results);
 
   } else if (numeric == "SAI") {
+    //* ---------- SINGLE AREA INTEGRATION ---------- *//
     SingleAreaIntegration<FLOAT_TYPE> solver;
+    //! ---------- BACK-FACE CULLING ---------- !//
     std::vector<unsigned int> unculled_indices(num_emitter_elements * num_receiver_elements);
     if (back_face_cull_mode == "ON") {
       unculled_indices = solver.backFaceCullMeshes(num_emitter_elements, num_receiver_elements, &emitter_centroids, &receiver_centroids, &emitter_normals, &receiver_normals);
@@ -208,10 +229,10 @@ void ovfWorkflow(po::variables_map variables_map) {
       std::iota(unculled_indices.begin(), unculled_indices.end(), 0);
     }
     back_face_cull_time = solver_timer.elapsed();
-
+    //! ---------- OBSTRUCTIONS ---------- !//
     auto unblocked_indices = solver.evaluateBlockingBetweenMeshes(num_emitter_elements, num_receiver_elements, emitter_centroids, receiver_centroids, blockers, unculled_indices);
     blocking_time = solver_timer.elapsed() - back_face_cull_time;
-
+    //! ---------- VIEW FACTOR SOLUTIONS ---------- !//
     results->linkTriangulations(emitter, receiver, unblocked_indices.size());
     solver.solveViewFactorBetweenMeshes(num_emitter_elements, num_receiver_elements, &emitter_centroids, &emitter_normals, &receiver_elements, &unblocked_indices, results);
   }

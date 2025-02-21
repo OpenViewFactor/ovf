@@ -6,6 +6,7 @@
 #include <vector>
 #include <memory>
 #include <execution>
+#include <numeric>
 #include <omp.h>
 
 #include "../../config.hpp"
@@ -40,10 +41,10 @@ namespace openviewfactor {
 
       OVF_HOST_DEVICE int binarySearch(unsigned int full_matrix_index, unsigned int inclusive_start, unsigned int uninclusive_end) const;
       OVF_HOST_DEVICE FLOAT_TYPE getMatrixElementVF(unsigned int full_matrix_index) const;
-      OVF_HOST_DEVICE FLOAT_TYPE getMatrixElementVF(unsigned int emitter_index, unsigned int receiver_index) const;
+      OVF_HOST_DEVICE FLOAT_TYPE getMatrixElementVF(unsigned int emitter_index, unsigned int receiver_index, unsigned int num_receiver_elements) const;
 
-      OVF_HOST_DEVICE FLOAT_TYPE getEmitterElementToReceiverSurfaceVF(unsigned int emitter_index) const;
-      OVF_HOST_DEVICE FLOAT_TYPE getReceiverElementToEmitterSurfaceVF(unsigned int receiver_index) const;
+      OVF_HOST_DEVICE FLOAT_TYPE getEmitterElementToReceiverSurfaceVF(unsigned int emitter_index, unsigned int num_receiver_elements) const;
+      OVF_HOST_DEVICE FLOAT_TYPE getReceiverElementToEmitterSurfaceVF(unsigned int receiver_index, unsigned int num_receiver_elements) const;
       OVF_HOST_DEVICE FLOAT_TYPE getSurfaceToSurfaceAverageVF() const;
 
       OVF_HOST_DEVICE ViewFactor<FLOAT_TYPE>& setElements(std::vector<unsigned int> indices, std::vector<FLOAT_TYPE> view_factors);

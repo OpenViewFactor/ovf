@@ -85,8 +85,7 @@ namespace openviewfactor {
   OVF_HOST_DEVICE std::vector<Triangle<FLOAT_TYPE>> Triangulation<FLOAT_TYPE>::getTriangles() const {
     std::vector<Triangle<FLOAT_TYPE>> mesh_triangles(this->getNumElements());
     for (unsigned int i = 0; i < this->getNumElements(); i++) {
-      std::array<size_t, 3> connections = _con[i];
-      mesh_triangles[i].setOA(_pts[connections[0]]).setOB(_pts[connections[1]]).setOC(_pts[connections[2]]);
+      mesh_triangles[i] = (*this)[i];
     }
     return mesh_triangles;
   }
@@ -121,6 +120,14 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::removeElement(unsigned int index) {
+    auto element_connectivity = _con[index];
+    std::remove(_con.begin(), _con.end(), element_connectivity);
+    _con.pop_back();
+    return *this;
+  }
+
+  template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& Triangulation<FLOAT_TYPE>::setConnectivity(std::vector<std::array<size_t, 3>> con) {
     _con.clear();
     _con = std::move(con);
@@ -148,30 +155,30 @@ namespace openviewfactor {
   //* ----- MESH QUALITY ANALYSIS ----- *//
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE std::vector<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::getAllElementsAspectRatios() const {
-    auto all_triangles = this->getTriangles();
-    std::vector<FLOAT_TYPE> aspect_ratios(all_triangles.size());
-    for (int i = 0; i < all_triangles.size(); i++) {
-      aspect_ratios[i] = all_triangles[i].evaluateAspectRatio();
+    auto num_elements = this->getNumElements();
+    std::vector<FLOAT_TYPE> aspect_ratios(num_elements);
+    for (int i = 0; i < num_elements; i++) {
+      aspect_ratios[i] = (*this)[i].evaluateAspectRatio();
     }
     return aspect_ratios;
   }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE std::vector<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::getAllElementsElementQualities() const {
-    auto all_triangles = this->getTriangles();
-    std::vector<FLOAT_TYPE> qualities(all_triangles.size());
-    for (int i = 0; i < all_triangles.size(); i++) {
-      qualities[i] = all_triangles[i].evaluateElementQuality();
+    auto num_elements = this->getNumElements();
+    std::vector<FLOAT_TYPE> qualities(num_elements);
+    for (int i = 0; i < num_elements; i++) {
+      qualities[i] = (*this)[i].evaluateElementQuality();
     }
     return qualities;
   }
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE std::vector<FLOAT_TYPE> Triangulation<FLOAT_TYPE>::getAllElementsSkewness() const {
-    auto all_triangles = this->getTriangles();
-    std::vector<FLOAT_TYPE> skewness(all_triangles.size());
-    for (int i = 0; i < all_triangles.size(); i++) {
-      skewness[i] = all_triangles[i].evaluateSkewness();
+    auto num_elements = this->getNumElements();
+    std::vector<FLOAT_TYPE> skewness(num_elements);
+    for (int i = 0; i < num_elements; i++) {
+      skewness[i] = (*this)[i].evaluateSkewness();
     }
     return skewness;
   }

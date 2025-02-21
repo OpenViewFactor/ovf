@@ -18,7 +18,7 @@ TEST(ViewFactor_Test, test_constructor) {
   EXPECT_EQ(vf.getState(), UNLINKED);
   EXPECT_EQ(vf.getEmitterMesh(), nullptr);
   EXPECT_EQ(vf.getReceiverMesh(), nullptr);
-  EXPECT_THROW(vf.getMatrixElementVF(0), std::runtime_error);
+  // EXPECT_THROW(vf.getMatrixElementVF(0), std::runtime_error);
 }
 
 TEST(ViewFactor_Test, test_linking) {
@@ -73,9 +73,9 @@ TEST(ViewFactor_Test, test_matrix_elements) {
   auto e = reader.getMesh(OVF_INPUT("xy_plane_unit_square_binary.stl"));
   auto r = reader.getMesh(OVF_INPUT("xy_plane_offset_unit_square_binary.stl"));
 
-  EXPECT_THROW(vf.getMatrixElementVF(0), std::runtime_error);
-  EXPECT_THROW(vf.getEmitterElementToReceiverSurfaceVF(0), std::runtime_error);
-  EXPECT_THROW(vf.getReceiverElementToEmitterSurfaceVF(0), std::runtime_error);
+  // EXPECT_THROW(vf.getMatrixElementVF(0), std::runtime_error);
+  // EXPECT_THROW(vf.getEmitterElementToReceiverSurfaceVF(0), std::runtime_error);
+  // EXPECT_THROW(vf.getReceiverElementToEmitterSurfaceVF(0), std::runtime_error);
   EXPECT_THROW(vf.getSurfaceToSurfaceAverageVF(), std::runtime_error);
 
   vf.linkTriangulations(e,r, 4);

@@ -35,6 +35,8 @@ namespace openviewfactor {
     std::iota(triangulations.begin(), triangulations.end(), 0);
     std::vector<double> vertices(num_emitter_elements * cell_size * dimension);
     std::vector<double> view_factors(num_emitter_elements * cell_size);
+
+    auto num_receiver_elements = (_vf->getReceiverMesh())->getNumElements();
     
     for (int i = 0; i < num_emitter_elements; i++) {
       vertices[9 * i + 0] = (((*emitter_mesh)[i]).getOA())[0];
@@ -49,7 +51,7 @@ namespace openviewfactor {
       vertices[9 * i + 7] = (((*emitter_mesh)[i]).getOC())[1];
       vertices[9 * i + 8] = (((*emitter_mesh)[i]).getOC())[2];
 
-      auto element_view_factor = _vf->getEmitterElementToReceiverSurfaceVF(i);
+      auto element_view_factor = _vf->getEmitterElementToReceiverSurfaceVF(i, num_receiver_elements);
       view_factors[3 * i + 0] = element_view_factor;
       view_factors[3 * i + 1] = element_view_factor;
       view_factors[3 * i + 2] = element_view_factor;
@@ -96,7 +98,7 @@ namespace openviewfactor {
       vertices[9 * i + 7] = (((*receiver_mesh)[i]).getOC())[1];
       vertices[9 * i + 8] = (((*receiver_mesh)[i]).getOC())[2];
 
-      auto element_view_factor = (((*receiver_mesh)[i]).getArea() / emitter_mesh_area) *(_vf->getReceiverElementToEmitterSurfaceVF(i));
+      auto element_view_factor = (((*receiver_mesh)[i]).getArea() / emitter_mesh_area) *(_vf->getReceiverElementToEmitterSurfaceVF(i, num_receiver_elements));
       view_factors[3 * i + 0] = element_view_factor;
       view_factors[3 * i + 1] = element_view_factor;
       view_factors[3 * i + 2] = element_view_factor;
@@ -142,7 +144,7 @@ namespace openviewfactor {
       vertices[9 * i + 7] = (((*receiver_mesh)[i]).getOC())[1];
       vertices[9 * i + 8] = (((*receiver_mesh)[i]).getOC())[2];
 
-      auto element_view_factor = _vf->getReceiverElementToEmitterSurfaceVF(i);
+      auto element_view_factor = _vf->getReceiverElementToEmitterSurfaceVF(i, num_receiver_elements);
       view_factors[3 * i + 0] = element_view_factor;
       view_factors[3 * i + 1] = element_view_factor;
       view_factors[3 * i + 2] = element_view_factor;
@@ -175,6 +177,9 @@ namespace openviewfactor {
     std::iota(triangulations.begin(), triangulations.end(), 0);
     std::vector<double> vertices(num_emitter_elements * cell_size * dimension);
     std::vector<double> view_factors(num_emitter_elements * cell_size);
+
+    auto receiver_mesh = _vf->getReceiverMesh();
+    auto num_receiver_elements = receiver_mesh->getNumElements();
     
     for (int i = 0; i < num_emitter_elements; i++) {
       vertices[9 * i + 0] = (((*emitter_mesh)[i]).getOA())[0];
@@ -189,7 +194,7 @@ namespace openviewfactor {
       vertices[9 * i + 7] = (((*emitter_mesh)[i]).getOC())[1];
       vertices[9 * i + 8] = (((*emitter_mesh)[i]).getOC())[2];
 
-      auto element_view_factor = _vf->getEmitterElementToReceiverSurfaceVF(i);
+      auto element_view_factor = _vf->getEmitterElementToReceiverSurfaceVF(i, num_receiver_elements);
       view_factors[3 * i + 0] = element_view_factor;
       view_factors[3 * i + 1] = element_view_factor;
       view_factors[3 * i + 2] = element_view_factor;
@@ -201,8 +206,6 @@ namespace openviewfactor {
 
 
     auto emitter_mesh_area = emitter_mesh->getMeshArea();
-    auto receiver_mesh = _vf->getReceiverMesh();
-    auto num_receiver_elements = receiver_mesh->getNumElements();
     std::vector<int> receiver_triangulations(num_receiver_elements * cell_size);
     std::iota(receiver_triangulations.begin(), receiver_triangulations.end(), 0);
     std::vector<double> receiver_vertices(num_receiver_elements * cell_size * dimension);
@@ -221,7 +224,7 @@ namespace openviewfactor {
       receiver_vertices[9 * i + 7] = (((*receiver_mesh)[i]).getOC())[1];
       receiver_vertices[9 * i + 8] = (((*receiver_mesh)[i]).getOC())[2];
 
-      auto element_view_factor = (emitter_mesh_area / ((*receiver_mesh)[i]).getArea()) *(_vf->getReceiverElementToEmitterSurfaceVF(i));
+      auto element_view_factor = (emitter_mesh_area / ((*receiver_mesh)[i]).getArea()) *(_vf->getReceiverElementToEmitterSurfaceVF(i, num_receiver_elements));
       receiver_view_factors[3 * i + 0] = element_view_factor;
       receiver_view_factors[3 * i + 1] = element_view_factor;
       receiver_view_factors[3 * i + 2] = element_view_factor;

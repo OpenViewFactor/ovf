@@ -85,7 +85,7 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE void Solver<FLOAT_TYPE>::solveViewFactorBetweenMeshes(unsigned int num_emitter_elements, unsigned int num_receiver_elements, std::vector<Vector3<FLOAT_TYPE>>* emitter_centroids,std::vector<Vector3<FLOAT_TYPE>>* emitter_normals, std::vector<Triangle<FLOAT_TYPE>>* receiver_elements, std::vector<unsigned int>* unblocked_indices, std::shared_ptr<ViewFactor<FLOAT_TYPE>> results) const {
     std::vector<FLOAT_TYPE> view_factors(unblocked_indices->size());
-    // #pragma omp parallel for
+    #pragma omp parallel for
     for (int i = 0; i < unblocked_indices->size(); i++) {
       auto index = (*unblocked_indices)[i];
       auto emitter_index = index / num_receiver_elements;

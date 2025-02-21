@@ -48,6 +48,7 @@ template <typename FLOAT_TYPE> class Triangulation {
     OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& clear();
     OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& addElement(Vector3<FLOAT_TYPE> OA, Vector3<FLOAT_TYPE> OB, Vector3<FLOAT_TYPE> OC);
     OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& addElement(Triangle<FLOAT_TYPE> tri);
+    OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& removeElement(unsigned int index);
 
     OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& setConnectivity(std::vector<std::array<size_t, 3>> con);
     OVF_HOST_DEVICE Triangulation<FLOAT_TYPE>& setPoints(std::vector<Vector3<FLOAT_TYPE>> pts);

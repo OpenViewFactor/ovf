@@ -49,7 +49,7 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE FLOAT_TYPE Triangle<FLOAT_TYPE>::getArea() const {
     Vector3<FLOAT_TYPE> unnormalized_normal = cross(this->getAB(), this->getCA());
-    return (unnormalized_normal.getMagnitude() / 2.0);
+    return (unnormalized_normal.getMagnitude() * 0.5);
   }
 
   template <typename FLOAT_TYPE>

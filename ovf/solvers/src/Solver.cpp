@@ -14,6 +14,8 @@ namespace openviewfactor {
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE Solver<FLOAT_TYPE>& Solver<FLOAT_TYPE>::setOptions(const SolverOptions &options) { _options = options; return *this; }
 
+
+  //* ---------- BACK FACE CULLING ---------- *//
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE bool Solver<FLOAT_TYPE>::backFaceCullElements(const Vector3<FLOAT_TYPE>& emitter_centroid, const Vector3<FLOAT_TYPE>& emitter_normal, const Vector3<FLOAT_TYPE>& receiver_centroid, const Vector3<FLOAT_TYPE> receiver_normal) const {
     auto ray = (receiver_centroid - emitter_centroid).normalize();
@@ -43,7 +45,7 @@ namespace openviewfactor {
   }
 
 
-
+  //* ---------- BLOCKING ---------- *//
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE bool Solver<FLOAT_TYPE>::evaluateBlockingBetweenElements(std::shared_ptr<Ray<FLOAT_TYPE>> ray, FLOAT_TYPE ray_magnitude, const Blockers<FLOAT_TYPE>& blockers) const {
     bool blocked = false;
@@ -59,10 +61,8 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE std::vector<unsigned int> Solver<FLOAT_TYPE>::evaluateBlockingBetweenMeshes(unsigned int num_emitter_elements, unsigned int num_receiver_elements, std::vector<Vector3<FLOAT_TYPE>> emitter_centroids, std::vector<Vector3<FLOAT_TYPE>> receiver_centroids, Blockers<FLOAT_TYPE> blockers, std::vector<unsigned int> unculled_indices) const {
-    if (blockers.size() == 0) {
-      return unculled_indices;
-    }
-    std::vector<unsigned int> unblocked_indices(unculled_indices.size(), (num_emitter_elements * num_receiver_elements));
+    auto problem_size = num_emitter_elements * num_receiver_elements;
+    auto unblocked_indices = unculled_indices;
     #pragma omp parallel for
     for (int i = 0; i < unculled_indices.size(); i++) {
       auto index = unculled_indices[i];
@@ -75,15 +75,17 @@ namespace openviewfactor {
       ray->setOrigin(emitter_element_centroid);
       ray->setDirection(ray_vector.normalize());
       bool blocked = this->evaluateBlockingBetweenElements(ray, ray_vector.getMagnitude(), blockers);
-      if (!blocked) {
-        unblocked_indices[index] = index;
+      if (blocked) {
+        unblocked_indices[i] = problem_size;
       }
     }
-    auto end_iterator = std::remove(unblocked_indices.begin(), unblocked_indices.end(), (num_emitter_elements * num_receiver_elements));
+    auto end_iterator = std::remove(unblocked_indices.begin(), unblocked_indices.end(), problem_size);
     unblocked_indices.erase(end_iterator, unblocked_indices.end());
     return unblocked_indices;
   }
 
+
+  //* ---------- VIEW FACTOR SOLVER ---------- *//
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE void Solver<FLOAT_TYPE>::solveViewFactorBetweenMeshes(unsigned int num_emitter_elements, unsigned int num_receiver_elements, std::vector<Vector3<FLOAT_TYPE>>* emitter_centroids,std::vector<Vector3<FLOAT_TYPE>>* emitter_normals, std::vector<Triangle<FLOAT_TYPE>>* receiver_elements, std::vector<unsigned int>* unblocked_indices, std::shared_ptr<ViewFactor<FLOAT_TYPE>> results) const {
     std::vector<FLOAT_TYPE> view_factors(unblocked_indices->size());

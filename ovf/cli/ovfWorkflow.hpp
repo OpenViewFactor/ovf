@@ -103,6 +103,9 @@ void ovfWorkflow(po::variables_map variables_map) {
   if (blocking_enabled) {
     std::vector<std::string> blocker_filenames = variables_map["blocking"].as<std::vector<std::string>>();
     blockers.setBlockers(blocker_filenames);
+
+    //! TEMPORARY
+    (blockers.getBVH(0))->writeToFile("/home/natan/Downloads/cylinder_bvh");
   } else {
     std::cout << "\n[LOG] No Blocking Meshes Loaded" << '\n';
   }
@@ -191,7 +194,14 @@ void ovfWorkflow(po::variables_map variables_map) {
     }
     back_face_cull_time = solver_timer.elapsed();
     //! ---------- OBSTRUCTIONS ---------- !//
-    auto unblocked_indices = solver.evaluateBlockingBetweenMeshes(num_emitter_elements, num_receiver_elements, emitter_centroids, receiver_centroids, blockers, unculled_indices);
+    std::vector<unsigned int> unblocked_indices(unculled_indices.size());
+    if (blocking_enabled) {
+      std::cout << "[LOG] Applying Blocking" << '\n';
+      unblocked_indices = solver.evaluateBlockingBetweenMeshes(num_emitter_elements, num_receiver_elements, emitter_centroids, receiver_centroids, blockers, unculled_indices);
+    } else {
+      unblocked_indices = unculled_indices;
+    }
+    unculled_indices.clear();
     blocking_time = solver_timer.elapsed() - back_face_cull_time;
     //! ---------- VIEW FACTOR SOLUTIONS ---------- !//
     results->linkTriangulations(emitter, receiver, unblocked_indices.size());
@@ -209,7 +219,14 @@ void ovfWorkflow(po::variables_map variables_map) {
     }
     back_face_cull_time = solver_timer.elapsed();
     //! ---------- OBSTRUCTIONS ---------- !//
-    auto unblocked_indices = solver.evaluateBlockingBetweenMeshes(num_emitter_elements, num_receiver_elements, emitter_centroids, receiver_centroids, blockers, unculled_indices);
+    std::vector<unsigned int> unblocked_indices(unculled_indices.size());
+    if (blocking_enabled) {
+      std::cout << "[LOG] Applying Blocking" << '\n';
+      unblocked_indices = solver.evaluateBlockingBetweenMeshes(num_emitter_elements, num_receiver_elements, emitter_centroids, receiver_centroids, blockers, unculled_indices);
+    } else {
+      unblocked_indices = unculled_indices;
+    }
+    unculled_indices.clear();
     blocking_time = solver_timer.elapsed() - back_face_cull_time;
     //! ---------- VIEW FACTOR SOLUTIONS ---------- !//
     results->linkTriangulations(emitter, receiver, unblocked_indices.size());

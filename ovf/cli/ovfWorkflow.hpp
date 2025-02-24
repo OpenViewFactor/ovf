@@ -105,7 +105,7 @@ void ovfWorkflow(po::variables_map variables_map) {
     blockers.setBlockers(blocker_filenames);
 
     //! TEMPORARY
-    (blockers.getBVH(0))->writeToFile("/home/natan/Downloads/cylinder_bvh");
+    (blockers.getBVH(0))->writeToFile("blocker_bvh");
   } else {
     std::cout << "\n[LOG] No Blocking Meshes Loaded" << '\n';
   }

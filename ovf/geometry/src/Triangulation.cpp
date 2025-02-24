@@ -48,7 +48,10 @@ namespace openviewfactor {
   OVF_HOST_DEVICE std::shared_ptr<Triangulation<FLOAT_TYPE>> Triangulation<FLOAT_TYPE>::getSubMesh(std::vector<unsigned int> indices) const {    
     auto sub_mesh = std::make_shared<Triangulation<FLOAT_TYPE>>();
     std::vector<std::array<size_t, 3>> sub_mesh_connectivity(indices.size());
-    std::generate(sub_mesh_connectivity.begin(), sub_mesh_connectivity.end(), [this, indices] (unsigned int i=0) mutable { return (this->_con)[indices[i++]]; }); 
+    #pragma omp parallel for
+    for (int i = 0; i < indices.size(); i++) {
+      sub_mesh_connectivity[i] = (this->_con)[indices[i]];
+    }
     sub_mesh->setConnectivity(sub_mesh_connectivity);
     sub_mesh->setPoints(_pts);    
     return sub_mesh;

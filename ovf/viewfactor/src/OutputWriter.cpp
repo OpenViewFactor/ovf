@@ -98,7 +98,7 @@ namespace openviewfactor {
       vertices[9 * i + 7] = (((*receiver_mesh)[i]).getOC())[1];
       vertices[9 * i + 8] = (((*receiver_mesh)[i]).getOC())[2];
 
-      auto element_view_factor = (((*receiver_mesh)[i]).getArea() / emitter_mesh_area) *(_vf->getReceiverElementToEmitterSurfaceVF(i, num_receiver_elements));
+      auto element_view_factor = (((*receiver_mesh)[i]).getArea() / emitter_mesh_area) * (_vf->getReceiverElementToEmitterSurfaceVF(i, num_receiver_elements));
       view_factors[3 * i + 0] = element_view_factor;
       view_factors[3 * i + 1] = element_view_factor;
       view_factors[3 * i + 2] = element_view_factor;

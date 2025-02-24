@@ -90,11 +90,11 @@ namespace openviewfactor {
     left_box.growToIncludeTriangulation(submesh->getSubMesh(left_side_indices));
     right_box.growToIncludeTriangulation(submesh->getSubMesh(right_side_indices));
 
-    FLOAT_TYPE left_cost = left_box.getSurfaceArea() * left_side_indices.size();
-    FLOAT_TYPE right_cost = right_box.getSurfaceArea() * right_side_indices.size();
+    FLOAT_TYPE left_cost = left_box.getNodeCost();
+    FLOAT_TYPE right_cost = right_box.getNodeCost();
     FLOAT_TYPE node_cost = 0;
-    if (left_cost != NAN) { node_cost += left_cost; }
-    if (right_cost != NAN) { node_cost += right_cost; }
+    if (!(std::isnan(left_cost))) { node_cost += left_cost; }
+    if (!(std::isnan(right_cost))) { node_cost += right_cost; }
     if (node_cost == 0) { node_cost = INFINITY; }
     return node_cost;
   }

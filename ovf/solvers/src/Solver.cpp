@@ -77,6 +77,7 @@ namespace openviewfactor {
       bool blocked = this->evaluateBlockingBetweenElements(ray, ray_vector.getMagnitude(), blockers);
       if (blocked) {
         unblocked_indices[i] = problem_size;
+        continue;
       }
     }
     auto end_iterator = std::remove(unblocked_indices.begin(), unblocked_indices.end(), problem_size);

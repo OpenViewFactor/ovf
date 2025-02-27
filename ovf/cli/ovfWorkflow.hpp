@@ -103,9 +103,6 @@ void ovfWorkflow(po::variables_map variables_map) {
   if (blocking_enabled) {
     std::vector<std::string> blocker_filenames = variables_map["blocking"].as<std::vector<std::string>>();
     blockers.setBlockers(blocker_filenames);
-
-    //! TEMPORARY
-    (blockers.getBVH(0))->writeToFile("blocker_bvh");
   } else {
     std::cout << "\n[LOG] No Blocking Meshes Loaded" << '\n';
   }

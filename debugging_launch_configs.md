@@ -89,6 +89,21 @@
       "stopAtEntry" : false,
       "cwd" : "${workspaceRoot}",
       "environment": []
+    },
+    {
+      "name" : "Square-Square Square Blocking",
+      "type" : "cppdbg",
+      "request" : "launch",
+      "program" : "/home/natan/Development/OpenViewFactor/ovf/build/ovf/cli/openviewfactor",
+      "args" : ["-g", "C:\\Development\\OpenViewFactor\\e_out", "C:\\Development\\OpenViewFactor\\r_out", "-p", "DOUBLE", "-n", "DAI", "-c", "CPU_N", "-s", "NONE", "-f", "OFF",
+        "-i", 
+        "C:\\Development\\OpenViewFactor\\verification-scripts\\submodules\\verification-meshes\\algnd-par-rect-10034els\\bottom-xDim=1-yDim=1.stl",
+        "C:\\Development\\OpenViewFactor\\verification-scripts\\submodules\\verification-meshes\\algnd-par-rect-10034els\\top-xDim=1-yDim=1-sep=1.stl",
+        "-b",
+        "C:\\Development\\OpenViewFactor\\blocking_square.stl"],
+      "stopAtEntry" : false,
+      "cwd" : "${workspaceRoot}",
+      "environment": [],
     }
   ]
 }

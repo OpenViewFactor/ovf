@@ -50,7 +50,7 @@ namespace openviewfactor {
   OVF_HOST_DEVICE bool Solver<FLOAT_TYPE>::evaluateBlockingBetweenElements(std::shared_ptr<Ray<FLOAT_TYPE>> ray, FLOAT_TYPE ray_magnitude, const Blockers<FLOAT_TYPE>& blockers) const {
     bool blocked = false;
     for (int bvh_index = 0; bvh_index < blockers.size(); bvh_index++) {
-      (blockers.getBVH(bvh_index))->intersectRayWithBVH(ray);
+      (blockers.getBVH(bvh_index))->intersectRayWithBVH(ray, ray_magnitude);
       if (ray->getIntersectionDistance() < ray_magnitude) {
         blocked = true;
         break;
@@ -63,7 +63,7 @@ namespace openviewfactor {
   OVF_HOST_DEVICE std::vector<unsigned int> Solver<FLOAT_TYPE>::evaluateBlockingBetweenMeshes(unsigned int num_emitter_elements, unsigned int num_receiver_elements, std::vector<Vector3<FLOAT_TYPE>> emitter_centroids, std::vector<Vector3<FLOAT_TYPE>> receiver_centroids, Blockers<FLOAT_TYPE> blockers, std::vector<unsigned int> unculled_indices) const {
     auto problem_size = num_emitter_elements * num_receiver_elements;
     auto unblocked_indices = unculled_indices;
-    #pragma omp parallel for
+    // #pragma omp parallel for
     for (int i = 0; i < unculled_indices.size(); i++) {
       auto index = unculled_indices[i];
       auto emitter_index = index / num_receiver_elements;

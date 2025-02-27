@@ -53,8 +53,49 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE void BVH<FLOAT_TYPE>::intersectRayWithBVH(std::shared_ptr<Ray<FLOAT_TYPE>> ray) {
-    this->intersectRayWithBVHNode(ray, 0);
+  OVF_HOST_DEVICE void BVH<FLOAT_TYPE>::intersectRayWithBVH(std::shared_ptr<Ray<FLOAT_TYPE>> ray, FLOAT_TYPE triangle_distance) {
+    auto node = _nodes[0];
+    std::vector<BVHNode<FLOAT_TYPE>> stack;
+    uint stack_pointer = 0;
+    while (1) {
+      if (node.isLeaf()) {
+        auto triangles = (_triangulation->getSubMesh(node.getElementArraySubindices()))->getTriangles();
+        for (int i = 0; i < triangles.size(); i++) {
+          ray->triangleIntersection(triangles[i]);
+          if (ray->getIntersectionDistance() < triangle_distance && ray->getIntersectionDistance() > 0.0) {
+            break;
+          }
+        }
+        if (stack_pointer == 0) {
+          break;
+        } else {
+          node = stack[--stack_pointer];
+        }
+        continue;
+      }
+      BVHNode<FLOAT_TYPE> child_one = _nodes[node.getChildOneIndex()];
+      BVHNode<FLOAT_TYPE> child_two = _nodes[node.getChildTwoIndex()];
+      FLOAT_TYPE distance_one = child_one.intersectRayWithNodeBoundingBox(ray);
+      FLOAT_TYPE distance_two = child_two.intersectRayWithNodeBoundingBox(ray);
+      if (distance_one < 0.0 || distance_two < 0.0) { std::cout << "[TEMP LOG] NEGATIVE DISTANCE VALUE TO BOX" << '\n'; }
+      if (distance_one > distance_two) {
+        std::swap(distance_one, distance_two);
+        std::swap(child_one, child_two);
+      }
+      if (distance_one == INFINITY) {
+        if (stack_pointer == 0) {
+          break;
+         } else {
+          node = stack[--stack_pointer];
+         }
+      } else {
+        node = child_one;
+        if (distance_two != INFINITY) {
+          stack.push_back(child_two);
+          stack_pointer++;
+        }
+      }
+    }
   }
 
   template <typename FLOAT_TYPE>
@@ -62,6 +103,9 @@ namespace openviewfactor {
 
   template <typename FLOAT_TYPE>
   OVF_HOST_DEVICE void BVH<FLOAT_TYPE>::writeToFile(const std::string& filename) const {
+
+    //TODO update this function to write a .vtu output instead of a .txt that has to be parsed in matlab
+
     std::ofstream outfile(filename + ".txt");
     outfile << "Encoding,X,Y,Z\n";
     unsigned int j = 0;

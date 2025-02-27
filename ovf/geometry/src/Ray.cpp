@@ -55,6 +55,14 @@ namespace openviewfactor {
     return *this;
   }
 
+  template <typename FLOAT_TYPE>
+  OVF_HOST_DEVICE Ray<FLOAT_TYPE>& Ray<FLOAT_TYPE>::reset() {
+    // _origin = Vector3<FLOAT_TYPE>();
+    // _direction = Vector3<FLOAT_TYPE>();
+    _intersection_distance = INFINITY;
+    return *this;
+  }
+
 template class Ray<float>;
 template class Ray<double>;
 }

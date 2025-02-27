@@ -52,7 +52,7 @@ template <typename FLOAT_TYPE> class BVH {
 
     OVF_HOST_DEVICE BVH<FLOAT_TYPE>& constructBVH();
 
-    OVF_HOST_DEVICE void intersectRayWithBVH(std::shared_ptr<Ray<FLOAT_TYPE>> ray);
+    OVF_HOST_DEVICE void intersectRayWithBVH(std::shared_ptr<Ray<FLOAT_TYPE>> ray, FLOAT_TYPE triangle_distance);
 
     OVF_HOST_DEVICE unsigned int getNumNodesUsed();
 

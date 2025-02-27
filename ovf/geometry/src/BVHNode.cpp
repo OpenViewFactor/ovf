@@ -178,7 +178,7 @@ namespace openviewfactor {
   }
 
   template <typename FLOAT_TYPE>
-  OVF_HOST_DEVICE bool BVHNode<FLOAT_TYPE>::intersectRayWithNodeBoundingBox(std::shared_ptr<Ray<FLOAT_TYPE>> ray) const {
+  OVF_HOST_DEVICE FLOAT_TYPE BVHNode<FLOAT_TYPE>::intersectRayWithNodeBoundingBox(std::shared_ptr<Ray<FLOAT_TYPE>> ray) const {
     FLOAT_TYPE tx1 = (this->getBoundingBoxMin().getX() - ray->getOrigin().getX()) / ray->getDirection().getX();
     FLOAT_TYPE tx2 = (this->getBoundingBoxMax().getX() - ray->getOrigin().getX()) / ray->getDirection().getX();
 
@@ -197,7 +197,7 @@ namespace openviewfactor {
     tmin = std::max(tmin, std::min(tz1, tz2));
     tmax = std::min(tmax, std::max(tz1, tz2));
 
-    return (tmax >= tmin && tmin < ray->getIntersectionDistance() && tmax > 0);
+    if (tmax >= tmin && tmin < ray->getIntersectionDistance() && tmax > 0) return tmin; else return INFINITY;
   }
 
 template class BVHNode<float>;

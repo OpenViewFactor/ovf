@@ -28,6 +28,7 @@ template <typename FLOAT_TYPE> class Ray {
     OVF_HOST_DEVICE Ray<FLOAT_TYPE>& setIntersectionDistance(FLOAT_TYPE t);
 
     OVF_HOST_DEVICE Ray<FLOAT_TYPE>& triangleIntersection(Triangle<FLOAT_TYPE> triangle);
+    OVF_HOST_DEVICE Ray<FLOAT_TYPE>& reset();
 };
 
 }

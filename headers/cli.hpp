@@ -12,6 +12,7 @@ namespace po = boost::program_options;
 
 enum SelfIntersectionMode { NONE, BOTH, EMITTER, RECEIVER };
 enum BackFaceCullMode { ON, OFF };
+enum BlockingMode { NAIVE, BVH };
 enum NumericMode { DAI, SAI };
 enum ComputeMode { CPU_N, GPU, GPU_N };
 enum PrecisionMode { SINGLE, DOUBLE };
@@ -40,11 +41,24 @@ boost::assign::map_list_of(
   "ON", BackFaceCullMode::ON)(
   "OFF", BackFaceCullMode::OFF);
 
-//* map precision enum to output string
+//* map back face cull enum to output string
 static std::map<BackFaceCullMode, std::string> BACKFACECULL_ENUM_TO_OUTPUT =
 boost::assign::map_list_of(
   BackFaceCullMode::ON, "ON")(
   BackFaceCullMode::OFF, "OFF");
+
+//* -------------------- MAP BLOCKING TYPE INPUTS AND OUTPUTS -------------------- *//
+//* map blocking type input string to enum
+static std::map<std::string, BlockingMode> BLOCKING_TYPE_INPUT_TO_ENUM =
+boost::assign::map_list_of(
+  "NAIVE", BlockingMode::NAIVE)(
+  "BVH", BlockingMode::BVH);
+
+//* map blocking type enum to output string
+static std::map<BlockingMode, std::string> BLOCKING_TYPE_ENUM_TO_OUTPUT =
+boost::assign::map_list_of(
+  BlockingMode::NAIVE, "NAIVE")(
+    BlockingMode::BVH, "BVH");
 
 //* -------------------- MAP NUMERICS INPUTS AND OUTPUTS -------------------- *//
 //* map numerics input string to enum
@@ -89,43 +103,51 @@ boost::assign::map_list_of(
 
 //* -------------------- NOTIFIERS -------------------- *//
 void checkSelfIntersectionType(const std::string &self_int_type) {
-std::cout << "[CHECK] Checking Self-Intersection Argument";
-if (!SELFINT_TYPE_INPUT_TO_ENUM.count(self_int_type)) {
-  throw po::error("\t> [ERROR] Selfint type not recognized: " + self_int_type);
-}
-std::cout << "\t> [VALID]" << '\n';
+  std::cout << "[CHECK] Checking Self-Intersection Argument";
+  if (!SELFINT_TYPE_INPUT_TO_ENUM.count(self_int_type)) {
+    throw po::error("\t> [ERROR] Selfint type not recognized: " + self_int_type);
+  }
+  std::cout << "\t> [VALID]" << '\n';
 }
 
 void checkBackFaceCull(const std::string &back_face_cull_mode) {
-std::cout << "[CHECK] Checking Back Face Cull Argument";
-if (!BACKFACECULL_INPUT_TO_ENUM.count(back_face_cull_mode)) {
-  throw po::error("\t> [ERROR] Back Face Cull option not recognized: " + back_face_cull_mode);
+  std::cout << "[CHECK] Checking Back Face Cull Argument";
+  if (!BACKFACECULL_INPUT_TO_ENUM.count(back_face_cull_mode)) {
+    throw po::error("\t> [ERROR] Back Face Cull option not recognized: " + back_face_cull_mode);
+  }
+  std::cout << "\t> [VALID]" << '\n';
 }
-std::cout << "\t> [VALID]" << '\n';
+
+void checkBlockingType(const std::string &blocking_type) {
+  std::cout << "[CHECK] Checking Blocking Type Argument";
+  if (!BLOCKING_TYPE_INPUT_TO_ENUM.count(blocking_type)) {
+    throw po::error("\t> [ERROR] Blocking Type option not recognized: " + blocking_type);
+  }
+  std::cout << "\t> [VALID]" << '\n';
 }
 
 void checkNumerics(const std::string &numerics) {
-std::cout << "[CHECK] Checking Numeric Method Argument";
-if (!NUMERICS_INPUT_TO_ENUM.count(numerics)) {
-  throw po::error("\t> [ERROR] Numeric method not recognized: " + numerics);
-}
-std::cout << "\t> [VALID]" << '\n';
+  std::cout << "[CHECK] Checking Numeric Method Argument";
+  if (!NUMERICS_INPUT_TO_ENUM.count(numerics)) {
+    throw po::error("\t> [ERROR] Numeric method not recognized: " + numerics);
+  }
+  std::cout << "\t> [VALID]" << '\n';
 }
 
 void checkCompute(const std::string &compute) {
-std::cout << "[CHECK] Checking Compute Backend Argument";
-if (!COMPUTE_INPUT_TO_ENUM.count(compute)) {
-  throw po::error("\t> [ERROR] Compute type not recognized: " + compute);
-}
-std::cout << "\t> [VALID]" << '\n';
+  std::cout << "[CHECK] Checking Compute Backend Argument";
+  if (!COMPUTE_INPUT_TO_ENUM.count(compute)) {
+    throw po::error("\t> [ERROR] Compute type not recognized: " + compute);
+  }
+  std::cout << "\t> [VALID]" << '\n';
 }
 
 void checkPrecision(const std::string &precision) {
-std::cout << "[CHECK] Checking Precision Argument";
-if (!PRECISION_INPUT_TO_ENUM.count(precision)) {
-  throw po::error("\t\t> [ERROR] Precision type not recognized: " + precision);
-}
-std::cout << "\t\t> [VALID]" << '\n';
+  std::cout << "[CHECK] Checking Precision Argument";
+  if (!PRECISION_INPUT_TO_ENUM.count(precision)) {
+    throw po::error("\t\t> [ERROR] Precision type not recognized: " + precision);
+  }
+  std::cout << "\t\t> [VALID]" << '\n';
 }
 
 //* -------------------- DEFINE PROGRAM OPTIONS -------------------- *//
@@ -157,6 +179,9 @@ options.add_options()
   ("backfacecull,f",
     po::value<std::string>()->default_value("ON")->notifier(&checkBackFaceCull),
     "-f <ON/OFF> \n[--+--] Determines whether to execute back face culling (defaults to ON)")
+  ("blockingtype,t",
+    po::value<std::string>()->default_value("BVH")->notifier(&checkBlockingType),
+    "-t <BVH/NAIVE> \n[--+--] Determines which type of blocking to utilize (defaults to BVH)")
   ("numerics,n",
     po::value<std::string>()->default_value("DAI")->notifier(&checkNumerics),
     "-n <DAI/SAI> \n[--+--] Numeric integration method (defaults to DAI)")

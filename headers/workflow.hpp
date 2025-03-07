@@ -33,12 +33,14 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
   std::cout << "[VERSION] OpenViewFactor Version: " << OVF_VERSION_STRING << "\n\n";
 
   std::string back_face_cull_mode = variables_map["backfacecull"].as<std::string>();
+  std::string blocking_type = variables_map["blockingtype"].as<std::string>();
   std::string self_int_type = variables_map["selfint"].as<std::string>();
   std::string numeric = variables_map["numerics"].as<std::string>();
   std::string compute = variables_map["compute"].as<std::string>();
   std::string precision = variables_map["precision"].as<std::string>();
 
   std::cout << "[LOG] Solver Setting Loaded: Back Face Cull Mode -\t" << back_face_cull_mode << '\n';
+  std::cout << "[LOG] Solver Setting Loaded: Blocking Mode -\t\t" << blocking_type << '\n';
   std::cout << "[LOG] Solver Setting Loaded: Self-Intersection Mode -\t" << self_int_type << '\n';
   std::cout << "[LOG] Solver Setting Loaded: Numeric Method -\t\t" << numeric << '\n';
   std::cout << "[LOG] Solver Setting Loaded: Compute Backend -\t\t" << compute << '\n';
@@ -165,20 +167,23 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
 
   geometry::BVH<T> blocker(&blocking_mesh);
 
-  if (blocking_enabled || self_int_type != "NONE") {
-    std::cout << "[LOG] Generating obstructing Boundary Volume Hierarchy (BVH)\n";
-    geometry::constructBVH(&blocker, &blocking_mesh);
-    std::cout << "[LOG] BVH generated in " << bvh_timer.elapsed() << " [s]\n";
-    std::cout << "[LOG] BVH Nodes Used = " << blocker._nodes_used << '\n';
-    std::cout << '\n';
-  }
-  
-  if (write_bvh) {
-    std::cout << "[OUTPUT] Writing BVH visualization\n";
-    io::writeToFile(&blocking_mesh, bvh_outfile + "-mesh" + ".vtu");
-    io::writeToFile(&blocker, bvh_output_filename);
-  }
+  if (blocking_type == "BVH") {
 
+    if (blocking_enabled || self_int_type != "NONE") {
+      std::cout << "[LOG] Generating obstructing Boundary Volume Hierarchy (BVH)\n";
+      geometry::constructBVH(&blocker, &blocking_mesh);
+      std::cout << "[LOG] BVH generated in " << bvh_timer.elapsed() << " [s]\n";
+      std::cout << "[LOG] BVH Nodes Used = " << blocker._nodes_used << '\n';
+      std::cout << '\n';
+    }
+    
+    if (write_bvh) {
+      std::cout << "[OUTPUT] Writing BVH visualization\n";
+      io::writeToFile(&blocking_mesh, bvh_outfile + "-mesh" + ".vtu");
+      io::writeToFile(&blocker, bvh_output_filename);
+    }
+
+  }
 
 
   
@@ -209,8 +214,11 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
   if (blocking_enabled) {
     std::cout << "[LOG] Applying Blocking\n";
   
-    // solver::naiveBlockingBetweenMeshes(&blocking_mesh, &e_centroids, &r_triangles, &unculled_indices);
-    solver::bvhBlockingBetweenMeshes(&blocker, &blocking_mesh, &e_centroids, &r_triangles, &unculled_indices);
+    if (blocking_type == "NAIVE") {
+      solver::naiveBlockingBetweenMeshes(&blocking_mesh, &e_centroids, &r_triangles, &unculled_indices);
+    } else if (blocking_type == "BVH") {
+      solver::bvhBlockingBetweenMeshes(&blocker, &blocking_mesh, &e_centroids, &r_triangles, &unculled_indices);
+    }
 
     std::cout << "[LOG] Blocking completed in " << solver_timer.elapsed() << " [s]\n";
     solver_timer.reset();

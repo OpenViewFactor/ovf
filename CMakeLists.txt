@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(ovf)
 add_executable(ovf ovf.cpp)
+add_executable(meshanalysis meshAnalysis.cpp)
 
 set(CMAKE_BUILD_TYPE Release)
 
@@ -14,6 +15,7 @@ find_package(OpenMP REQUIRED)
 
 set_target_properties(ovf PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(ovf Boost::program_options Boost::boost LeanVTK OpenMP::OpenMP_CXX)
+target_link_libraries(meshanalysis Boost::program_options Boost::boost LeanVTK OpenMP::OpenMP_CXX)
 
 if(LINUX)
   #TODO FIX THIS BIT HERE.

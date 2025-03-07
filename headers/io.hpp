@@ -53,6 +53,77 @@ template <typename T> void printMeshMetrics(geometry::mesh<T>* m) {
   std::cout << " -----------------------------------------------------------------" << '\n';
 }
 
+
+
+
+
+template <typename T> void prepareVTUMesh(geometry::mesh<T>* m, std::vector<int>* triangulations, std::vector<double>* points) {
+  int dimension = 3;
+  int cell_size = 3;
+  uint num_elements = m->size();
+
+  for (int i = 0; i < num_elements; i++) {
+    geometry::tri<T> t = (*m)[i];
+    (*points)[i*cell_size*dimension + 0] = (double)t[0][0];
+    (*points)[i*cell_size*dimension + 1] = (double)t[0][1];
+    (*points)[i*cell_size*dimension + 2] = (double)t[0][2];
+    (*points)[i*cell_size*dimension + 3] = (double)t[1][0];
+    (*points)[i*cell_size*dimension + 4] = (double)t[1][1];
+    (*points)[i*cell_size*dimension + 5] = (double)t[1][2];
+    (*points)[i*cell_size*dimension + 6] = (double)t[2][0];
+    (*points)[i*cell_size*dimension + 7] = (double)t[2][1];
+    (*points)[i*cell_size*dimension + 8] = (double)t[2][2];
+
+    (*triangulations)[i*cell_size + 0] = i*cell_size + 0;
+    (*triangulations)[i*cell_size + 1] = i*cell_size + 1;
+    (*triangulations)[i*cell_size + 2] = i*cell_size + 2;
+  }
+
+}
+
+
+
+enum MetricMode { ASPECT_RATIO, ELEMENT_QUALITY, SKEWNESS };
+
+void writeMeshMetrics(geometry::mesh<double>* m, const std::string& filename, MetricMode mode) {
+  int dimension = 3;
+  int cell_size = 3;
+  auto num_elements = m->size();
+  std::vector<int> triangulations(num_elements * cell_size);
+  std::vector<double> points(num_elements * cell_size * dimension);
+
+  prepareVTUMesh(m, &triangulations, &points);
+
+  std::vector<double> field;
+
+  std::vector<double> output_field(num_elements * cell_size);
+
+  leanvtk::VTUWriter writer;
+
+  std::string field_name;
+  if (mode == MetricMode::ASPECT_RATIO) {
+    field = geometry::meshAspectRatio(m);
+    field_name = "Aspect Ratio";
+
+  } else if (mode == MetricMode::ELEMENT_QUALITY) {
+    field = geometry::meshElementQuality(m);
+    field_name = "Element Quality";
+
+  } else if (mode == MetricMode::SKEWNESS) {
+    field = geometry::meshSkewness(m);
+    field_name = "Skewness";
+  }
+
+  for (int i = 0; i < num_elements; i++) {
+    output_field[i * cell_size + 0] = field[i];
+    output_field[i * cell_size + 1] = field[i];
+    output_field[i * cell_size + 2] = field[i];
+  }
+
+  writer.add_scalar_field(field_name, output_field);
+  writer.write_surface_mesh(filename, dimension, cell_size, points, triangulations);
+}
+
 template <typename T> void writeToFile(geometry::mesh<T>* m, const std::string& filename) {
   int dimension = 3;
   int cell_size = 3;
@@ -60,22 +131,7 @@ template <typename T> void writeToFile(geometry::mesh<T>* m, const std::string& 
   std::vector<int> triangulations(num_elements * cell_size);
   std::vector<double> points(num_elements * cell_size * dimension);
 
-  for (int i = 0; i < num_elements; i++) {
-    geometry::tri<T> t = (*m)[i];
-    points[i*cell_size*dimension + 0] = (double)t[0][0];
-    points[i*cell_size*dimension + 1] = (double)t[0][1];
-    points[i*cell_size*dimension + 2] = (double)t[0][2];
-    points[i*cell_size*dimension + 3] = (double)t[1][0];
-    points[i*cell_size*dimension + 4] = (double)t[1][1];
-    points[i*cell_size*dimension + 5] = (double)t[1][2];
-    points[i*cell_size*dimension + 6] = (double)t[2][0];
-    points[i*cell_size*dimension + 7] = (double)t[2][1];
-    points[i*cell_size*dimension + 8] = (double)t[2][2];
-
-    triangulations[i*cell_size + 0] = i*cell_size + 0;
-    triangulations[i*cell_size + 1] = i*cell_size + 1;
-    triangulations[i*cell_size + 2] = i*cell_size + 2;
-  }
+  prepareVTUMesh(m, &triangulations, &points);
 
   leanvtk::VTUWriter writer;
   writer.write_surface_mesh(filename, dimension, cell_size, points, triangulations);
@@ -162,32 +218,6 @@ template <typename T> void writeToFile(geometry::BVH<T>* bvh, const std::string&
 
 
 
-
-
-
-template <typename T> void prepareVTUMesh(geometry::mesh<T>* m, std::vector<int>* triangulations, std::vector<double>* points) {
-  int dimension = 3;
-  int cell_size = 3;
-  uint num_elements = m->size();
-
-  for (int i = 0; i < num_elements; i++) {
-    geometry::tri<T> t = (*m)[i];
-    (*points)[i*cell_size*dimension + 0] = (double)t[0][0];
-    (*points)[i*cell_size*dimension + 1] = (double)t[0][1];
-    (*points)[i*cell_size*dimension + 2] = (double)t[0][2];
-    (*points)[i*cell_size*dimension + 3] = (double)t[1][0];
-    (*points)[i*cell_size*dimension + 4] = (double)t[1][1];
-    (*points)[i*cell_size*dimension + 5] = (double)t[1][2];
-    (*points)[i*cell_size*dimension + 6] = (double)t[2][0];
-    (*points)[i*cell_size*dimension + 7] = (double)t[2][1];
-    (*points)[i*cell_size*dimension + 8] = (double)t[2][2];
-
-    (*triangulations)[i*cell_size + 0] = i*cell_size + 0;
-    (*triangulations)[i*cell_size + 1] = i*cell_size + 1;
-    (*triangulations)[i*cell_size + 2] = i*cell_size + 2;
-  }
-
-}
 
 
 enum VisualOutputMode { EMITTER, RECEIVER, BOTH };

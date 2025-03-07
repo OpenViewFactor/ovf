@@ -120,9 +120,13 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
   
   std::cout << "[LOG] Loading Emitting Mesh : " << input_filenames[0] << '\n';
   e_mesh = geometry::getMesh<T>( input_filenames[0] );
+
+  io::printMeshMetrics(&e_mesh);
+
   if (two_mesh_problem) {
     std::cout << "[LOG] Loading Receiving Mesh : " << input_filenames[1] << '\n';
     r_mesh = geometry::getMesh<T>( input_filenames[1] );
+    io::printMeshMetrics(&r_mesh);
   } else {
     r_mesh = e_mesh;
   }

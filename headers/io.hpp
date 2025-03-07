@@ -10,6 +10,49 @@
 
 namespace io {
 
+template <typename T> T mean(std::vector<T>* v) {
+  T sum = std::reduce(std::execution::par, v->cbegin(), v->cend());
+  return (sum / v->size());
+}
+template <typename T> T median(std::vector<T>* v) {
+  std::sort(v->begin(), v->end());
+  T median;
+  if ( v->size() % 2 == 0 ) {
+    median = (*v)[ v->size() / 2 ];
+  } else {
+    median = ( (*v)[ v->size() / 2 ] + (*v)[ v->size() / 2 + 1 ] ) / 2.0;
+  }
+  return median;
+}
+
+template <typename T> void printMeshMetrics(geometry::mesh<T>* m) {
+  std::cout << " -----------------------------------------------------------------" << '\n';
+  std::cout << " [Size]\t\t\t\t\t" << m->size() << " Elements" << '\n';
+
+  std::vector<T> aspect_ratios = geometry::meshAspectRatio(m);
+  std::vector<T> element_qualities = geometry::meshElementQuality(m);
+  std::vector<T> skewnesses = geometry::meshSkewness(m);
+  
+  std::cout << " [Aspect Ratio]\t\tMean\t\t" << mean(&aspect_ratios) << '\n';
+  std::cout << " [Aspect Ratio]\t\tMedian\t\t" << median(&aspect_ratios) << '\n';
+  auto min_ar_it = std::min_element(aspect_ratios.cbegin(), aspect_ratios.cend());
+  auto max_ar_it = std::max_element(aspect_ratios.cbegin(), aspect_ratios.cend());
+  std::cout << " [Aspect Ratio]\t\tMin / Max\t" << *min_ar_it << " / " << *max_ar_it << '\n';
+
+  std::cout << " [Element Quality]\tMean\t\t" << mean(&element_qualities) << '\n';
+  std::cout << " [Element Quality]\tMedian\t\t" << median(&element_qualities) << '\n';
+  auto min_eq_it = std::min_element(element_qualities.cbegin(), element_qualities.cend());
+  auto max_eq_it = std::max_element(element_qualities.cbegin(), element_qualities.cend());
+  std::cout << " [Element Quality]\tMin/Max\t\t" << *min_eq_it << " / " << *max_eq_it << '\n';
+
+  std::cout << " [Skewness]\t\tMean\t\t" << mean(&skewnesses) << '\n';
+  std::cout << " [Skewness]\t\tMedian\t\t" << median(&skewnesses) << '\n';
+  auto min_s_it = std::min_element(skewnesses.cbegin(), skewnesses.cend());
+  auto max_s_it = std::max_element(skewnesses.cbegin(), skewnesses.cend());
+  std::cout << " [Skewness]\t\tMin/Max\t\t" << *min_s_it << " / " << *max_s_it << '\n';
+  std::cout << " -----------------------------------------------------------------" << '\n';
+}
+
 template <typename T> void writeToFile(geometry::mesh<T>* m, const std::string& filename) {
   int dimension = 3;
   int cell_size = 3;

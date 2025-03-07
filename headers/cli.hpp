@@ -164,9 +164,12 @@ options.add_options()
   ("obstructions,o",
     po::value<std::vector<std::string>>()->multitoken(),
     "-o <OBSTRUCTOR FILEPATH> -o <OBSTRUCTOR FILEPATH> -o <etc.> \n[--+--] Filepath(s) to obstructing mesh(es) (Minimum of 0, No Maximum)")
+  ("logfile,l",
+    po::value<std::string>()->default_value(std::string("log")),
+    "-m <LOG OUTPUT FILEPATH> \n[--+--] Filepath for command-line log output (defaults to 'log.log', write 'NONE' to skip)")
   ("matrixout,m",
-    po::value<std::string>()->default_value(std::string("ovf.out")),
-    "-m <MATRIX OUTPUT FILEPATH> \n[--+--] Filepath for nonzero element-wise view factor map output (defaults to 'ovf.out', write 'NONE' to skip)")
+    po::value<std::string>()->default_value(std::string("ovf")),
+    "-m <MATRIX OUTPUT FILEPATH> \n[--+--] Filepath for nonzero element-wise view factor map output (defaults to 'ovf', write 'NONE' to skip)")
   ("graphicout,g",
     po::value<std::vector<std::string>>()->default_value(std::vector<std::string>({std::string("emitter_out")}), "emitter_out")->multitoken(),
     "-g <GRAPHIC OUTPUT FILEPATH> \n[--+--] Filename for Paraview unstructured grid (.vtu) output (defaults to 'emitter_out', write 'NONE' to skip)")

@@ -53,7 +53,33 @@ template <typename T> void printMeshMetrics(geometry::mesh<T>* m) {
   std::cout << " -----------------------------------------------------------------" << '\n';
 }
 
+template <typename T> void logMeshMetrics(std::vector<std::string>* log_messages, geometry::mesh<T>* m) {
+  log_messages->push_back(std::string(" -----------------------------------------------------------------\n"));
+  log_messages->push_back(std::string(" [Size]\t\t\t\t\t" + std::to_string(m->size()) + " Elements\n"));
 
+  std::vector<T> aspect_ratios = geometry::meshAspectRatio(m);
+  std::vector<T> element_qualities = geometry::meshElementQuality(m);
+  std::vector<T> skewnesses = geometry::meshSkewness(m);
+  
+  log_messages->push_back(std::string(" [Aspect Ratio]\t\tMean\t\t" + std::to_string(mean(&aspect_ratios)) + '\n'));
+  log_messages->push_back(std::string(" [Aspect Ratio]\t\tMedian\t\t" + std::to_string(median(&aspect_ratios)) + '\n'));
+  auto min_ar_it = std::min_element(aspect_ratios.cbegin(), aspect_ratios.cend());
+  auto max_ar_it = std::max_element(aspect_ratios.cbegin(), aspect_ratios.cend());
+  log_messages->push_back(std::string(" [Aspect Ratio]\t\tMin / Max\t" + std::to_string(*min_ar_it) + " / " + std::to_string(*max_ar_it) + '\n'));
+
+  log_messages->push_back(std::string(" [Element Quality]\tMean\t\t" + std::to_string(mean(&element_qualities)) + '\n'));
+  log_messages->push_back(std::string(" [Element Quality]\tMedian\t\t" + std::to_string(median(&element_qualities)) + '\n'));
+  auto min_eq_it = std::min_element(element_qualities.cbegin(), element_qualities.cend());
+  auto max_eq_it = std::max_element(element_qualities.cbegin(), element_qualities.cend());
+  log_messages->push_back(std::string(" [Element Quality]\tMin/Max\t\t" + std::to_string(*min_eq_it) + " / " + std::to_string(*max_eq_it) + '\n'));
+
+  log_messages->push_back(std::string(" [Skewness]\t\tMean\t\t" + std::to_string(mean(&skewnesses)) + '\n'));
+  log_messages->push_back(std::string(" [Skewness]\t\tMedian\t\t" + std::to_string(median(&skewnesses)) + '\n'));
+  auto min_s_it = std::min_element(skewnesses.cbegin(), skewnesses.cend());
+  auto max_s_it = std::max_element(skewnesses.cbegin(), skewnesses.cend());
+  log_messages->push_back(std::string(" [Skewness]\t\tMin/Max\t\t" + std::to_string(*min_s_it) + " / " + std::to_string(*max_s_it) + '\n'));
+  log_messages->push_back(std::string(" -----------------------------------------------------------------\n"));
+}
 
 
 

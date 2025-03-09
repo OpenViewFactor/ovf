@@ -3,6 +3,14 @@ project(ovf)
 add_executable(ovf ovf.cpp)
 add_executable(meshanalysis meshAnalysis.cpp)
 
+if(UNIX AND NOT APPLE)
+  message(STATUS ">>> Configuring for Linux")
+  set(LINUX TRUE)
+elseif(WIN32)
+  message(STATUS ">>> Configuring for Windows")
+  set(WINDOWS TRUE)
+endif()
+
 set(CMAKE_BUILD_TYPE Release)
 
 set(THIRD_PARTY_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
@@ -23,7 +31,7 @@ if(LINUX)
 
   message("[Linux] Add binary directory to environment variable")
   # Get the directory where the binary is located
-  get_target_property(MY_BINARY_DIR openviewfactor BINARY_DIR)
+  get_target_property(MY_BINARY_DIR ovf BINARY_DIR)
   # Define the line to append
   set(export_line "export MY_BINARY_DIR=${MY_BINARY_DIR}")
   # Path to the shell configuration file
@@ -38,7 +46,7 @@ if(LINUX)
 elseif(WINDOWS)
 
   message("[Windows] Add binary directory to environment variable")
-  get_target_property(MY_BINARY_DIR openviewfactor BINARY_DIR)
+  get_target_property(MY_BINARY_DIR ovf BINARY_DIR)
   execute_process(COMMAND setx MY_BINARY_DIR "${MY_BINARY_DIR}/Debug")
   
 endif()

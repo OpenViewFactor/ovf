@@ -203,7 +203,7 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
   std::cout << "[LOG] Meshes loaded in " << loading_meshes_timer.elapsed() << " [s]\n";
   log_messages.push_back(std::string("[LOG] Meshes loaded in " + std::to_string(loading_meshes_timer.elapsed()) + " [s]\n"));
 
-  uint problem_size = e_mesh.size() * r_mesh.size();
+  unsigned int problem_size = e_mesh.size() * r_mesh.size();
   std::cout << "[LOG] Problem Size: " << problem_size << " Pairs\n";
   log_messages.push_back(std::string("[LOG] Problem Size: " + std::to_string(problem_size) + " Pairs\n"));
 
@@ -250,7 +250,7 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
   std::vector<geometry::v3<T>> r_normals = geometry::normals(&r_mesh);
   std::vector<geometry::tri<T>> r_triangles = geometry::allTriangles(&r_mesh);
 
-  std::vector<uint> unculled_indices(problem_size);
+  std::vector<unsigned int> unculled_indices(problem_size);
 
   if (back_face_cull_mode == "ON") {
     std::cout << "[LOG] Applying Back-Face Cull\n";

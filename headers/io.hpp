@@ -86,7 +86,7 @@ template <typename T> void logMeshMetrics(std::vector<std::string>* log_messages
 template <typename T> void prepareVTUMesh(geometry::mesh<T>* m, std::vector<int>* triangulations, std::vector<double>* points) {
   int dimension = 3;
   int cell_size = 3;
-  uint num_elements = m->size();
+  unsigned int num_elements = m->size();
 
   for (int i = 0; i < num_elements; i++) {
     geometry::tri<T> t = (*m)[i];
@@ -167,9 +167,9 @@ template <typename T> void writeToFile(geometry::BVH<T>* bvh, const std::string&
   int dimension = 3;
   int cell_size = 4;
 
-  uint num_leaf_nodes = 0;
-  uint nodes_used = (*bvh)._nodes_used;
-  std::vector<uint> leaf_nodes_indices(nodes_used);
+  unsigned int num_leaf_nodes = 0;
+  unsigned int nodes_used = (*bvh)._nodes_used;
+  std::vector<unsigned int> leaf_nodes_indices(nodes_used);
   std::iota(leaf_nodes_indices.begin(), leaf_nodes_indices.end(), 0);
   for (int i = 0; i < nodes_used; i++) {
     if ((*bvh)[i]->isLeaf()) {
@@ -185,7 +185,7 @@ template <typename T> void writeToFile(geometry::BVH<T>* bvh, const std::string&
   std::vector<int> connectivity(num_leaf_nodes * 6 * 4);
 
   for (int i = 0; i < leaf_nodes_indices.size(); i++) {
-    uint node_index = leaf_nodes_indices[i];
+    unsigned int node_index = leaf_nodes_indices[i];
 
     //* adding bounding box vertices to vertices vector
     geometry::v3<T> bbmin = ((*bvh)[node_index])->min();
@@ -206,7 +206,7 @@ template <typename T> void writeToFile(geometry::BVH<T>* bvh, const std::string&
     }
 
     //* adding bounding box face connectivities to connectivity vector
-    uint num_points_filled = i*8;
+    unsigned int num_points_filled = i*8;
     connectivity[i*6*4 + 0] = num_points_filled + 0;
     connectivity[i*6*4 + 1] = num_points_filled + 1;
     connectivity[i*6*4 + 2] = num_points_filled + 6;
@@ -252,7 +252,7 @@ template <typename T> void writeToFile(results::solution<T>* s, geometry::mesh<T
   int dimension = 3;
   int cell_size = 3;
 
-  uint num_elements;
+  unsigned int num_elements;
 
   std::string field_name;
   

@@ -17,10 +17,10 @@ template <typename T> bool backFaceCullElements(geo::v3<T> e_centroid, geo::v3<T
   return ( emitter_culled || receiver_culled );
 }
 
-template <typename T> void backFaceCullMeshes(std::vector<geo::v3<T>>* e_centroids, std::vector<geo::v3<T>>* e_normals, std::vector<geo::v3<T>>* r_centroids, std::vector<geo::v3<T>>* r_normals, std::vector<uint>* unculled_indices) {
-  uint N_e = e_centroids->size();
-  uint N_r = r_centroids->size();
-  uint problem_size = N_e * N_r;
+template <typename T> void backFaceCullMeshes(std::vector<geo::v3<T>>* e_centroids, std::vector<geo::v3<T>>* e_normals, std::vector<geo::v3<T>>* r_centroids, std::vector<geo::v3<T>>* r_normals, std::vector<unsigned int>* unculled_indices) {
+  unsigned int N_e = e_centroids->size();
+  unsigned int N_r = r_centroids->size();
+  unsigned int problem_size = N_e * N_r;
 
   std::iota(unculled_indices->begin(), unculled_indices->end(), 0);
 
@@ -66,14 +66,14 @@ template <typename T> geo::ray<T> intersectRayWithTri(geo::ray<T>* r, geo::tri<T
 }
 
 
-template <typename T> void naiveBlockingBetweenMeshes(geo::mesh<T>* o, std::vector<geo::v3<T>>* e_centroids, std::vector<geo::tri<T>>* r_triangles, std::vector<uint>* unculled_indices) {
-  uint problem_size = e_centroids->size() * r_triangles->size();
+template <typename T> void naiveBlockingBetweenMeshes(geo::mesh<T>* o, std::vector<geo::v3<T>>* e_centroids, std::vector<geo::tri<T>>* r_triangles, std::vector<unsigned int>* unculled_indices) {
+  unsigned int problem_size = e_centroids->size() * r_triangles->size();
 
   #pragma omp parallel for
   for (int i = 0; i < unculled_indices->size(); i++) {
-    uint index = (*unculled_indices)[i];
-    uint e = index / r_triangles->size();
-    uint r = index % r_triangles->size();
+    unsigned int index = (*unculled_indices)[i];
+    unsigned int e = index / r_triangles->size();
+    unsigned int r = index % r_triangles->size();
 
     geo::v3<T> e_centroid = (*e_centroids)[e];
     geo::tri<T> r_tri = (*r_triangles)[r];
@@ -124,7 +124,7 @@ template <typename T> T intersectRayWithNode(geo::ray<T>* r, geo::BVHNode<T>* b)
 template <typename T> void intersectRayWithBVH(geo::ray<T>* r, geo::BVH<T> bvh, geo::mesh<T>* m, T triangle_distance) {
   geo::BVHNode<T>* node = bvh[0];
   std::vector<geo::BVHNode<T>*> stack;
-  uint stack_pointer = 0;
+  unsigned int stack_pointer = 0;
   
   while (1) {
     if (node->isLeaf()) {
@@ -143,7 +143,7 @@ template <typename T> void intersectRayWithBVH(geo::ray<T>* r, geo::BVH<T> bvh, 
       }
       continue;
     }
-    uint child_index = node->childIndex();
+    unsigned int child_index = node->childIndex();
     geo::BVHNode<T>* child_one = bvh[child_index];
     geo::BVHNode<T>* child_two = bvh[child_index + 1];
 
@@ -176,14 +176,14 @@ template <typename T> void intersectRayWithBVH(geo::ray<T>* r, geo::BVH<T> bvh, 
 
 
 
-template <typename T> void bvhBlockingBetweenMeshes(geo::BVH<T>* bvh, geo::mesh<T>* blocking_mesh, std::vector<geo::v3<T>>* e_centroids, std::vector<geo::tri<T>>* r_triangles, std::vector<uint>* unculled_indices) {
-  uint problem_size = e_centroids->size() * r_triangles->size();
+template <typename T> void bvhBlockingBetweenMeshes(geo::BVH<T>* bvh, geo::mesh<T>* blocking_mesh, std::vector<geo::v3<T>>* e_centroids, std::vector<geo::tri<T>>* r_triangles, std::vector<unsigned int>* unculled_indices) {
+  unsigned int problem_size = e_centroids->size() * r_triangles->size();
 
   #pragma omp parallel for
   for (int i = 0; i < unculled_indices->size(); i++) {
-    uint index = (*unculled_indices)[i];
-    uint e = index / r_triangles->size();
-    uint r = index % r_triangles->size();
+    unsigned int index = (*unculled_indices)[i];
+    unsigned int e = index / r_triangles->size();
+    unsigned int r = index % r_triangles->size();
 
     geo::v3<T> e_centroid = (*e_centroids)[e];
     geo::tri<T> r_tri = (*r_triangles)[r];
@@ -246,12 +246,12 @@ template <typename T> T singleAreaIntegration(geo::v3<T> e_centroid, geo::v3<T> 
 }
 
 
-template <typename T> void viewFactors(std::vector<geo::v3<T>>* e_centroids, std::vector<geo::v3<T>>* e_normals, std::vector<geo::tri<T>>* r_triangles, std::vector<uint>* unculled_indices, std::vector<T>* view_factors, std::string solver_mode) {
+template <typename T> void viewFactors(std::vector<geo::v3<T>>* e_centroids, std::vector<geo::v3<T>>* e_normals, std::vector<geo::tri<T>>* r_triangles, std::vector<unsigned int>* unculled_indices, std::vector<T>* view_factors, std::string solver_mode) {
   #pragma omp parallel for
   for (int i = 0; i < unculled_indices->size(); i++) {
-    uint index = (*unculled_indices)[i];
-    uint e = index / r_triangles->size();
-    uint r = index % r_triangles->size();
+    unsigned int index = (*unculled_indices)[i];
+    unsigned int e = index / r_triangles->size();
+    unsigned int r = index % r_triangles->size();
 
     geo::tri<T> r_triangle = (*r_triangles)[r];
 

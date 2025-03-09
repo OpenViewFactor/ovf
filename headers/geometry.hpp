@@ -12,7 +12,7 @@ template <typename T> class v3 {
   T _x, _y, _z;
   v3<T>() : _x(0.0), _y(0.0), _z(0.0) {}
   v3<T>(T x, T y, T z) : _x(x), _y(y), _z(z) {}
-  T operator[](uint i) const {
+  T operator[](unsigned int i) const {
     switch (i % 3) {
       case 0:
         return _x;
@@ -58,7 +58,7 @@ template <typename T> v3<T> cross(v3<T> a, v3<T> b) {
   T z_component = a[0]*b[1] - a[1]*b[0];
   return v3<T>( x_component, y_component, z_component );
 }
-template <typename T> uint getLongestDirection(v3<T> v) {
+template <typename T> unsigned int getLongestDirection(v3<T> v) {
   if (std::abs(v[1]) >= std::abs(v[0]) && std::abs(v[1]) >= std::abs(v[2])) { return 1; }
   if (std::abs(v[2]) >= std::abs(v[0]) && std::abs(v[2]) >= std::abs(v[1])) { return 2; }
   return 0;
@@ -92,8 +92,8 @@ template <typename T> class tri {
   tri() : _p(std::array<T,9>()) {}
   tri(std::array<T,9> p) : _p(p) {}
 
-  v3<T> operator[](uint i) const {
-    uint p_i = i % 3;
+  v3<T> operator[](unsigned int i) const {
+    unsigned int p_i = i % 3;
     return v3<T>(_p[3*p_i + 0], _p[3*p_i + 1], _p[3*p_i + 2]);
   }
 };
@@ -180,7 +180,7 @@ template <typename T> class mesh {
     _c = c;
   }
   
-  tri<T> operator[](uint i) const {
+  tri<T> operator[](unsigned int i) const {
     std::array<T,9> points;
     for (int j = 0; j < 9; j++) {
       points[j] = _p[ 3 * ( _c[3*i + (j/3)] ) + (j%3) ];
@@ -189,7 +189,7 @@ template <typename T> class mesh {
     return t;
   }
 
-  mesh<T> operator[](std::vector<uint> indices) const {
+  mesh<T> operator[](std::vector<unsigned int> indices) const {
     mesh<T> sub_mesh;
     std::vector<tri<T>> triangles(indices.size());
     for (int i = 0; i < indices.size(); i++) {
@@ -200,7 +200,7 @@ template <typename T> class mesh {
   }
 
   mesh<T>& operator+(tri<T> t) {
-    uint pre_add_size = _p.size() / 3;
+    unsigned int pre_add_size = _p.size() / 3;
     for (int i = 0; i < 9; i++) {
       _p.push_back( (t[i / 3])[i % 3] );
     }
@@ -224,7 +224,7 @@ template <typename T> class mesh {
     return *this;
   }
 
-  uint size() const {
+  unsigned int size() const {
     return (_c.size() / 3);
   }
 };
@@ -286,7 +286,7 @@ template <typename T> std::vector<T> meshAspectRatio(mesh<T>* m) {
 }
 
 template <typename T> mesh<T> removeDegenerateElements(mesh<T>* m) {
-  std::vector<uint> good_elements(m->size());
+  std::vector<unsigned int> good_elements(m->size());
   std::iota(good_elements.begin(), good_elements.end(), 0);
   for (int i = 0; i < m->size(); i++) {
     if ( std::isinf(triAspectRatio((*m)[i])) || std::isnan(triSkewness((*m)[i])) ) {
@@ -317,25 +317,25 @@ template <typename T> mesh<T> getMesh(const std::string& filename) {
 template <typename T> class BVHNode {
   public:
   v3<T> _bbmin, _bbmax;
-  uint _N_tri, _left_or_first;
+  unsigned int _N_tri, _left_or_first;
 
   BVHNode() : _bbmin(v3<T>(INFINITY, INFINITY, INFINITY)), _bbmax(v3<T>(-INFINITY, -INFINITY, -INFINITY)), _N_tri(0), _left_or_first(0) {}
 
   v3<T> min() const { return _bbmin; }
   v3<T> max() const { return _bbmax; }
   v3<T> span() const { return (max() - min()); }
-  uint numTri() const { return _N_tri; }
+  unsigned int numTri() const { return _N_tri; }
   bool isLeaf() const {
     return (this->numTri() != 0);
   }
-  uint childIndex() const {
+  unsigned int childIndex() const {
     if (isLeaf()) {
       throw std::runtime_error("Leaf node does not have a child");
     } else {
       return _left_or_first;
     }
   }
-  uint firstTriangleIndex() const {
+  unsigned int firstTriangleIndex() const {
     if (isLeaf()) {
       return _left_or_first;
     } else {
@@ -373,15 +373,15 @@ template <typename T> T cost(BVHNode<T>* b) {
   return surfaceArea(b) * b->numTri();
 }
 
-template <typename T> uint bestSplitAxis(BVHNode<T>* b) {
+template <typename T> unsigned int bestSplitAxis(BVHNode<T>* b) {
   return getLongestDirection(b->span());
 }
 
-template <typename T> T surfaceAreaHeuristic(BVHNode<T>* b, mesh<T>* m, uint axis, T candidate_position) {
+template <typename T> T surfaceAreaHeuristic(BVHNode<T>* b, mesh<T>* m, unsigned int axis, T candidate_position) {
   BVHNode<T> left;
   BVHNode<T> right;
-  uint mesh_size = m->size();
-  std::vector<uint> left_i(mesh_size), right_i(mesh_size);
+  unsigned int mesh_size = m->size();
+  std::vector<unsigned int> left_i(mesh_size), right_i(mesh_size);
   std::iota(left_i.begin(), left_i.end(), 0);
   std::iota(right_i.begin(), right_i.end(), 0);
   std::vector<v3<T>> mesh_centroids = centroids(m);
@@ -415,8 +415,8 @@ template <typename T> T surfaceAreaHeuristic(BVHNode<T>* b, mesh<T>* m, uint axi
   return split_cost;
 }
 
-template <typename T> mesh<T> nodeSubmesh(BVHNode<T>* b, mesh<T>* m, std::vector<uint>* tri_indices) {
-  std::vector<uint> submesh_indices(b->numTri());
+template <typename T> mesh<T> nodeSubmesh(BVHNode<T>* b, mesh<T>* m, std::vector<unsigned int>* tri_indices) {
+  std::vector<unsigned int> submesh_indices(b->numTri());
   std::iota(submesh_indices.begin(), submesh_indices.end(), b->firstTriangleIndex());
   for (int i = 0; i < b->numTri(); i++) {
     submesh_indices[i] = (*tri_indices)[submesh_indices[i]];
@@ -425,7 +425,7 @@ template <typename T> mesh<T> nodeSubmesh(BVHNode<T>* b, mesh<T>* m, std::vector
   return submesh;
 }
 
-template <typename T> std::pair<T,T> bestSplit(BVHNode<T>* b, mesh<T>* m, uint axis, uint num_evals, std::vector<uint>* tri_indices) {
+template <typename T> std::pair<T,T> bestSplit(BVHNode<T>* b, mesh<T>* m, unsigned int axis, unsigned int num_evals, std::vector<unsigned int>* tri_indices) {
   mesh<T> submesh = nodeSubmesh(b, m, tri_indices);
 
   T axis_length = b->span()[axis];
@@ -446,7 +446,7 @@ template <typename T> std::pair<T,T> bestSplit(BVHNode<T>* b, mesh<T>* m, uint a
     return (x < y);
   });
   T best_cost = *best_cost_it;
-  uint best_cost_index = std::distance(eval_costs.begin(), best_cost_it);
+  unsigned int best_cost_index = std::distance(eval_costs.begin(), best_cost_it);
   
   std::pair<T,T> split_pos_cost;
   split_pos_cost.first = eval_pos[best_cost_index];
@@ -461,8 +461,8 @@ template <typename T> std::pair<T,T> bestSplit(BVHNode<T>* b, mesh<T>* m, uint a
 template <typename T>  class BVH {
   public:
   std::vector<BVHNode<T>> _nodes;
-  std::vector<uint> _tri_indices;
-  uint _nodes_used;
+  std::vector<unsigned int> _tri_indices;
+  unsigned int _nodes_used;
 
   BVH() {}
   BVH(mesh<T>* m) {
@@ -474,7 +474,7 @@ template <typename T>  class BVH {
       }
       _nodes = nodes;
 
-      std::vector<uint> tri_indices(m->size());
+      std::vector<unsigned int> tri_indices(m->size());
       std::iota(tri_indices.begin(), tri_indices.end(), 0);
       _tri_indices = tri_indices;
 
@@ -482,24 +482,24 @@ template <typename T>  class BVH {
     }
   }
 
-  BVHNode<T>* operator[](uint i) { return &(_nodes[i]); }
+  BVHNode<T>* operator[](unsigned int i) { return &(_nodes[i]); }
 
-  BVH<T>& swapElements(uint i1, uint i2) {
-    uint temp = _tri_indices[i1];
+  BVH<T>& swapElements(unsigned int i1, unsigned int i2) {
+    unsigned int temp = _tri_indices[i1];
     _tri_indices[i1] = _tri_indices[i2];
     _tri_indices[i2] = temp;
     return *this;
   }
 };
 
-template <typename T> void constructNewNode(BVH<T>* bvh, mesh<T>* m, uint node_i) {
+template <typename T> void constructNewNode(BVH<T>* bvh, mesh<T>* m, unsigned int node_i) {
   BVHNode<T>* node = (*bvh)[node_i];
   mesh<T> submesh = nodeSubmesh(node, m, &(bvh->_tri_indices));
   node->grow(&submesh);
 }
 
-template <typename T> uint createChildNodes(BVH<T>* bvh, mesh<T>* m, uint node_i, uint split_index, uint num_left_tri) {
-  uint left_child_index = bvh->_nodes_used;
+template <typename T> unsigned int createChildNodes(BVH<T>* bvh, mesh<T>* m, unsigned int node_i, unsigned int split_index, unsigned int num_left_tri) {
+  unsigned int left_child_index = bvh->_nodes_used;
   (bvh->_nodes_used) += 2;
   
   BVHNode<T>* node = (*bvh)[node_i];
@@ -521,13 +521,13 @@ template <typename T> uint createChildNodes(BVH<T>* bvh, mesh<T>* m, uint node_i
   return left_child_index;
 }
 
-template <typename T> uint splitPrimitives(BVH<T>* bvh, mesh<T>* m, uint node_i, uint axis, T loc) {
+template <typename T> unsigned int splitPrimitives(BVH<T>* bvh, mesh<T>* m, unsigned int node_i, unsigned int axis, T loc) {
   BVHNode<T>* node = (*bvh)[node_i];
-  uint split_index = node->firstTriangleIndex();
-  uint unsorted_index = split_index + node->numTri() - 1;
+  unsigned int split_index = node->firstTriangleIndex();
+  unsigned int unsorted_index = split_index + node->numTri() - 1;
 
   while (split_index <= unsorted_index) {
-    uint element_index = bvh->_tri_indices[split_index];
+    unsigned int element_index = bvh->_tri_indices[split_index];
     tri<T> current_element = (*m)[element_index];
     if (centroid(current_element)[axis] < loc) {
       split_index++;
@@ -538,20 +538,20 @@ template <typename T> uint splitPrimitives(BVH<T>* bvh, mesh<T>* m, uint node_i,
   return split_index;
 }
 
-template <typename T> uint subdivideNode(BVH<T>* bvh, mesh<T>* m, uint node_i) {
+template <typename T> unsigned int subdivideNode(BVH<T>* bvh, mesh<T>* m, unsigned int node_i) {
   BVHNode<T>* node = (*bvh)[node_i];
   if (node->numTri() <= 2) { return 0; }
 
-  uint axis = bestSplitAxis(node);
+  unsigned int axis = bestSplitAxis(node);
   std::pair<T,T> split_pos_cost = bestSplit(node, m, axis, 20, &(bvh->_tri_indices));
   if (cost(node) < split_pos_cost.second) { return 1; }
 
-  uint split_index = splitPrimitives(bvh, m, node_i, axis, split_pos_cost.first);
+  unsigned int split_index = splitPrimitives(bvh, m, node_i, axis, split_pos_cost.first);
 
-  uint num_left_tri = split_index - node->firstTriangleIndex();
+  unsigned int num_left_tri = split_index - node->firstTriangleIndex();
   if (num_left_tri == 0 || num_left_tri == node->numTri()) { return 2; }
 
-  uint left_child_index = createChildNodes(bvh, m, node_i, split_index, num_left_tri);
+  unsigned int left_child_index = createChildNodes(bvh, m, node_i, split_index, num_left_tri);
   subdivideNode(bvh, m, left_child_index);
   subdivideNode(bvh, m, left_child_index + 1);
 
@@ -559,7 +559,7 @@ template <typename T> uint subdivideNode(BVH<T>* bvh, mesh<T>* m, uint node_i) {
 }
 
 template <typename T> void constructBVH(BVH<T>* bvh, mesh<T>* m) {
-  uint root_i = 0;
+  unsigned int root_i = 0;
   BVHNode<T>* root_node = (*bvh)[root_i];
   root_node->_N_tri = m->size();
   root_node->grow(m);

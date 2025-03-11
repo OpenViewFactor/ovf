@@ -250,7 +250,12 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
   std::vector<geometry::v3<T>> r_normals = geometry::normals(&r_mesh);
   std::vector<geometry::tri<T>> r_triangles = geometry::allTriangles(&r_mesh);
 
-  std::vector<unsigned int> unculled_indices(problem_size);
+  std::vector<std::vector<unsigned int>*> unculled_indices(e_mesh.size());
+  for (int i = 0; i < e_mesh.size(); i++) {
+    std::vector<unsigned int>* sub_indices = new std::vector<unsigned int>(r_mesh.size());
+    std::iota(sub_indices->begin(), sub_indices->end(), 0);
+    unculled_indices[i] = sub_indices;
+  }
 
   if (back_face_cull_mode == "ON") {
     std::cout << "[LOG] Applying Back-Face Cull\n";
@@ -262,8 +267,6 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
     log_messages.push_back(std::string("[LOG] Back-Face Cull completed in " + std::to_string(solver_timer.elapsed()) + " [s]\n"));
 
     solver_timer.reset();
-  } else {
-    std::iota(unculled_indices.begin(), unculled_indices.end(), 0);
   }
 
   if (blocking_enabled) {
@@ -291,7 +294,11 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
     log_messages.push_back(std::string("[LOG] Applying Single Area Integration\n"));
   }
   
-  std::vector<T> view_factors(unculled_indices.size());
+  std::vector<std::vector<T>*> view_factors(e_mesh.size());
+  for (int i = 0; i < e_mesh.size(); i++) {
+    std::vector<T>* sub_results = new std::vector<T>( ( (unculled_indices)[i] )->size() );
+    view_factors[i] = sub_results;
+  }
   solver::viewFactors(&e_centroids, &e_normals, &r_triangles, &unculled_indices, &view_factors, numeric);
 
   std::cout << "[LOG] View Factors completed in " << solver_timer.elapsed() << " [s]\n";

@@ -315,7 +315,8 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
 
   results::solution<T> s(&unculled_indices, &view_factors, e_mesh.size(), r_mesh.size());
   std::vector<T> e_areas = geometry::areas(&e_mesh);
-  T surface_to_surface_vf = results::surfaceVF(&s, &e_areas, e_mesh.size(), r_mesh.size());
+  T surface_to_surface_vf = results::surfaceVF(&s, &e_areas);
+
   std::cout << "[RESULT] Surface-Surface View Factor: " << std::setprecision(15) << surface_to_surface_vf << '\n';
   log_messages.push_back(std::string("[RESULT] Surface-Surface View Factor: " + std::to_string(surface_to_surface_vf) + '\n'));
 

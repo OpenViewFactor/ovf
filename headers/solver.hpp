@@ -211,6 +211,7 @@ template <typename T> void bvhBlockingBetweenMeshes(geo::BVH<T>* bvh, geo::mesh<
 
   for (int e = 0; e < unculled_indices->size(); e++) {
     std::vector<unsigned int>* sub_indices = (*unculled_indices)[e];
+    #pragma omp parallel for
     for (int i = 0; i < sub_indices->size(); i++) {
       unsigned int r = (*sub_indices)[i];
 
@@ -310,6 +311,7 @@ template <typename T> void viewFactors(std::vector<geo::v3<T>>* e_centroids, std
     std::vector<unsigned int>* sub_indices = (*unculled_indices)[e];
     std::vector<T>* sub_results = (*view_factors)[e];
 
+    #pragma omp parallel for
     for (int i = 0; i < sub_indices->size(); i++) {
 
       unsigned int r = (*sub_indices)[i];

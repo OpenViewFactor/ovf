@@ -36,7 +36,7 @@ namespace results {
       unsigned int e_index = i / _N_r;
       unsigned int r_index = i % _N_r;
       std::vector<unsigned int>* e_indices = (*_e_indices)[e_index];
-      int index_in_e_indices = binarySearch(e_indices, i, 0, e_indices->size());
+      int index_in_e_indices = binarySearch(e_indices, r_index, 0, e_indices->size());
       if (index_in_e_indices != -1) {
         std::vector<T>* sub_results = (*_vf)[e_index];
         T result = (*sub_results)[index_in_e_indices];
@@ -78,32 +78,32 @@ namespace results {
     return ( (*s)[i] );
   }
   
-  template <typename T> T vfElement(solution<T>* s, unsigned int e, unsigned int r, unsigned int N_r) {
-    unsigned int i = e * N_r + r;
+  template <typename T> T vfElement(solution<T>* s, unsigned int e, unsigned int r) {
+    unsigned int i = e * s->_N_r + r;
     return ( (*s)[i] );
   }
   
-  template <typename T> T emitterElementVF(solution<T>* s, unsigned int e, unsigned int N_r) {
+  template <typename T> T emitterElementVF(solution<T>* s, unsigned int e) {
     T total_vf = 0.0;
-    for (int i = 0; i < N_r; i++) {
-      total_vf += vfElement(s, e, i, N_r);
+    for (int i = 0; i < s->_N_r; i++) {
+      total_vf += vfElement(s, e, i);
     }
     return total_vf;
   }
 
-  template <typename T> T receiverElementVF(solution<T>* s, unsigned int r, unsigned int N_e, unsigned int N_r, std::vector<T>* e_areas, T e_area) {
+  template <typename T> T receiverElementVF(solution<T>* s, unsigned int r, std::vector<T>* e_areas, T e_area) {
     T total_vf = 0.0;
-    for (int i = 0; i < N_e; i++) {
-      total_vf += vfElement(s, i, r, N_r);
+    for (int i = 0; i < s->_N_e; i++) {
+      total_vf += vfElement(s, i, r);
     }
     return total_vf;
   }
   
-  template <typename T> T surfaceVF(solution<T>* s, std::vector<T>* e_areas, unsigned int N_e, unsigned int N_r) {
-    std::vector<T> element_vf(N_e);
+  template <typename T> T surfaceVF(solution<T>* s, std::vector<T>* e_areas) {
+    std::vector<T> element_vf(s->_N_e);
     #pragma omp parallel for
-    for (int i = 0; i < N_e; i++) {
-      element_vf[i] = emitterElementVF(s, i, N_r) * (*e_areas)[i];
+    for (int i = 0; i < s->_N_e; i++) {
+      element_vf[i] = emitterElementVF(s, i) * (*e_areas)[i];
     }
     T sum = std::reduce(std::execution::par, element_vf.cbegin(), element_vf.cend());
     T e_area = std::reduce(std::execution::par, (*e_areas).cbegin(), (*e_areas).cend());

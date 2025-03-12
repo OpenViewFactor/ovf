@@ -54,23 +54,6 @@ namespace results {
       }
       return -1;
     }
-  
-    // int binarySearch(unsigned int i, unsigned int inclusive_start, unsigned int uninclusive_end) {
-    //   //TODO rewrite this to account for split up vectors
-
-    //   unsigned int e_index = i / _N_r;
-    //   unsigned int r_index = i % _N_r;
-
-    //   std::vector<unsigned int>* indices = (*_e_indices)[e_index];
-
-    //   if (uninclusive_end > inclusive_start) {
-    //     int midpoint = (int)((inclusive_start + uninclusive_end) / 2);
-    //     if ( (*indices)[midpoint] == i ) { return midpoint; }
-    //     if ( (*indices)[midpoint] > i ) { return binarySearch(i, inclusive_start, midpoint); }
-    //     return binarySearch(i, midpoint + 1, uninclusive_end);
-    //   }
-    //   return -1;
-    // }
   };
   
   

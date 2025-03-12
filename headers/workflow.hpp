@@ -30,7 +30,10 @@ public:
 
 template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
 
-  std::ofstream log_file ( variables_map["logfile"].as<std::string>() + ".txt" );
+  bool write_log = false;
+  if ( variables_map["logfile"].as<std::string>() != "NONE" ) {
+    write_log = true;
+  }
   std::vector<std::string> log_messages;
 
   std::string log_wrapper = "------------------------------------------------------------------\n";
@@ -371,10 +374,13 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
 
   std::cout << "------------------------------------------------------------------\n";
 
-  for (auto message : log_messages) {
-    log_file << message;
+  if (write_log) {
+    std::ofstream log_file ( variables_map["logfile"].as<std::string>() + ".txt" );
+    for (auto message : log_messages) {
+      log_file << message;
+    }
+    log_file.close();
   }
-  log_file.close();
 }
 
 }

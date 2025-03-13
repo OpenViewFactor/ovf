@@ -49,12 +49,12 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
   std::string compute = variables_map["compute"].as<std::string>();
   std::string precision = variables_map["precision"].as<std::string>();
 
-  std::string load_back_face_cull = "[LOG] Solver Setting Loaded: Back Face Cull Mode -\t" + back_face_cull_mode + '\n';
-  std::string load_blocking_mode = "[LOG] Solver Setting Loaded: Blocking Mode -\t\t" + blocking_type + '\n';
-  std::string load_selfint = "[LOG] Solver Setting Loaded: Self-Intersection Mode -\t" + self_int_type + '\n';
-  std::string load_numeric = "[LOG] Solver Setting Loaded: Numeric Method -\t\t" + numeric + '\n';
-  std::string load_compute = "[LOG] Solver Setting Loaded: Compute Backend -\t\t" + compute + '\n';
-  std::string load_precision = "[LOG] Solver Setting Loaded: Floating Point Precision -\t" + precision + '\n';
+  std::string load_back_face_cull = "[LOG] Solver Setting Loaded: Back Face Cull Mode\t-" + back_face_cull_mode + '\n';
+  std::string load_blocking_mode = "[LOG] Solver Setting Loaded: Blocking Mode\t\t-" + blocking_type + '\n';
+  std::string load_selfint = "[LOG] Solver Setting Loaded: Self-Intersection Mode\t-" + self_int_type + '\n';
+  std::string load_numeric = "[LOG] Solver Setting Loaded: Numeric Method\t\t-" + numeric + '\n';
+  std::string load_compute = "[LOG] Solver Setting Loaded: Compute Backend\t\t-" + compute + '\n';
+  std::string load_precision = "[LOG] Solver Setting Loaded: Floating Point Precision\t-" + precision + '\n';
 
   std::cout << load_back_face_cull;
   std::cout << load_blocking_mode;

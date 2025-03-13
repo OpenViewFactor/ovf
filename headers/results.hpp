@@ -42,7 +42,7 @@ namespace results {
         T result = (*sub_results)[index_in_e_indices];
         return ( result );
       }
-      return 0.0;
+      return ( (T)0.0 );
     }
 
     int binarySearch(std::vector<unsigned int>* v, unsigned int i, unsigned int inclusive_start, unsigned int uninclusive_end) {
@@ -72,6 +72,9 @@ namespace results {
       total_vf += vfElement(s, e, i);
     }
     return total_vf;
+    // std::vector<T>* e_vfs = ( (*s)._vf )[e];
+    // T total_vf = std::reduce(e_vfs->cbegin(), e_vfs->cend());
+    // return total_vf;
   }
 
   template <typename T> T receiverElementVF(solution<T>* s, unsigned int r, std::vector<T>* e_areas, T e_area) {
@@ -88,8 +91,8 @@ namespace results {
     for (int i = 0; i < s->_N_e; i++) {
       element_vf[i] = emitterElementVF(s, i) * (*e_areas)[i];
     }
-    T sum = std::reduce(std::execution::par, element_vf.cbegin(), element_vf.cend());
-    T e_area = std::reduce(std::execution::par, (*e_areas).cbegin(), (*e_areas).cend());
+    T sum = std::reduce(std::execution::par, element_vf.cbegin(), element_vf.cend(), (T)0.0);
+    T e_area = std::reduce(std::execution::par, (*e_areas).cbegin(), (*e_areas).cend(), (T)0.0);
     T total_vf = sum / e_area;
     return total_vf;
   }

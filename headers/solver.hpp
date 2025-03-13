@@ -212,7 +212,7 @@ template <typename T> void bvhBlockingBetweenMeshes(geo::BVH<T>* bvh, geo::mesh<
 template <typename T> T doubleAreaIntegration(geo::v3<T> e_centroid, geo::v3<T> e_normal, geo::v3<T> r_centroid, geo::v3<T> r_normal, T r_area) {
   geo::v3<T> ray_vector = r_centroid - e_centroid;
   
-  T denominator = geo::dot(ray_vector, ray_vector) * geo::dot(ray_vector, ray_vector) * M_PI;
+  T denominator = geo::dot(ray_vector, ray_vector) * geo::dot(ray_vector, ray_vector) * std::numbers::pi;
   T scale_factor = -1.0 / denominator;
 
   T fij = geo::dot(e_normal, ray_vector) * geo::dot(r_normal, ray_vector) * r_area * scale_factor;
@@ -240,10 +240,10 @@ template <typename T> T singleAreaIntegration(geo::v3<T> e_centroid, geo::v3<T> 
     geo::v3<T> section_normal = section_normals[i];
     T denominator = geo::magnitude(section_normal);
     T scale_factor = 1.0 / denominator;
-    edge_integral += geo::dot(section_normal, e_normal) * scale_factor * ( M_PI * 0.5 - std::atan( section_projections[i] * scale_factor ) );
+    edge_integral += geo::dot(section_normal, e_normal) * scale_factor * ( std::numbers::pi * 0.5 - std::atan( section_projections[i] * scale_factor ) );
   }
 
-  T scale_factor = 1.0 / ( 2.0 * M_PI );
+  T scale_factor = 1.0 / ( 2.0 * std::numbers::pi );
   T fij = edge_integral * scale_factor;
   return fij;
 }

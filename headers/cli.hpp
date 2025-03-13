@@ -123,7 +123,7 @@ void checkBlockingType(const std::string &blocking_type) {
   if (!BLOCKING_TYPE_INPUT_TO_ENUM.count(blocking_type)) {
     throw po::error("\t> [ERROR] Blocking Type option not recognized: " + blocking_type);
   }
-  std::cout << "\t> [VALID]" << '\n';
+  std::cout << "\t\t> [VALID]" << '\n';
 }
 
 void checkNumerics(const std::string &numerics) {

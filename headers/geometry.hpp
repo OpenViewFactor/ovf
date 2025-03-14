@@ -540,7 +540,7 @@ template <typename T> unsigned int splitPrimitives(BVH<T>* bvh, mesh<T>* m, unsi
 
 template <typename T> unsigned int subdivideNode(BVH<T>* bvh, mesh<T>* m, unsigned int node_i) {
   BVHNode<T>* node = (*bvh)[node_i];
-  if (node->numTri() <= 2) { return 0; }
+  if (node->numTri() <= 20) { return 0; }
 
   unsigned int axis = bestSplitAxis(node);
   std::pair<T,T> split_pos_cost = bestSplit(node, m, axis, 20, &(bvh->_tri_indices));

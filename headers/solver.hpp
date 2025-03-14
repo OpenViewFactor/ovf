@@ -126,17 +126,16 @@ template <typename T> T intersectRayWithNode(geo::ray<T>* r, geo::BVHNode<T>* b)
 
 template <typename T> void intersectRayWithBVH(geo::ray<T>* r, geo::BVH<T> bvh, geo::mesh<T>* m, T triangle_distance) {
   geo::BVHNode<T>* node = bvh[0];
-  std::vector<geo::BVHNode<T>*> stack;
+  std::vector<geo::BVHNode<T>*> stack(bvh._nodes_used);
   unsigned int stack_pointer = 0;
   
   while (1) {
     if (node->isLeaf()) {
-      geo::mesh<T> node_submesh = geo::nodeSubmesh(node, m, &(bvh._tri_indices));
-      std::vector<geo::tri<T>> triangles = geo::allTriangles( &node_submesh );
-      for (int i = 0; i < triangles.size(); i++) {
-        intersectRayWithTri(r, triangles[i]);
+      for (int i = 0; i < node->numTri(); i++) {
+        const geo::tri<T>& triangle = (*m)[ (bvh._tri_indices)[ (int)(node->firstTriangleIndex()) + i ] ];
+        intersectRayWithTri(r, triangle);
         if (r->_t < triangle_distance && r->_t > 0.0) {
-          break;
+          return;
         }
       }
       if (stack_pointer == 0) {
@@ -166,12 +165,7 @@ template <typename T> void intersectRayWithBVH(geo::ray<T>* r, geo::BVH<T> bvh, 
     } else {
       node = child_one;
       if (distance_two != INFINITY) {
-        if (stack_pointer == stack.size()) {
-          stack.push_back(child_two);
-          stack_pointer++;
-        } else {
           stack[stack_pointer++] = child_two;
-        }
       }
     }
   }
@@ -182,9 +176,9 @@ template <typename T> void intersectRayWithBVH(geo::ray<T>* r, geo::BVH<T> bvh, 
 template <typename T> void bvhBlockingBetweenMeshes(geo::BVH<T>* bvh, geo::mesh<T>* blocking_mesh, std::vector<geo::v3<T>>* e_centroids, std::vector<geo::tri<T>>* r_triangles, std::vector<std::vector<unsigned int>*>* unculled_indices) {
   unsigned int problem_size = e_centroids->size() * r_triangles->size();
 
+  #pragma omp parallel for
   for (int e = 0; e < unculled_indices->size(); e++) {
     std::vector<unsigned int>* sub_indices = (*unculled_indices)[e];
-    #pragma omp parallel for
     for (int i = 0; i < sub_indices->size(); i++) {
       unsigned int r = (*sub_indices)[i];
 

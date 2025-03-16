@@ -285,11 +285,11 @@ template <typename T> void writeToFile(results::solution<T>* s, geometry::mesh<T
     double element_view_factor;
 
     if (mode == VisualOutputMode::EMITTER) {
-      element_view_factor = (double)( results::emitterElementVF(s, i, r->size()) );
+      element_view_factor = (double)( results::emitterElementVF(s, i) );
     } else if (mode == VisualOutputMode::RECEIVER) {
       std::vector<T> e_areas = geometry::areas(e);
       T e_area = std::reduce(std::execution::par, e_areas.cbegin(), e_areas.cend());
-      element_view_factor = (double)( results::receiverElementVF(s, i, e->size(), r->size(), &e_areas, e_area) );
+      element_view_factor = (double)( results::receiverElementVF(s, i, &e_areas, e_area) );
     } else if (mode == VisualOutputMode::BOTH) {
       throw std::runtime_error("No. Just no. I'm not implementing this right now. No need");
     }

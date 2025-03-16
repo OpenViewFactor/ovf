@@ -1,6 +1,7 @@
 //! ----- INCLUDE HEADERS ----- !//
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <numbers>
 #include <string>
 #include <array>
 #include <vector>

@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
   if (precision == "SINGLE") {
     workflow::ovfWorkflow<float>(variables_map);
   } else if (precision == "DOUBLE") {
-    workflow::ovfWorkflow<double>(variables_map);
+    workflow::ovfWorkflow<long double>(variables_map);
   }
   return 0;
 }

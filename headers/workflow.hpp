@@ -30,7 +30,10 @@ public:
 
 template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
 
-  std::ofstream log_file ( variables_map["logfile"].as<std::string>() + ".txt" );
+  bool write_log = false;
+  if ( variables_map["logfile"].as<std::string>() != "NONE" ) {
+    write_log = true;
+  }
   std::vector<std::string> log_messages;
 
   std::string log_wrapper = "------------------------------------------------------------------\n";
@@ -46,12 +49,12 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
   std::string compute = variables_map["compute"].as<std::string>();
   std::string precision = variables_map["precision"].as<std::string>();
 
-  std::string load_back_face_cull = "[LOG] Solver Setting Loaded: Back Face Cull Mode -\t" + back_face_cull_mode + '\n';
-  std::string load_blocking_mode = "[LOG] Solver Setting Loaded: Blocking Mode -\t\t" + blocking_type + '\n';
-  std::string load_selfint = "[LOG] Solver Setting Loaded: Self-Intersection Mode -\t" + self_int_type + '\n';
-  std::string load_numeric = "[LOG] Solver Setting Loaded: Numeric Method -\t\t" + numeric + '\n';
-  std::string load_compute = "[LOG] Solver Setting Loaded: Compute Backend -\t\t" + compute + '\n';
-  std::string load_precision = "[LOG] Solver Setting Loaded: Floating Point Precision -\t" + precision + '\n';
+  std::string load_back_face_cull = "[LOG] Solver Setting Loaded: Back Face Cull Mode\t-" + back_face_cull_mode + '\n';
+  std::string load_blocking_mode = "[LOG] Solver Setting Loaded: Blocking Mode\t\t-" + blocking_type + '\n';
+  std::string load_selfint = "[LOG] Solver Setting Loaded: Self-Intersection Mode\t-" + self_int_type + '\n';
+  std::string load_numeric = "[LOG] Solver Setting Loaded: Numeric Method\t\t-" + numeric + '\n';
+  std::string load_compute = "[LOG] Solver Setting Loaded: Compute Backend\t\t-" + compute + '\n';
+  std::string load_precision = "[LOG] Solver Setting Loaded: Floating Point Precision\t-" + precision + '\n';
 
   std::cout << load_back_face_cull;
   std::cout << load_blocking_mode;
@@ -250,7 +253,12 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
   std::vector<geometry::v3<T>> r_normals = geometry::normals(&r_mesh);
   std::vector<geometry::tri<T>> r_triangles = geometry::allTriangles(&r_mesh);
 
-  std::vector<unsigned int> unculled_indices(problem_size);
+  std::vector<std::vector<unsigned int>*> unculled_indices(e_mesh.size());
+  for (int i = 0; i < e_mesh.size(); i++) {
+    std::vector<unsigned int>* sub_indices = new std::vector<unsigned int>(r_mesh.size());
+    std::iota(sub_indices->begin(), sub_indices->end(), 0);
+    unculled_indices[i] = sub_indices;
+  }
 
   if (back_face_cull_mode == "ON") {
     std::cout << "[LOG] Applying Back-Face Cull\n";
@@ -262,8 +270,6 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
     log_messages.push_back(std::string("[LOG] Back-Face Cull completed in " + std::to_string(solver_timer.elapsed()) + " [s]\n"));
 
     solver_timer.reset();
-  } else {
-    std::iota(unculled_indices.begin(), unculled_indices.end(), 0);
   }
 
   if (blocking_enabled) {
@@ -291,7 +297,11 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
     log_messages.push_back(std::string("[LOG] Applying Single Area Integration\n"));
   }
   
-  std::vector<T> view_factors(unculled_indices.size());
+  std::vector<std::vector<T>*> view_factors(e_mesh.size());
+  for (int i = 0; i < e_mesh.size(); i++) {
+    std::vector<T>* sub_results = new std::vector<T>( ( (unculled_indices)[i] )->size() );
+    view_factors[i] = sub_results;
+  }
   solver::viewFactors(&e_centroids, &e_normals, &r_triangles, &unculled_indices, &view_factors, numeric);
 
   std::cout << "[LOG] View Factors completed in " << solver_timer.elapsed() << " [s]\n";
@@ -308,7 +318,8 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
 
   results::solution<T> s(&unculled_indices, &view_factors, e_mesh.size(), r_mesh.size());
   std::vector<T> e_areas = geometry::areas(&e_mesh);
-  T surface_to_surface_vf = results::surfaceVF(&s, &e_areas, e_mesh.size(), r_mesh.size());
+  T surface_to_surface_vf = results::surfaceVF(&s, &e_areas);
+
   std::cout << "[RESULT] Surface-Surface View Factor: " << std::setprecision(15) << surface_to_surface_vf << '\n';
   log_messages.push_back(std::string("[RESULT] Surface-Surface View Factor: " + std::to_string(surface_to_surface_vf) + '\n'));
 
@@ -363,10 +374,13 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
 
   std::cout << "------------------------------------------------------------------\n";
 
-  for (auto message : log_messages) {
-    log_file << message;
+  if (write_log) {
+    std::ofstream log_file ( variables_map["logfile"].as<std::string>() + ".txt" );
+    for (auto message : log_messages) {
+      log_file << message;
+    }
+    log_file.close();
   }
-  log_file.close();
 }
 
 }

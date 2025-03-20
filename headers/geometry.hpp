@@ -10,8 +10,8 @@ namespace geometry {
 template <typename T> class v3 {
   public:
   T _x, _y, _z;
-  v3<T>() : _x(0.0), _y(0.0), _z(0.0) {}
-  v3<T>(T x, T y, T z) : _x(x), _y(y), _z(z) {}
+  v3() : _x(0.0), _y(0.0), _z(0.0) {}
+  v3(T x, T y, T z) : _x(x), _y(y), _z(z) {}
   T operator[](unsigned int i) const {
     switch (i % 3) {
       case 0:

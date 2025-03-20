@@ -187,6 +187,7 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
       new_blocking_mesh = geometry::getMesh<T>( file );
       blocking_mesh = blocking_mesh + &new_blocking_mesh;
     }
+    io::printMeshMetrics(&blocking_mesh);
   } else {
     std::cout << "[LOG] NO Blocking Meshes Loaded\n";
     log_messages.push_back(std::string("[LOG] NO Blocking Meshes Loaded\n"));
@@ -321,7 +322,7 @@ template <typename T> void ovfWorkflow(cli::po::variables_map variables_map) {
   T surface_to_surface_vf = results::surfaceVF(&s, &e_areas);
 
   std::cout << "[RESULT] Surface-Surface View Factor: " << std::setprecision(15) << surface_to_surface_vf << '\n';
-  log_messages.push_back(std::string("[RESULT] Surface-Surface View Factor: " + std::to_string(surface_to_surface_vf) + '\n'));
+  log_messages.push_back( std::format( "[RESULT] Surface-Surface View Factor: {}\n", surface_to_surface_vf) );
 
   std::cout << "[LOG] Results evaluated in " << results_timer.elapsed() << " [s]\n";
   log_messages.push_back(std::string("[LOG] Results evaluated in " + std::to_string(results_timer.elapsed()) + " [s]\n"));

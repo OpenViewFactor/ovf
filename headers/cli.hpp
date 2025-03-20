@@ -165,26 +165,26 @@ options.add_options()
     po::value<std::vector<std::string>>()->multitoken(),
     "-o <OBSTRUCTOR FILEPATH> -o <OBSTRUCTOR FILEPATH> -o <etc.> \n[--+--] Filepath(s) to obstructing mesh(es) (Minimum of 0, No Maximum)")
   ("logfile,l",
-    po::value<std::string>()->default_value(std::string("log")),
-    "-m <LOG OUTPUT FILEPATH> \n[--+--] Filepath for command-line log output (defaults to 'log.log', write 'NONE' to skip)")
+    po::value<std::string>()->default_value(std::string("NONE")),
+    "-m <LOG OUTPUT FILEPATH> \n[--+--] Filepath for command-line log output (defaults to 'NONE')")
   ("matrixout,m",
-    po::value<std::string>()->default_value(std::string("ovf")),
-    "-m <MATRIX OUTPUT FILEPATH> \n[--+--] Filepath for nonzero element-wise view factor map output (defaults to 'ovf', write 'NONE' to skip)")
+    po::value<std::string>()->default_value(std::string("NONE")),
+    "-m <MATRIX OUTPUT FILEPATH> \n[--+--] Filepath for nonzero element-wise view factor map output (defaults to 'NONE')")
   ("graphicout,g",
-    po::value<std::vector<std::string>>()->default_value(std::vector<std::string>({std::string("emitter_out")}), "emitter_out")->multitoken(),
-    "-g <GRAPHIC OUTPUT FILEPATH> \n[--+--] Filename for Paraview unstructured grid (.vtu) output (defaults to 'emitter_out', write 'NONE' to skip)")
+    po::value<std::vector<std::string>>()->default_value(std::vector<std::string>({std::string("NONE")}), "NONE")->multitoken(),
+    "-g <GRAPHIC OUTPUT FILEPATH> \n[--+--] Filename for Paraview unstructured grid (.vtu) output (defaults to 'emitter_out')")
   ("bvhout,b",
     po::value<std::string>()->default_value(std::string(std::string("NONE"))),
     "-b <BLOCKER BVH OUTPUT FILEPATH> \n[--+--] Filename for Paraview unstructured grid (.vtu) output of the blocker BVH structure (skips by default)")
   ("selfint,s",
-    po::value<std::string>()->default_value("BOTH")->notifier(&checkSelfIntersectionType),
-    "-s <NONE/EMITTER/RECEIVER/BOTH> \n[--+--] Determines which input mesh(es) are included in evaluating obstruction (defaults to BOTH)")
+    po::value<std::string>()->default_value("NONE")->notifier(&checkSelfIntersectionType),
+    "-s <NONE/EMITTER/RECEIVER/BOTH> \n[--+--] Determines which input mesh(es) are included in evaluating obstruction (defaults to NONE)")
   ("backfacecull,f",
     po::value<std::string>()->default_value("ON")->notifier(&checkBackFaceCull),
     "-f <ON/OFF> \n[--+--] Determines whether to execute back face culling (defaults to ON)")
   ("blockingtype,t",
-    po::value<std::string>()->default_value("BVH")->notifier(&checkBlockingType),
-    "-t <BVH/NAIVE> \n[--+--] Determines which type of blocking to utilize (defaults to BVH)")
+    po::value<std::string>()->default_value("NAIVE")->notifier(&checkBlockingType),
+    "-t <BVH/NAIVE> \n[--+--] Determines which type of blocking to utilize (defaults to NAIVE)")
   ("numerics,n",
     po::value<std::string>()->default_value("DAI")->notifier(&checkNumerics),
     "-n <DAI/SAI> \n[--+--] Numeric integration method (defaults to DAI)")
@@ -192,7 +192,7 @@ options.add_options()
     po::value<std::string>()->default_value("CPU_N")->notifier(&checkCompute),
     "-c <CPU_N/GPU/GPU_N> \n[--+--] Compute backend (defaults to CPU_N)")
   ("precision,p",
-    po::value<std::string>()->default_value("SINGLE")->notifier(&checkPrecision),
+    po::value<std::string>()->default_value("DOUBLE")->notifier(&checkPrecision),
     "-p <SINGLE/DOUBLE> \n[--+--] Floating point precision (defaults to SINGLE)");
 return options;
 }
